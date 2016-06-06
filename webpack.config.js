@@ -3,7 +3,6 @@
 var path = require('path');
 var webpack = require('webpack');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
-var ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 module.exports = {
   devtool: 'eval-source-map',
@@ -36,16 +35,13 @@ module.exports = {
       loader: 'babel',
       query: {
         "presets": ["react", "es2015", "stage-0", "react-hmre"]
-      },
+      }
     }, {
       test: /\.json?$/,
       loader: 'json'
     }, {
       test: /\.css$/,
-      loader: 'style!css'
+      loader: 'style!css!postcss'
     }]
-  },
-  resolve: {
-    extensions: ['', '.js', '.jsx']
   }
 };
