@@ -8,7 +8,15 @@ var EditorsTable = require('./editors_table.js');
 var NestedTable = require('./nested_table.js');
 
 //var readme = require('../README.md');
-import styles from './App.css';
+
+import pure from 'purecss/build/pure.css';
+import highlight from 'highlight.js/styles/github.css';
+import reactpage from 'react-pagify/style.css';
+import main from './main.css';
+import skylight from './skylight.css';
+//import '../style.css';
+//import skylight from './App.css';
+
 
 
 module.exports = React.createClass({

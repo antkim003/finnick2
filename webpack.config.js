@@ -23,7 +23,6 @@ module.exports = {
       filename: 'index.html'
     }),
     new webpack.optimize.OccurenceOrderPlugin(),
-    new ExtractTextPlugin('[name]-[hash].min.css'),
     new webpack.HotModuleReplacementPlugin(),
     new webpack.NoErrorsPlugin(),
     new webpack.DefinePlugin({
@@ -43,7 +42,7 @@ module.exports = {
       loader: 'json'
     }, {
       test: /\.css$/,
-      loader: ExtractTextPlugin.extract('style', 'css?modules&localIdentName=[name]---[local]---[hash:base64:5]!postcss')
+      loader: 'style!css'
     }]
   },
   resolve: {

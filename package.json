@@ -110,6 +110,7 @@
     "segmentize": "^0.4.1",
     "sinon": "^1.16.1",
     "sinon-chai": "^2.8.0",
+    "socket.io": "^1.4.6",
     "stage": "^0.9.0",
     "stats-webpack-plugin": "^0.2.1",
     "style-loader": "^0.12.4",
