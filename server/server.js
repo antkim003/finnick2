@@ -14,4 +14,48 @@ app.listen(port, function onStart(err) {
     console.log(err);
   }
   console.info('==> Listening on port %s. Open up http://localhost:%s/ in your browser.', port, port);
+
+
 });
+app.prototype.listen = function() {
+    this.listeningApp.listen.apply(this.listeningApp, arguments);
+
+    var io = require('socket.io')(this.listeningApp);
+    io.on('connection', function (socket) {
+//        socket.emit('news', { hello: 'world' });
+        socket.on('my other event', function (data) {
+//            console.log(data);
+//            socket.emit('sendtoclient', data);
+            console.log('now send to all browsers', data);
+            socket.broadcast.emit('new message', data);
+//            socket.emit('news',data);
+        });
+        socket.on('news', function (data) {
+//            console.log(data);
+            socket.emit('my other event', { hello: 'world' });
+        });
+        socket.broadcast.emit('user connected')
+    });
+};
+
+//var server = require('http').Server(app);
+//var io = require('socket.io')(server);
+////server.listen(port);
+//
+//io.on('connection', function (socket) {
+//    console.log('connected');
+//
+////        socket.emit('news', { hello: 'world' });
+//    socket.on('my other event', function (data) {
+////            console.log(data);
+////            socket.emit('sendtoclient', data);
+//        console.log('now send to all browsers',data);
+//        socket.broadcast.emit('new message', data);
+////            socket.emit('news',data);
+//    });
+//    socket.on('news', function(data) {
+////            console.log(data);
+//        socket.emit('my other event', { hello: 'world' });
+//    });
+//    socket.broadcast.emit('user connected')
+//});
