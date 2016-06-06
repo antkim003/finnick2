@@ -1,5 +1,5 @@
 'use strict';
-//import React from 'react';
+
 var React = require('react');
 var Fork = require('react-ghfork');
 
@@ -7,21 +7,20 @@ var FullTable = require('./full_table.js');
 var EditorsTable = require('./editors_table.js');
 var NestedTable = require('./nested_table.js');
 
-//var readme = require('../README.md');
-import styles from './App.css';
+var readme = require('../README.md');
 
 
 module.exports = React.createClass({
     displayName: 'App',
     componentDidMount: function() {
-//        function loadScript() {
+        function loadScript() {
 //            var script= document.createElement('script');
 //            script.type= 'text/javascript';
 //            script.src= './socket.js';
 //            script.async = true;
 //            document.body.appendChild(script);
-//        }
-//        loadScript();
+        }
+        loadScript();
 //        window.socket;
 
 
@@ -52,23 +51,24 @@ module.exports = React.createClass({
 //            </section>
     },
     render() {
-    return (
+        return (
 
-        <div className='pure-g'>
-            <header className='pure-u-1'>
-                <h1>Finnick 2.0</h1>
+            <div className='pure-g'>
+                <Fork className='right' project='bebraw/reactabular' />
+                <header className='pure-u-1'>
+                    <h1>Finnick 2.0</h1>
 
-                <div className='description'>Spectacular tables for React.js</div>
-            </header>
-            <article className='pure-u-1'>
-                <section className='demonstration'>
+                    <div className='description'>Spectacular tables for React.js</div>
+                </header>
+                <article className='pure-u-1'>
+                    <section className='demonstration'>
 
 
-                    <FullTable />
-                </section>
+                        <FullTable />
+                    </section>
 
-            </article>
-        </div>
+                </article>
+            </div>
         );
-},
+    },
 });
