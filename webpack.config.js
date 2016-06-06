@@ -3,6 +3,7 @@
 var path = require('path');
 var webpack = require('webpack');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
+var ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 module.exports = {
   devtool: 'eval-source-map',
@@ -22,6 +23,7 @@ module.exports = {
       filename: 'index.html'
     }),
     new webpack.optimize.OccurenceOrderPlugin(),
+    new ExtractTextPlugin('[name]-[hash].min.css'),
     new webpack.HotModuleReplacementPlugin(),
     new webpack.NoErrorsPlugin(),
     new webpack.DefinePlugin({
@@ -35,13 +37,13 @@ module.exports = {
       loader: 'babel',
       query: {
         "presets": ["react", "es2015", "stage-0", "react-hmre"]
-      }
+      },
     }, {
       test: /\.json?$/,
       loader: 'json'
     }, {
       test: /\.css$/,
-      loader: 'style!css?modules&localIdentName=[name]---[local]---[hash:base64:5]'
+      loader: ExtractTextPlugin.extract('style', 'css?modules&localIdentName=[name]---[local]---[hash:base64:5]!postcss')
     }]
   },
   resolve: {
