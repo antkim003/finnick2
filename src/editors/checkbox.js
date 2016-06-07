@@ -21,7 +21,7 @@ module.exports = (options, fields={}) => {
 
                 var soc = setInterval(function() {
                     if (typeof io != 'undefined') {
-                        window.socket = io.connect('http://localhost:8080');
+                        window.socket = io.connect('http://localhost:3000');
                         window.socket.on('my other event', function (data) {
                             console.log(data, 'thadhafd');
                         });
