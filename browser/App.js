@@ -60,23 +60,22 @@ module.exports = React.createClass({
 //            </section>
     },
     render() {
-    return (
+        return (
 
-        <div className='pure-g'>
-            <header className='pure-u-1'>
-                <h1>Finnick 2.0</h1>
+            <div className='pure-g'>
+                <header className='pure-u-1'>
+                    <h1>Finnick 2.0</h1>
 
-                <div className='description'>Spectacular tables for React.js</div>
-            </header>
-            <article className='pure-u-1'>
-                <section className='demonstration'>
+                </header>
+                <article className='pure-u-1'>
+                    <section className='demonstration'>
 
 
-                    <FullTable />
-                </section>
+                        <FullTable />
+                    </section>
 
-            </article>
-        </div>
-        );
-},
+                </article>
+            </div>
+            );
+        }
 });

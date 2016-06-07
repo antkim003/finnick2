@@ -25,7 +25,10 @@ var FieldWrapper = require('./field_wrapper.js');
 var SectionWrapper = require('./section_wrapper.js');
 var countries = require('./countries');
 var generateData = require('./generate_data');
-var rowdata = require('./rowdata.js');
+var rowdata = require('./dummyrowdata.js');
+var dummyusers = require('./dummyusers.js');
+var categoriesandsub = require('./categoriesandsub.js');
+
 
 var highlight = require('../src/formatters/highlight');
 
@@ -56,6 +59,13 @@ module.exports = React.createClass({
             instore: {
                 enum: countryValues,
 //                enumNames: countries.map((c) => c.name),
+            },
+            category: {
+                enum: categoriesandsub,
+                    enumNames: categoriesandsub.map((c) => c.name),
+            },
+            subcategories: {
+                enum: categoriesandsub
             }
 
         });
@@ -68,6 +78,12 @@ module.exports = React.createClass({
 //        data = attachIds(data);
 //        window.data =
 
+
+
+        var users = dummyusers;
+
+
+        window.user = users[Math.floor(Math.random()*users.length)];
 
         var data = rowdata;
 //        data = window.data;
@@ -134,19 +150,14 @@ module.exports = React.createClass({
         })],
         columnorder: '0'
     },
-//    {
-//        property: 'name',
-//        header: <div>
-//            <input
-//            type="checkbox"
-//            onClick={() => console.log('clicked')}
-//            style={{width:'20px'}}/>Name
-//        </div>,
-//        cell: [editable({
-//            editor: editors.input(),
-//        }), highlighter('name')],
-//        columnorder: '0'
-//    },
+    {
+        property: 'sortnumber',
+        header: 'Sort number',
+        cell: [editable({
+            editor: editors.input(),
+        }), highlighter('name')],
+        columnorder: '0'
+    },
 {
     property: 'name',
     header: 'Name',
@@ -155,40 +166,40 @@ module.exports = React.createClass({
 }), highlighter('name')],
     columnorder: '0'
 },
-    {
-        property: 'position',
-        header: 'Position',
-        cell: [editable({
-            editor: editors.input(),
-        }), highlighter('position')],
-        columnorder: '3'
-    },
-    {
-        property: 'country',
-        header: 'Country',
-        search: formatters.country,
-        cell: [editable({
-            editor: editors.checkbox(countries),
-        }), formatters.country, highlighter('country')],
-        columnorder: '1'
-    },
-    {
-        property: 'salary',
-        header: 'Salary',
-        cell: [(v) => ({
-            value: v,
-            props: {
-                onDoubleClick: () => alert('salary is ' + v)
-        }
-    }), highlighter('salary')],
-columnorder: '2'
+//{
+//    property: 'position',
+//    header: 'Position',
+//    cell: [editable({
+//        editor: editors.input(),
+//    }), highlighter('position')],
+//    columnorder: '3'
+//},
+{
+    property: 'country',
+    header: 'Country',
+    search: formatters.country,
+    cell: [editable({
+        editor: editors.checkbox(categoriesandsub),
+    }), formatters.country, highlighter('country')],
+    columnorder: '1'
 },
+//{
+//    property: 'salary',
+//    header: 'Salary',
+//    cell: [(v) => ({
+//        value: v,
+//        props: {
+//            onDoubleClick: () => alert('salary is ' + v)
+//    }
+//}), highlighter('salary')],
+//columnorder: '2'
+//},
 {
     property: 'category',
         header: 'Category',
     cell: [editable({
-    editor: editors.input(),
-}), highlighter('name')],
+        editor: editors.checkbox(categoriesandsub),
+    }),highlighter('name')],
     columnorder: '0'
 },
 {
@@ -211,8 +222,8 @@ columnorder: '2'
     property: 'doubleexposure',
         header: 'Double Exposure',
     cell: [editable({
-    editor: editors.input(),
-}), highlighter('name')],
+    editor: editors.checkbox(categoriesandsub),
+}),highlighter('name')],
     columnorder: '0'
 },
 {
@@ -625,9 +636,6 @@ columnorder: '2'
                                     <span className='edit' onClick={edit.bind(this)} style={{cursor: 'pointer'}}>
                                         &#8665;
                                     </span>
-                                    <span className='remove' onClick={remove.bind(this)} style={{cursor: 'pointer'}}>
-                                        &#10007;
-                                    </span>
                                 </span>
                             )
                         };
@@ -711,18 +719,6 @@ columnorder: '2'
                         };
                     }}
                 >
-                    <tfoot>
-                        <tr>
-                            <td>
-                                You could show sums etc. here in the customizable footer.
-                            </td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                        </tr>
-                    </tfoot>
                 </Table>
                 <div className='controls'>
                     <div className='pagination'>

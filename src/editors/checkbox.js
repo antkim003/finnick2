@@ -43,7 +43,7 @@ module.exports = (options, fields={}) => {
 //
         {
             e.preventDefault();
-            console.log(e.target.form, document.querySelectorAll('form'), window.row);
+            console.log(e.target.form, document.querySelectorAll('form'), window.row-1);
             var checkboxes = e.target.form.querySelectorAll('input');
             var checkboxesChecked = [];
             for (var i=0; i<checkboxes.length; i++) {
@@ -53,11 +53,11 @@ module.exports = (options, fields={}) => {
                 }
             }
 //            if (typeof  window.socket != 'undefined') {
-                window.socket.emit('my other event', { val: checkboxesChecked, row: window.row });
+                window.socket.emit('my other event', { val: checkboxesChecked, row: window.row-1 });
 //            }
 
 //            console.log('val ', checkboxesChecked)
-            this.props.onValue({ val: checkboxesChecked, row: window.row });
+            this.props.onValue({ val: checkboxesChecked, row: window.row-1 });
         }
 
             return (
