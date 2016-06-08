@@ -20,7 +20,7 @@ var editors = require('../src/editors');
 var sortColumn = require('../src/sort_column');
 var cells = require('../src/cells');
 
-var ColumnFilters = require('./data/column_filters.js');
+var ColumnFilters = require('./column_filters.js');
 var FieldWrapper = require('./field_wrapper.js');
 var SectionWrapper = require('./section_wrapper.js');
 var countries = require('./data/countries');
@@ -90,7 +90,11 @@ var highlighter = (column) => highlight((value) => {
     return Search.matches(column, value, this.state.search.query);
 });
 
+var t = _.filter(categoriesandsub, function(c){ return c.value == 'men'})[0].subcategories;
+
 return {
+
+
     editedCell: null,
     data: data,
     formatters: formatters,
@@ -182,15 +186,15 @@ columns: [
     header: 'Double Exposure',
     cell: [editable({
         editor: editors.checkbox(categoriesandsub)
-    }), highlighter('country')],
+    }), highlighter('doubleexposure')],
     columnorder: '0'
 },
 {
     property: 'doubleexposuresubcategory',
     header: 'Double Exposure Subcategory',
     cell: [editable({
-        editor: editors.checkbox(categoriesandsub)
-    }), highlighter('')],
+        editor: editors.checkbox(t, 'cat')
+    }), highlighter('doubleexposuresubcategory')],
     columnorder: '0'
 },
 {

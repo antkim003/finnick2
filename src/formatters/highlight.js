@@ -18,7 +18,7 @@ module.exports = function(getHighlights) {
             }
             children.push(<span className='highlight' key={x + '-match'}>{matchingText}</span>);
         }
-        children.push(<span key={x + '-remainder'}>{value.slice(currentPosition)}</span>);
+        children.push(<span key={x + '-remainder'}>{value != 'null' && value != '[object Object]' ? value.slice(currentPosition) : ''}</span>);
 
         var element = <span className='search-result'>{children}</span>;
         return element;

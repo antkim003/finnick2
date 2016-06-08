@@ -4,8 +4,6 @@ var React = require('react');
 var Fork = require('react-ghfork');
 
 var FullTable = require('./full_table.js');
-var EditorsTable = require('./editors_table.js');
-var NestedTable = require('./nested_table.js');
 
 // var readme = require('../README.md');
 

@@ -3,10 +3,10 @@
 var React = require('react');
 
 
-module.exports = (options, fields={}) => {
+module.exports = (options, cat, fields={}) => {
     const nameField = fields.name || 'name';
     const valueField = fields.value || 'value';
-
+    console.log(cat, options, 'in checkbox');
     return React.createClass({
         displayName: 'Checkbox',
 
@@ -16,49 +16,41 @@ module.exports = (options, fields={}) => {
         },
         componentDidMount: function() {
             var self = this;
-            console.log(options);
             window.socket;
+            var soc = setInterval(function() {
+                if (typeof io != 'undefined') {
+                    window.socket = io.connect('http://localhost:3000');
+                    window.socket.on('my other event', function (data) {
+                        console.log(data, 'thadhafd');
+                    });
+                    window.socket.on('new message', function (data) {
+                        self.props.onValue(data);
+                    });
+                    clearInterval(soc);
+                } else {
 
-                var soc = setInterval(function() {
-                    if (typeof io != 'undefined') {
-                        window.socket = io.connect('http://localhost:3000');
-                        window.socket.on('my other event', function (data) {
-                            console.log(data, 'thadhafd');
-                        });
-                        window.socket.on('new message', function (data) {
-                            self.props.onValue(data);
-                        });
-                        clearInterval(soc);
-                    } else {
-
-                    }
-
-                },100);
+                }
+            },100);
 
 
         },
         render() {
 
             const edit = (e) =>
-//
-        {
-            e.preventDefault();
-            console.log(e.target.form, document.querySelectorAll('form'), window.row-1);
-            var checkboxes = e.target.form.querySelectorAll('input');
-            var checkboxesChecked = [];
-            for (var i=0; i<checkboxes.length; i++) {
-                // And stick the checked ones onto an array...
-                if (checkboxes[i].checked) {
-                    checkboxesChecked.push(checkboxes[i].value);
+            {
+                e.preventDefault();
+                console.log(e.target.form, document.querySelectorAll('form'), window.row-1);
+                var checkboxes = e.target.form.querySelectorAll('input');
+                var checkboxesChecked = [];
+                for (var i=0; i<checkboxes.length; i++) {
+                    // And stick the checked ones onto an array...
+                    if (checkboxes[i].checked) {
+                        checkboxesChecked.push(checkboxes[i].value);
+                    }
                 }
-            }
-//            if (typeof  window.socket != 'undefined') {
                 window.socket.emit('my other event', { val: checkboxesChecked, row: window.row-1 });
-//            }
-
-//            console.log('val ', checkboxesChecked)
-            this.props.onValue({ val: checkboxesChecked, row: window.row-1 });
-        }
+                this.props.onValue({ val: checkboxesChecked, row: window.row-1 });
+            }
 
             return (
                 <form>
