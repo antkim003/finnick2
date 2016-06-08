@@ -5,7 +5,7 @@ var React = require('react');
 var Table = require('../src/table');
 var editors = require('../src/editors');
 
-var countries = require('./countries');
+var countries = require('./data/countries');
 
 
 module.exports = React.createClass({
