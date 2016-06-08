@@ -27,6 +27,7 @@ app.use('/api', require('./routes'));
  URLs that bypass express.static because the given file does not exist.
  */
 app.use(function (req, res, next) {
+
     if (isDeveloping) {
         next();
     } else {
@@ -38,7 +39,6 @@ app.use(function (req, res, next) {
     }
 
 });
-
 
 // webpack hot loading middleware
 if (isDeveloping) {
@@ -59,13 +59,12 @@ if (isDeveloping) {
   app.use(middleware);
   app.use(webpackHotMiddleware(compiler));
   app.get('*', function response(req, res) {
-    res.write(middleware.fileSystem.readFileSync(path.join(__dirname, '../dist/index.html')));
+    res.write(middleware.fileSystem.readFileSync(path.join(__dirname, '../../dist/index.html')));
     res.end();
   });
 } else {
   app.use(express.static(__dirname + '../../dist'));
   app.get('*', function response(req, res) {
-    console.log('it got here to return the react middleware');
     res.sendFile(path.join(__dirname, '../../dist/index.html'));
   });
 }

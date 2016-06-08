@@ -36,7 +36,6 @@ module.exports = function(editProperty, onValue, o) {
                 props: {
                     onClick: () => {
                         var state = {};
-
                         state[editProperty] = idx;
 
                         context.setState(state);
