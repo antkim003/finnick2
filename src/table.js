@@ -63,7 +63,12 @@ module.exports = React.createClass({
 
                             content = reduce(cell, (v, fn) => {
                                 if(React.isValidElement(v.value)) {
+                                    console.log(v);
                                     return v;
+                                }
+                                else {
+//                                  v =
+//                                    return v;
                                 }
 
                                 var val = fn(v.value, data, i, property);
@@ -80,8 +85,18 @@ module.exports = React.createClass({
                             }, {value: value, props: {}});
 
                             content = content || {};
+                            var values = {};
+//                            console.log(content)
 
-                            return <td className={'cell-'+j} key={j + '-cell'} {...content.props} >{j == columns.length-1 || value ? content.value : ''}</td>;
+                            if(j == columns.length-1 || value) {
+                                values = content.value;
+                            } else {
+                                content= {"value": "test", "props": {}}
+                                values = content.value;
+                            }
+
+
+                            return <td className={'cell-'+j} key={j + '-cell'} {...content.props} >{values}</td>;
                         }
                     )}</tr>)}
                 </tbody>
