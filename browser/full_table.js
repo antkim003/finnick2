@@ -90,7 +90,11 @@ var highlighter = (column) => highlight((value) => {
     return Search.matches(column, value, this.state.search.query);
 });
 
+var t = _.filter(categoriesandsub, function(c){ return c.value == 'men'})[0].subcategories;
+
 return {
+
+
     editedCell: null,
     data: data,
     formatters: formatters,
@@ -182,15 +186,15 @@ columns: [
     header: 'Double Exposure',
     cell: [editable({
         editor: editors.checkbox(categoriesandsub)
-    }), highlighter('country')],
+    }), highlighter('doubleexposure')],
     columnorder: '0'
 },
 {
     property: 'doubleexposuresubcategory',
     header: 'Double Exposure Subcategory',
     cell: [editable({
-        editor: editors.checkbox(categoriesandsub)
-    }), highlighter('')],
+        editor: editors.checkbox(t)
+    }), highlighter('doubleexposuresubcategory')],
     columnorder: '0'
 },
 {

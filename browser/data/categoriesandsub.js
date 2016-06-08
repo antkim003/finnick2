@@ -5,12 +5,12 @@ module.exports =
         {
             value: 'women',
             name: 'Women',
-            subcategories: ['womencat1','womencat2']
+            subcategories: [{value: 'womencat1', name: "Cat1"},{value: 'womencat2', name: 'Cat2'}]
         },
         {
             value: 'men',
             name: 'Men',
-            subcategories: ['mencat1','mencat2']
+            subcategories: [{value: 'mencat1', name: "Cat1"},{value: 'mencat2', name: 'Cat2'}]
         },
         {
             value: 'womens_shoes',
