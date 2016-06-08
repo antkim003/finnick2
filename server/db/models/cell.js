@@ -3,10 +3,13 @@ var mongoose = require('mongoose');
 var _ = require('lodash');
 
 var schema = new mongoose.Schema({
-    row: {
+    rowIndex: {
         type: String
     },
-    column: {
+    columnIndex: {
+        type: String
+    },
+    columnName: {
         type: String
     },
     data: {
