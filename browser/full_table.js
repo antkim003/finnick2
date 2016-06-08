@@ -29,14 +29,15 @@ var rowdata = require('./dummyrowdata.js');
 var dummyusers = require('./dummyusers.js');
 var categoriesandsub = require('./categoriesandsub.js');
 
-
 var highlight = require('../src/formatters/highlight');
 
 module.exports = React.createClass({
     displayName: 'FullTable',
     getInitialState() {
-        var countryValues = countries.map((c) => c.value);
-        var properties = augmentWithTitles({
+    var countryValues = countries.map((c) => c.value);
+    var categoryValues = categoriesandsub.map((c) => c.value);
+
+    var properties = augmentWithTitles({
             name: {
                 type: 'string'
             },
@@ -58,23 +59,18 @@ module.exports = React.createClass({
             },
             instore: {
                 enum: countryValues,
-//                enumNames: countries.map((c) => c.name),
+        //                enumNames: countries.map((c) => c.name),
             },
-            category: {
-                enum: categoriesandsub,
-                    enumNames: categoriesandsub.map((c) => c.name),
-            },
-            subcategories: {
-                enum: categoriesandsub
+            doubleexposure: {
+                enum: categoryValues,
             }
 
-        });
-
-//        var data = generateData({
-//            amount: 10000,
-//            fieldGenerators: getFieldGenerators(countryValues),
-//            properties: properties,
-//        });
+});
+//var data = generateData({
+//    amount: 100,
+//    fieldGenerators: getFieldGenerators(countryValues),
+//    properties: properties,
+//});
 //        data = attachIds(data);
 //        window.data =
 
@@ -88,118 +84,120 @@ module.exports = React.createClass({
         var data = rowdata;
 //        data = window.data;
 
-        var editable = cells.edit.bind(this, 'editedCell', (value, celldata, rowIndex, property) => {
+var editable = cells.edit.bind(this, 'editedCell', (value, celldata, rowIndex, property) => {
 
-            console.log('editable', celldata, rowIndex, celldata[rowIndex].id, property);
-            var idx = findIndex(this.state.data, {
-                id: celldata[rowIndex].id,
-            });
+    console.log('editable', celldata, rowIndex, celldata[rowIndex].id, property);
+var idx = findIndex(this.state.data, {
+    id: celldata[rowIndex].id,
+});
 
-            var row = value.hasOwnProperty('row') ? value.row : rowIndex;
-            var val = value.hasOwnProperty('row') ? value.val : value;
+var row = value.hasOwnProperty('row') ? value.row : rowIndex;
+var val = value.hasOwnProperty('row') ? value.val : value;
 //            console.log('id', celldata, value);
-            this.state.data[row][property] = val;
+this.state.data[row][property] = val;
 
-            this.setState({
-                data: data,
-            });
+this.setState({
+    data: data,
+});
+});
+
+var formatters = {
+        country: (country) => find(countries, 'value', country).name,
+//salary: (salary) => parseFloat(salary).toFixed(2),
+    };
+
+var highlighter = (column) => highlight((value) => {
+    return Search.matches(column, value, this.state.search.query);
+});
+
+return {
+    editedCell: null,
+    data: data,
+    formatters: formatters,
+    search: {
+        column: '',
+        query: ''
+    },
+    header: {
+        onClick: (column) => {
+        // reset edits
+        this.setState({
+            editedCell: null
         });
 
-        var formatters = {
-            country: (country) => find(countries, 'value', country).name,
-            //salary: (salary) => parseFloat(salary).toFixed(2),
-        };
+sortColumn(
+    this.state.columns,
+    column,
+    this.setState.bind(this)
+);
+},
+className: cx(['header'])
+},
+sortingColumn: null, // reference to sorting column
 
-        var highlighter = (column) => highlight((value) => {
-            return Search.matches(column, value, this.state.search.query);
-        });
 
-        return {
-            editedCell: null,
-            data: data,
-            formatters: formatters,
-            search: {
-                column: '',
-                query: ''
-            },
-            header: {
-                onClick: (column) => {
-                    // reset edits
-                    this.setState({
-                        editedCell: null
-                    });
-
-                    sortColumn(
-                        this.state.columns,
-                        column,
-                        this.setState.bind(this)
-                    );
-                },
-                className: cx(['header'])
-            },
-            sortingColumn: null, // reference to sorting column
-            columns: [
+columns: [
     {
         property: 'id',
-        header: 'row',
+        header: 'row id',
         cell: [(v) => ({
-            value: v+1,
+            value: v,
             props: {
 
             }
         })],
-        columnorder: '0'
-    },
+    columnorder: '0'
+},
     {
         property: 'sortnumber',
-        header: 'Sort number',
+        header: 'sort number',
         cell: [editable({
             editor: editors.input(),
-        }), highlighter('name')],
+        })],
         columnorder: '0'
     },
 {
     property: 'name',
-    header: 'Name',
+        header: 'Name',
     cell: [editable({
     editor: editors.input(),
-}), highlighter('name')],
+})],
     columnorder: '0'
 },
 //{
 //    property: 'position',
-//    header: 'Position',
+//        header: 'Position',
 //    cell: [editable({
-//        editor: editors.input(),
-//    }), highlighter('position')],
+//    editor: editors.input(),
+//})],
 //    columnorder: '3'
 //},
-{
-    property: 'country',
-    header: 'Country',
-    search: formatters.country,
-    cell: [editable({
-        editor: editors.checkbox(categoriesandsub),
-    }), formatters.country, highlighter('country')],
-    columnorder: '1'
-},
 //{
-//    property: 'salary',
-//    header: 'Salary',
-//    cell: [(v) => ({
-//        value: v,
-//        props: {
-//            onDoubleClick: () => alert('salary is ' + v)
-//    }
-//}), highlighter('salary')],
-//columnorder: '2'
+//    property: 'country',
+//        header: 'Country',
+//    search: formatters.country,
+//    cell: [editable({
+//    editor: editors.checkbox(countries),
+//}), formatters.country, highlighter('country')],
+//    columnorder: '1'
 //},
+{
+    property: 'salary',
+        header: 'Salary',
+    cell: [(v) => ({
+    value: v,
+    props: {
+        onDoubleClick: () => alert('salary is ' + v)
+}
+}), highlighter('salary')],
+columnorder: '2'
+},
 {
     property: 'category',
         header: 'Category',
     cell: [editable({
-        editor: editors.checkbox(categoriesandsub),
-    }),highlighter('name')],
+    editor: editors.input(),
+}), highlighter('name')],
     columnorder: '0'
 },
 {
@@ -215,23 +213,23 @@ module.exports = React.createClass({
         header: 'Notes on Category',
     cell: [editable({
     editor: editors.input(),
-}), highlighter('name')],
+})],
     columnorder: '0'
 },
 {
     property: 'doubleexposure',
         header: 'Double Exposure',
     cell: [editable({
-    editor: editors.checkbox(categoriesandsub),
-}),highlighter('name')],
+    editor: editors.checkbox(categoriesandsub)
+}), highlighter('country')],
     columnorder: '0'
 },
 {
     property: 'doubleexposuresubcategory',
-    header: 'Double Exposure Subcategory',
+        header: 'Double Exposure Subcategory',
     cell: [editable({
     editor: editors.input(),
-}), highlighter('name')],
+})],
     columnorder: '0'
 },
 {
@@ -247,7 +245,7 @@ module.exports = React.createClass({
         header: 'In Store Special',
     cell: [editable({
     editor: editors.input(),
-}), highlighter('name')],
+})],
     columnorder: '0'
 },
 {
@@ -271,7 +269,7 @@ module.exports = React.createClass({
         header: 'MCOM Special',
     cell: [editable({
     editor: editors.input(),
-}), highlighter('name')],
+})],
     columnorder: '0'
 },
 {
@@ -287,7 +285,7 @@ module.exports = React.createClass({
         header: 'MCOM Reg Price (range)',
     cell: [editable({
     editor: editors.input(),
-}), highlighter('name')],
+})],
     columnorder: '0'
 },
 {
@@ -311,7 +309,7 @@ module.exports = React.createClass({
         header: 'Market to International',
     cell: [editable({
     editor: editors.input(),
-}), highlighter('name')],
+})],
     columnorder: '0'
 },
 {
@@ -319,7 +317,7 @@ module.exports = React.createClass({
         header: 'Projected Units',
     cell: [editable({
     editor: editors.input(),
-}), highlighter('name')],
+})],
     columnorder: '0'
 },
 {
@@ -327,7 +325,7 @@ module.exports = React.createClass({
         header: 'MCOM Projected Sales',
     cell: [editable({
     editor: editors.input(),
-}), highlighter('name')],
+})],
     columnorder: '0'
 },
 {
@@ -343,7 +341,7 @@ module.exports = React.createClass({
         header: 'Image Id',
     cell: [editable({
     editor: editors.input(),
-}), highlighter('name')],
+})],
     columnorder: '0'
 },
 {
@@ -359,7 +357,7 @@ module.exports = React.createClass({
         header: 'Single or Multiple',
     cell: [editable({
     editor: editors.input(),
-}), highlighter('name')],
+})],
     columnorder: '0'
 },
 {
@@ -367,7 +365,7 @@ module.exports = React.createClass({
         header: 'Feature Product Ids',
     cell: [editable({
     editor: editors.input(),
-}), highlighter('name')],
+})],
     columnorder: '0'
 },
 {
@@ -375,7 +373,7 @@ module.exports = React.createClass({
         header: 'Saved Set Ids',
     cell: [editable({
     editor: editors.input(),
-}), highlighter('name')],
+})],
     columnorder: '0'
 },
 {
@@ -383,7 +381,7 @@ module.exports = React.createClass({
         header: 'Tile Image',
     cell: [editable({
     editor: editors.input(),
-}), highlighter('name')],
+})],
     columnorder: '0'
 },
 {
@@ -391,7 +389,7 @@ module.exports = React.createClass({
         header: 'Tile Copy Line 1',
     cell: [editable({
     editor: editors.input(),
-}), highlighter('name')],
+})],
     columnorder: '0'
 },
 {
@@ -399,7 +397,7 @@ module.exports = React.createClass({
         header: 'Tile Copy Line 2',
     cell: [editable({
     editor: editors.input(),
-}), highlighter('name')],
+})],
     columnorder: '0'
 },
 {
@@ -423,7 +421,7 @@ module.exports = React.createClass({
         header: 'Plenti Watermark',
     cell: [editable({
     editor: editors.input(),
-}), highlighter('name')],
+})],
     columnorder: '0'
 },
 {
@@ -431,7 +429,7 @@ module.exports = React.createClass({
         header: 'Black Friday Favorites',
     cell: [editable({
     editor: editors.input(),
-}), highlighter('name')],
+})],
     columnorder: '0'
 },
 {
@@ -439,7 +437,7 @@ module.exports = React.createClass({
         header: 'Going Fast',
     cell: [editable({
     editor: editors.input(),
-}), highlighter('name')],
+})],
     columnorder: '0'
 },
 {
@@ -455,7 +453,7 @@ module.exports = React.createClass({
         header: 'Petites Saved Set',
     cell: [editable({
     editor: editors.input(),
-}), highlighter('name')],
+})],
     columnorder: '0'
 },
 {
@@ -463,7 +461,7 @@ module.exports = React.createClass({
         header: 'Need Saved Set?',
     cell: [editable({
     editor: editors.input(),
-}), highlighter('name')],
+})],
     columnorder: '0'
 },
 {
@@ -471,7 +469,7 @@ module.exports = React.createClass({
         header: 'Link Type',
     cell: [editable({
     editor: editors.input(),
-}), highlighter('name')],
+})],
     columnorder: '0'
 },
 {
@@ -479,7 +477,7 @@ module.exports = React.createClass({
         header: 'Live Date',
     cell: [editable({
     editor: editors.input(),
-}), highlighter('name')],
+})],
     columnorder: '0'
 },
 {
@@ -487,7 +485,7 @@ module.exports = React.createClass({
         header: 'Category Id linking',
     cell: [editable({
     editor: editors.input(),
-}), highlighter('name')],
+})],
     columnorder: '0'
 },
 {
@@ -495,7 +493,7 @@ module.exports = React.createClass({
         header: 'Product Id linking',
     cell: [editable({
     editor: editors.input(),
-}), highlighter('name')],
+})],
     columnorder: '0'
 },
 {
@@ -503,7 +501,7 @@ module.exports = React.createClass({
         header: 'Url linking',
     cell: [editable({
     editor: editors.input(),
-}), highlighter('name')],
+})],
     columnorder: '0'
 },
 {
@@ -511,7 +509,7 @@ module.exports = React.createClass({
         header: 'Petites Link Type',
     cell: [editable({
     editor: editors.input(),
-}), highlighter('name')],
+})],
     columnorder: '0'
 },
 {
@@ -543,238 +541,239 @@ module.exports = React.createClass({
         header: 'Omni Projected Sales',
     cell: [editable({
     editor: editors.input(),
-}), highlighter('name')],
+})],
     columnorder: '0'
 },
 {
     property: 'extraomniprojectedsales',
         header: ' Extra Omni Projected Sales',
-        cell: [editable({
-        editor: editors.input(),
-    }), highlighter('name')],
-        columnorder: '0'
+    cell: [editable({
+    editor: editors.input(),
+})],
+    columnorder: '0'
 },
 {
     property: 'killedrow',
         header: 'Killed Row',
     cell: [editable({
     editor: editors.input(),
-}), highlighter('name')],
+})],
     columnorder: '0'
 },
-                {
-                    cell: function(value, celldata, rowIndex) {
-                        var idx = findIndex(this.state.data, {
-                            id: celldata[rowIndex].id,
-                        });
-
-                        var edit = () => {
-                            var schema = {
-                                type: 'object',
-                                properties: properties,
-                            };
-
-                            var onSubmit = (editData, editValue) => {
-                                this.refs.modal.hide();
-
-                                if(editValue === 'Cancel') {
-                                    return;
-                                }
-
-                                this.state.data[idx] = editData;
-
-                                this.setState({
-                                    data: this.state.data
-                                });
-                            };
-
-                            var getButtons = (submit) => {
-                                return (
-                                    <span>
-                                        <input type='submit'
-                                            className='pure-button pure-button-primary ok-button'
-                                            key='ok' value='OK'
-                                            onClick={submit} />
-                                        <input type='submit'
-                                            className='pure-button cancel-button'
-                                            key='cancel' value='Cancel'
-                                            onClick={submit} />
-                                    </span>
-                                );
-                            };
-
-                            this.setState({
-                                modal: {
-                                    title: 'Edit',
-                                    content: <Form
-                                        className='pure-form pure-form-aligned'
-                                        fieldWrapper={FieldWrapper}
-                                        sectionWrapper={SectionWrapper}
-                                        buttons={getButtons}
-                                        schema={schema}
-                                        validate={validate}
-                                        values={this.state.data[idx]}
-                                        onSubmit={onSubmit}/>
-                                }
-                            });
-
-                            this.refs.modal.show();
-                        };
-
-                        var remove = () => {
-                            // this could go through flux etc.
-                            this.state.data.splice(idx, 1);
-
-                            this.setState({
-                                data: this.state.data
-                            });
-                        };
-
-                        return {
-                            value: (
-                                <span>
-                                    <span className='edit' onClick={edit.bind(this)} style={{cursor: 'pointer'}}>
-                                        &#8665;
-                                    </span>
-                                </span>
-                            )
-                        };
-                    }.bind(this),
-                },
-            ],
-            modal: {
-                title: 'title',
-                content: 'content',
-            },
-            pagination: {
-                page: 1,
-                perPage: 10
-            }
-        };
-    },
-
-    onSearch(search) {
-        this.setState({
-            editedCell: null, // reset edits
-            search: search
+{
+    cell: function(value, celldata, rowIndex) {
+        var idx = findIndex(this.state.data, {
+            id: celldata[rowIndex].id,
         });
-    },
 
-    columnFilters() {
-        var headerConfig = this.state.header;
-        var columns = _.sortBy(this.state.columns, 'columnorder');
-        // if you don't want an header, just return;
-        return (
-            <thead>
-                <ColumnNames config={headerConfig} columns={columns} />
-                <ColumnFilters columns={columns} />
-            </thead>
+        var edit = () => {
+            var schema = {
+                type: 'object',
+                properties: properties,
+            };
+
+            var onSubmit = (editData, editValue) => {
+                this.refs.modal.hide();
+
+                if(editValue === 'Cancel') {
+                    return;
+                }
+
+                this.state.data[idx] = editData;
+
+                this.setState({
+                    data: this.state.data
+                });
+            };
+
+            var getButtons = (submit) => {
+                return (
+                    <span>
+                        <input type='submit'
+                        className='pure-button pure-button-primary ok-button'
+                        key='ok' value='OK'
+                        onClick={submit} />
+                        <input type='submit'
+                        className='pure-button cancel-button'
+                        key='cancel' value='Cancel'
+                        onClick={submit} />
+                    </span>
+                    );
+            };
+
+            this.setState({
+                modal: {
+                    title: 'Edit',
+                    content: <Form
+                    className='pure-form pure-form-aligned'
+                    fieldWrapper={FieldWrapper}
+                    sectionWrapper={SectionWrapper}
+                    buttons={getButtons}
+                    schema={schema}
+                    validate={validate}
+                    values={this.state.data[idx]}
+                    onSubmit={onSubmit}/>
+                }
+            });
+
+            this.refs.modal.show();
+        };
+
+        var remove = () => {
+            // this could go through flux etc.
+            this.state.data.splice(idx, 1);
+
+            this.setState({
+                data: this.state.data
+            });
+        };
+
+        return {
+            value: (
+                <span>
+                    <span className='edit' onClick={edit.bind(this)} style={{cursor: 'pointer'}}>
+                    &#8665;
+                    </span>
+                </span>
+                )
+        };
+    }.bind(this),
+},
+],
+modal: {
+    title: 'title',
+        content: 'content',
+},
+pagination: {
+    page: 1,
+        perPage: 10
+}
+};
+},
+
+onSearch(search) {
+    this.setState({
+        editedCell: null, // reset edits
+        search: search
+    });
+},
+
+columnFilters() {
+    var headerConfig = this.state.header;
+    var columns = _.sortBy(this.state.columns, 'columnorder');
+    // if you don't want an header, just return;
+    return (
+        <thead>
+            <ColumnNames config={headerConfig} columns={columns} />
+            <ColumnFilters columns={columns} />
+        </thead>
         );
-    },
+},
 
-    render() {
-        var columns = _.sortBy(this.state.columns, 'columnorder');
+render() {
+    var columns = _.sortBy(this.state.columns, 'columnorder');
 //        var columns = this.state.columns;
 
-        var pagination = this.state.pagination;
+    var pagination = this.state.pagination;
 
-        var data = this.state.data;
+    var data = this.state.data;
 
-        if (this.state.search.query) {
-            data = Search.search(
-                data,
-                columns,
-                this.state.search.column,
-                this.state.search.query
-            );
-        }
-
-        data = sortColumn.sort(data, this.state.sortingColumn, orderBy);
-
-        var paginated = paginate(data, pagination);
-        var pages = Math.ceil(data.length / Math.max(
-          isNaN(pagination.perPage) ? 1 : pagination.perPage, 1)
+    if (this.state.search.query) {
+        data = Search.search(
+            data,
+            columns,
+            this.state.search.column,
+            this.state.search.query
         );
+    }
 
-        return (
-            <div>
-                <div className='controls'>
-                    <div className='per-page-container'>
-                        Per page <input type='text' defaultValue={pagination.perPage} onChange={this.onPerPage}></input>
-                    </div>
-                    <div className='search-container'>
-                        Search <Search columns={columns} data={this.state.data} onChange={this.onSearch} />
-                    </div>
+    data = sortColumn.sort(data, this.state.sortingColumn, orderBy);
+
+    var paginated = paginate(data, pagination);
+    var pages = Math.ceil(data.length / Math.max(
+            isNaN(pagination.perPage) ? 1 : pagination.perPage, 1)
+    );
+
+    return (
+        <div>
+            <div className='controls'>
+                <div className='per-page-container'>
+                Per page <input type='text' defaultValue={pagination.perPage} onChange={this.onPerPage}></input>
                 </div>
-                <Table
-                    className='pure-table pure-table-striped'
-                    columnNames={this.columnFilters}
-                    columns={columns}
-                    data={paginated.data}
-                    row={(d, rowIndex) => {
-                        return {
-                            className: rowIndex % 2 ? 'odd-row row-'+d.id : 'even-row row-'+d.id,
-                            onClick: () => {console.log('clicked row', d); window.row = d.id; highlightRow(this,d.id)},
-                            dataRow: d.id
-                        };
-                    }}
-                >
-                </Table>
-                <div className='controls'>
-                    <div className='pagination'>
-                        <Paginator.Context className="pagify-pagination"
-                        segments={segmentize({
-                            page: pagination.page,
-                            pages: pages,
-                            beginPages: 3,
-                            endPages: 3,
-                            sidePages: 2
-                        })} onSelect={this.onSelect}>
-                            <Paginator.Button page={pagination.page - 1}>Previous</Paginator.Button>
-
-                            <Paginator.Segment field="beginPages" />
-
-                            <Paginator.Ellipsis className="ellipsis"
-                              previousField="beginPages" nextField="previousPages" />
-
-                            <Paginator.Segment field="previousPages" />
-                            <Paginator.Segment field="centerPage" className="selected" />
-                            <Paginator.Segment field="nextPages" />
-
-                            <Paginator.Ellipsis className="ellipsis"
-                              previousField="nextPages" nextField="endPages" />
-
-                            <Paginator.Segment field="endPages" />
-
-                            <Paginator.Button page={pagination.page + 1}>Next</Paginator.Button>
-                        </Paginator.Context>
-                    </div>
+                <div className='search-container'>
+                Search <Search columns={columns} data={this.state.data} onChange={this.onSearch} />
                 </div>
-                <SkyLight ref='modal' title={this.state.modal.title}>{this.state.modal.content}</SkyLight>
             </div>
+            <Table
+            className='pure-table pure-table-striped'
+            columnNames={this.columnFilters}
+            columns={columns}
+            data={paginated.data}
+            row={(d, rowIndex) => {
+                return {
+                className: rowIndex % 2 ? 'odd-row row-'+d.id : 'even-row row-'+d.id,
+                onClick: () => {console.log('clicked row', d); window.row = d.id; highlightRow(this,d.id)},
+                dataRow: d.id
+                };
+                }}
+            >
+
+            </Table>
+            <div className='controls'>
+                <div className='pagination'>
+                    <Paginator.Context className="pagify-pagination"
+                    segments={segmentize({
+                        page: pagination.page,
+                        pages: pages,
+                        beginPages: 3,
+                        endPages: 3,
+                        sidePages: 2
+                    })} onSelect={this.onSelect}>
+                        <Paginator.Button page={pagination.page - 1}>Previous</Paginator.Button>
+
+                        <Paginator.Segment field="beginPages" />
+
+                        <Paginator.Ellipsis className="ellipsis"
+                        previousField="beginPages" nextField="previousPages" />
+
+                        <Paginator.Segment field="previousPages" />
+                        <Paginator.Segment field="centerPage" className="selected" />
+                        <Paginator.Segment field="nextPages" />
+
+                        <Paginator.Ellipsis className="ellipsis"
+                        previousField="nextPages" nextField="endPages" />
+
+                        <Paginator.Segment field="endPages" />
+
+                        <Paginator.Button page={pagination.page + 1}>Next</Paginator.Button>
+                    </Paginator.Context>
+                </div>
+            </div>
+            <SkyLight ref='modal' title={this.state.modal.title}>{this.state.modal.content}</SkyLight>
+        </div>
         );
-    },
+},
 
-    onSelect(page) {
-        var pagination = this.state.pagination || {};
-        var pages = Math.ceil(this.state.data.length / pagination.perPage);
+onSelect(page) {
+    var pagination = this.state.pagination || {};
+    var pages = Math.ceil(this.state.data.length / pagination.perPage);
 
-        pagination.page = Math.min(Math.max(page, 1), pages);
+    pagination.page = Math.min(Math.max(page, 1), pages);
 
-        this.setState({
-            pagination: pagination
-        });
-    },
+    this.setState({
+        pagination: pagination
+    });
+},
 
-    onPerPage(e) {
-        var pagination = this.state.pagination || {};
+onPerPage(e) {
+    var pagination = this.state.pagination || {};
 
-        pagination.perPage = parseInt(e.target.value, 10);
+    pagination.perPage = parseInt(e.target.value, 10);
 
-        this.setState({
-            pagination: pagination
-        });
-    },
+    this.setState({
+        pagination: pagination
+    });
+},
 });
 
 function paginate(data, o) {
@@ -806,7 +805,7 @@ function getFieldGenerators(countryValues) {
     return {
         name: function() {
             var forenames = ['Jack', 'Bo', 'John', 'Jill', 'Angus', 'Janet', 'Cecilia',
-            'Daniel', 'Marge', 'Homer', 'Trevor', 'Fiona', 'Margaret', 'Ofelia'];
+                'Daniel', 'Marge', 'Homer', 'Trevor', 'Fiona', 'Margaret', 'Ofelia'];
             var surnames = ['MacGyver', 'Johnson', 'Jackson', 'Robertson', 'Hull', 'Hill'];
 
             return math.pick(forenames) + ' ' + math.pick(surnames);
@@ -827,15 +826,15 @@ function attachIds(arr) {
     return arr.map((o, i) => {
         o.id = i;
 
-        return o;
-    });
+    return o;
+});
 }
 
 function find(arr, key, value) {
 //    console.log('console.log find ',key, value, arr )
-    for( var i=0; i < value.length; i++) {
+//    for( var i=0; i < value.length; i++) {
 //        console.log(value[i]);
-    }
+//    }
 
     return arr;
 //    var value = Array.isArray(value) ? value : [value];

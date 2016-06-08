@@ -81,7 +81,7 @@ module.exports = React.createClass({
 
                             content = content || {};
 
-                            return <td className={'cell-'+j} key={j + '-cell'} {...content.props} data-test={value}>{content.value}</td>;
+                            return <td className={'cell-'+j} key={j + '-cell'} {...content.props} >{j == columns.length-1 || value ? content.value : ''}</td>;
                         }
                     )}</tr>)}
                 </tbody>

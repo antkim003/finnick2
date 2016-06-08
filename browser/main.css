@@ -133,3 +133,29 @@ table {
     float: left;
     width: 100%;
 }
+
+
+.pure-table {
+    font-size: 13px;
+}
+
+.pure-table label {
+    float: right;
+    font-size: 10px;
+    white-space: nowrap;
+    width: calc(100% - 15px);
+    line-height: 18px;
+}
+.pure-table td {
+    padding-left: 1.5em;
+    padding-right: 1.5em;
+    padding-top: 0.3em;
+    padding-bottom: 0.3em;
+    white-space: pre;
+}
+.cell-0 {
+    /*position: fixed;*/
+    /*height: inherit;*/
+    /*width: inherit;*/
+    /*top: 0;*/
+}
