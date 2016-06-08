@@ -193,7 +193,7 @@ columns: [
     property: 'doubleexposuresubcategory',
     header: 'Double Exposure Subcategory',
     cell: [editable({
-        editor: editors.checkbox(t)
+        editor: editors.checkbox(t, 'cat')
     }), highlighter('doubleexposuresubcategory')],
     columnorder: '0'
 },
