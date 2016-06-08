@@ -712,7 +712,10 @@ render() {
             row={(d, rowIndex) => {
                 return {
                 className: rowIndex % 2 ? 'odd-row row-'+d.id : 'even-row row-'+d.id,
-                onClick: () => {console.log('clicked row', d); window.row = d.id; highlightRow(this,d.id)},
+                onClick: () => {
+                    console.log('clicked row', d); 
+                    window.row = d.id; highlightRow(this,d.id);
+                },
                 dataRow: d.id
                 };
                 }}
