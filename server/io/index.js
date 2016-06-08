@@ -10,8 +10,6 @@ module.exports = function (server) {
 
     io.on('connection', function (socket) {
         console.log('io connection on');
-        // Now have access to socket, wowzers!
-        //        socket.emit('news', { hello: 'world' });
         socket.on('my other event', function (data) {
         //            console.log(data);
         //            socket.emit('sendtoclient', data);
