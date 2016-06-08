@@ -20,7 +20,7 @@ var editors = require('../src/editors');
 var sortColumn = require('../src/sort_column');
 var cells = require('../src/cells');
 
-var ColumnFilters = require('./data/column_filters.js');
+var ColumnFilters = require('./column_filters.js');
 var FieldWrapper = require('./field_wrapper.js');
 var SectionWrapper = require('./section_wrapper.js');
 var countries = require('./data/countries');
