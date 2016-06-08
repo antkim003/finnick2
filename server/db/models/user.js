@@ -12,7 +12,15 @@ var schema = new mongoose.Schema({
     },
     salt: {
         type: String
+    },
+    collections: {
+        type: String
+    },
+    locked: {
+        type: Boolean
     }
+},{
+    timestamps: true
 });
 
 // method to remove sensitive information from user objects before sending them out
