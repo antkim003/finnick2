@@ -23,36 +23,23 @@ var cells = require('../src/cells');
 var ColumnFilters = require('./column_filters.js');
 var FieldWrapper = require('./field_wrapper.js');
 var SectionWrapper = require('./section_wrapper.js');
-var countries = require('./countries');
+var countries = require('./data/countries');
 var generateData = require('./generate_data');
-var rowdata = require('./dummyrowdata.js');
-var dummyusers = require('./dummyusers.js');
-var categoriesandsub = require('./categoriesandsub.js');
+var rowdata = require('./data/dummyrowdata.js');
+var dummyusers = require('./data/dummyusers.js');
+var categoriesandsub = require('./data/categoriesandsub.js');
 
 var highlight = require('../src/formatters/highlight');
 
 module.exports = React.createClass({
     displayName: 'FullTable',
-    getInitialState() {
+    getInitialState: function(){
     var countryValues = countries.map((c) => c.value);
     var categoryValues = categoriesandsub.map((c) => c.value);
 
     var properties = augmentWithTitles({
             name: {
                 type: 'string'
-            },
-            position: {
-                type: 'string'
-            },
-            salary: {
-                type: 'number'
-            },
-            country: {
-                enum: countryValues,
-                enumNames: countries.map((c) => c.name),
-            },
-            active: {
-                type: 'boolean'
             },
             sortnumber: {
                 type: 'number'
@@ -62,48 +49,41 @@ module.exports = React.createClass({
         //                enumNames: countries.map((c) => c.name),
             },
             doubleexposure: {
-                enum: categoryValues,
+                enum: categoryValues
+            },
+            doubleexposuresubcategory: {
+                enum: categoryValues
             }
 
-});
+    });
 //var data = generateData({
 //    amount: 100,
 //    fieldGenerators: getFieldGenerators(countryValues),
 //    properties: properties,
 //});
-//        data = attachIds(data);
-//        window.data =
-
-
 
         var users = dummyusers;
-
 
         window.user = users[Math.floor(Math.random()*users.length)];
 
         var data = rowdata;
-//        data = window.data;
 
 var editable = cells.edit.bind(this, 'editedCell', (value, celldata, rowIndex, property) => {
-
     console.log('editable', celldata, rowIndex, celldata[rowIndex].id, property);
-var idx = findIndex(this.state.data, {
-    id: celldata[rowIndex].id,
-});
-
-var row = value.hasOwnProperty('row') ? value.row : rowIndex;
-var val = value.hasOwnProperty('row') ? value.val : value;
-//            console.log('id', celldata, value);
-this.state.data[row][property] = val;
-
-this.setState({
-    data: data,
-});
+    var idx = findIndex(this.state.data, {
+        id: celldata[rowIndex].id,
+    });
+    var row = value.hasOwnProperty('row') ? value.row : rowIndex;
+    var val = value.hasOwnProperty('row') ? value.val : value;
+    //            console.log('id', celldata, value);
+    this.state.data[row][property] = val;
+    this.setState({
+        data: data,
+    });
 });
 
 var formatters = {
         country: (country) => find(countries, 'value', country).name,
-//salary: (salary) => parseFloat(salary).toFixed(2),
     };
 
 var highlighter = (column) => highlight((value) => {
@@ -125,15 +105,15 @@ return {
             editedCell: null
         });
 
-sortColumn(
-    this.state.columns,
-    column,
-    this.setState.bind(this)
-);
-},
-className: cx(['header'])
-},
-sortingColumn: null, // reference to sorting column
+        sortColumn(
+            this.state.columns,
+            column,
+            this.setState.bind(this)
+        );
+        },
+        className: cx(['header'])
+    },
+    sortingColumn: null, // reference to sorting column
 
 
 columns: [
@@ -165,14 +145,6 @@ columns: [
     columnorder: '0'
 },
 //{
-//    property: 'position',
-//        header: 'Position',
-//    cell: [editable({
-//    editor: editors.input(),
-//})],
-//    columnorder: '3'
-//},
-//{
 //    property: 'country',
 //        header: 'Country',
 //    search: formatters.country,
@@ -182,23 +154,12 @@ columns: [
 //    columnorder: '1'
 //},
 {
-    property: 'salary',
-        header: 'Salary',
-    cell: [(v) => ({
-    value: v,
-    props: {
-        onDoubleClick: () => alert('salary is ' + v)
-}
-}), highlighter('salary')],
-columnorder: '2'
-},
-{
     property: 'category',
         header: 'Category',
     cell: [editable({
-    editor: editors.input(),
-}), highlighter('name')],
-    columnorder: '0'
+        editor: editors.input(),
+    }), highlighter('name')],
+        columnorder: '0'
 },
 {
     property: 'subcategories',
@@ -210,7 +171,7 @@ columnorder: '2'
 },
 {
     property: 'notesoncategory',
-        header: 'Notes on Category',
+    header: 'Notes on Category',
     cell: [editable({
     editor: editors.input(),
 })],
@@ -218,25 +179,25 @@ columnorder: '2'
 },
 {
     property: 'doubleexposure',
-        header: 'Double Exposure',
+    header: 'Double Exposure',
     cell: [editable({
-    editor: editors.checkbox(categoriesandsub)
-}), highlighter('country')],
+        editor: editors.checkbox(categoriesandsub)
+    }), highlighter('country')],
     columnorder: '0'
 },
 {
     property: 'doubleexposuresubcategory',
-        header: 'Double Exposure Subcategory',
+    header: 'Double Exposure Subcategory',
     cell: [editable({
-    editor: editors.input(),
-})],
+        editor: editors.checkbox(categoriesandsub)
+    }), highlighter('')],
     columnorder: '0'
 },
 {
     property: 'pricingcategory',
         header: 'Pricing Category',
     cell: [editable({
-    editor: editors.input(),
+    editor: editors.input()
 }), highlighter('name')],
     columnorder: '0'
 },

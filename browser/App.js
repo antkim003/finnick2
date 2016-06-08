@@ -12,8 +12,8 @@ var NestedTable = require('./nested_table.js');
 import pure from 'purecss/build/pure.css';
 import highlight from 'highlight.js/styles/github.css';
 import reactpage from 'react-pagify/style.css';
-import main from './main.css';
-import skylight from './skylight.css';
+import main from './css/main.css';
+import skylight from './css/skylight.css';
 //import '../style.css';
 //import skylight from './App.css';
 
