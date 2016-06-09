@@ -81,16 +81,20 @@ module.exports = React.createClass({
 
                     _.each(row, function(cell, j) {
                         var all = {};
-                        all[cell.columnName] = cell.data;
-                        all.rowIndex = cell.rowIndex;
+                        if (cell.columnName != 'sortnumber' && cell.columnName != 'id') {
+                            all[cell.columnName] = cell.data;
+                        } else {
+                            all[cell.columnName] = parseInt(cell.data);
+                        }
+                        all.rowIndex = parseInt(cell.rowIndex);
                         _.extend(dataobj,all)
                     });
                     arr.push(dataobj);
                 });
-                data = arr;
-//                self.setState({
-//                    data: arr
-//                });
+                data = _.sortBy(arr, 'rowIndex');
+                self.setState({
+                    data: _.sortBy(arr, 'rowIndex')
+                });
 
             }
         })
@@ -663,31 +667,31 @@ columnFilters() {
 },
 
 componentDidMount() {
-    var self = this;
-    var query = window.location.search.split('?')[1];
-    $.ajax({
-        type: "GET",
-        url: '/api/rows',
-        success: function(data) {
-            var allrows = _.map(data, 'entries');
-            var arr = [];
-            _.each(allrows, function(row, i) {
-                var data = {};
-
-                _.each(row, function(cell, j) {
-                    var all = {};
-                    all[cell.columnName] = cell.data;
-                    all.rowIndex = cell.rowIndex;
-                    _.extend(data,all)
-                });
-                arr.push(data);
-            });
-            self.setState({
-                data: arr
-            });
-
-        }
-    })
+//    var self = this;
+//    var query = window.location.search.split('?')[1];
+//    $.ajax({
+//        type: "GET",
+//        url: '/api/rows',
+//        success: function(data) {
+//            var allrows = _.map(data, 'entries');
+//            var arr = [];
+//            _.each(allrows, function(row, i) {
+//                var data = {};
+//
+//                _.each(row, function(cell, j) {
+//                    var all = {};
+//                    all[cell.columnName] = cell.data;
+//                    all.rowIndex = cell.rowIndex;
+//                    _.extend(data,all)
+//                });
+//                arr.push(data);
+//            });
+//            self.setState({
+//                data: arr
+//            });
+//
+//        }
+//    })
 },
 
 
