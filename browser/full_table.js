@@ -25,7 +25,7 @@ var FieldWrapper = require('./field_wrapper.js');
 var SectionWrapper = require('./section_wrapper.js');
 var countries = require('./data/countries');
 var generateData = require('./generate_data');
-var rowdata = require('./data/dummyrowdata.js');
+//var rowdata = require('./data/dummyrowdata.js');
 var dummyusers = require('./data/dummyusers.js');
 var categoriesandsub = require('./data/categoriesandsub.js');
 
@@ -66,7 +66,38 @@ module.exports = React.createClass({
 
         window.user = users[Math.floor(Math.random()*users.length)];
 
-        var data = rowdata;
+        var data = [];
+
+        var self = this;
+        var query = window.location.search.split('?')[1];
+        $.ajax({
+            type: "GET",
+            url: '/api/rows',
+            success: function(data1) {
+                var allrows = _.map(data1, 'entries');
+                var arr = [];
+                _.each(allrows, function(row, i) {
+                    var dataobj = {};
+
+                    _.each(row, function(cell, j) {
+                        var all = {};
+                        if (cell.columnName != 'sortnumber' && cell.columnName != 'id') {
+                            all[cell.columnName] = cell.data;
+                        } else {
+                            all[cell.columnName] = parseInt(cell.data);
+                        }
+                        all.rowIndex = parseInt(cell.rowIndex);
+                        _.extend(dataobj,all)
+                    });
+                    arr.push(dataobj);
+                });
+                data = _.sortBy(arr, 'rowIndex');
+                self.setState({
+                    data: _.sortBy(arr, 'rowIndex')
+                });
+
+            }
+        })
 
 var editable = cells.edit.bind(this, 'editedCell', (value, celldata, rowIndex, property) => {
     console.log('editable', celldata, rowIndex, celldata[rowIndex].id, property);
@@ -634,6 +665,36 @@ columnFilters() {
         </thead>
         );
 },
+
+componentDidMount() {
+//    var self = this;
+//    var query = window.location.search.split('?')[1];
+//    $.ajax({
+//        type: "GET",
+//        url: '/api/rows',
+//        success: function(data) {
+//            var allrows = _.map(data, 'entries');
+//            var arr = [];
+//            _.each(allrows, function(row, i) {
+//                var data = {};
+//
+//                _.each(row, function(cell, j) {
+//                    var all = {};
+//                    all[cell.columnName] = cell.data;
+//                    all.rowIndex = cell.rowIndex;
+//                    _.extend(data,all)
+//                });
+//                arr.push(data);
+//            });
+//            self.setState({
+//                data: arr
+//            });
+//
+//        }
+//    })
+},
+
+
 
 render() {
     var columns = _.sortBy(this.state.columns, 'columnorder');
