@@ -15,7 +15,7 @@ var ensureAuthenticated = function (req, res, next) {
 
 
 router.get('/', function (req, res, next) {
-    Row.find().populate('Cell').then(function(rows) {
+    Row.find().populate('entries').then(function(rows) {
         res.json(rows);
     });
 });
