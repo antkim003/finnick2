@@ -3,8 +3,17 @@ var mongoose = require('mongoose');
 var _ = require('lodash');
 
 var schema = new mongoose.Schema({
-    columns: {
-        type: Array
+    property: {
+      type: String
+    }, 
+    header: {
+      type: String
+    },
+    validationType: {
+      type: String
+    },
+    columnorder: {
+      type: Number
     }
 },
 {

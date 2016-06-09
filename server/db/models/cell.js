@@ -4,7 +4,7 @@ var _ = require('lodash');
 
 var schema = new mongoose.Schema({
     rowIndex: {
-        type: String
+        type: Number
     },
     columnIndex: {
         type: String

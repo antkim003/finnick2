@@ -5,12 +5,14 @@ var connectToDb = require('./server/db');
 var User = mongoose.model('User');
 var Cell = mongoose.model('Cell');
 var Row = mongoose.model('Row');
+var ColumnIndex = mongoose.model('ColumnIndex');
+var fakeColumnIndexData = require('./browser/data/dummycolumnindex.js');
 var fakeRowData = require('./browser/data/dummyrowdata');
 
 var wipeCollections = function () {
     var removeUsers = User.remove({});
     return Promise.all([
-        removeUsers, Cell.remove({}), Row.remove({})
+        removeUsers, Cell.remove({}), Row.remove({}), ColumnIndex.remove({})
     ]);
 };
 
@@ -38,7 +40,8 @@ var seedRowData = function() {
     return Promise.map(outerArray, function(row) {
         return Cell.create(row).then(function(createdrow) {
             return Row.create({
-                entries: createdrow
+                entries: createdrow,
+                index: createdrow[0].rowIndex
             });
         });
     }).then(function(everything) {
@@ -47,6 +50,10 @@ var seedRowData = function() {
         console.error('err', err);
     });
 };
+
+var seedColumnIndex = function() {
+    return ColumnIndex.create(fakeColumnIndexData);
+}
 
 var seedUsers = function () {
 
@@ -136,7 +143,7 @@ connectToDb
         return wipeCollections();
     })
     .then(function () {
-        return Promise.all([seedRowData(),seedUsers()]);
+        return Promise.all([seedRowData(),seedUsers(), seedColumnIndex()]);
     })
     .then(function (data) {
         console.log(chalk.green('Seed successful!', data.length));
