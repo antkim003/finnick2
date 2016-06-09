@@ -635,6 +635,18 @@ columnFilters() {
         );
 },
 
+componentDidMount() {
+    $.ajax({
+        type: "GET",
+        url: '/api/rows',
+        success: function(data) {
+            console.log('get', data);
+        }
+    })
+},
+
+
+
 render() {
     var columns = _.sortBy(this.state.columns, 'columnorder');
 //        var columns = this.state.columns;
