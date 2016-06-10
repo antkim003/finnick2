@@ -30,7 +30,8 @@ var dummyusers = require('./data/dummyusers.js');
 var categoriesandsub = require('./data/categoriesandsub.js');
 var categoriesandsub1 = categoriesandsub;
 var categoriesandsub2 = categoriesandsub;
-var columns = require('./data/columnsschema.js');;
+var columns = require('./data/columnsschema.js');
+var userpermissions = require('./data/userpermissions.js');;
 
 var highlight = require('../src/formatters/highlight');
 
@@ -454,7 +455,7 @@ columns: [
 },
 {
     property: 'needsavedset',
-        header: 'Need Saved Set?',
+    header: 'Need Saved Set?',
     cell: [editable({
     editor: editors.input(),
 })],
@@ -542,7 +543,7 @@ columns: [
 },
 {
     property: 'extraomniprojectedsales',
-        header: ' Extra Omni Projected Sales',
+    header: 'Extra Omni Projected Sales',
     cell: [editable({
     editor: editors.input(),
 })],
@@ -698,8 +699,16 @@ componentDidMount() {
 
 render() {
     var columns = _.sortBy(this.state.columns, 'columnorder');
-//        var columns = this.state.columns;
-
+    columns = _.each(columns, function(col) {
+        var thisuserspermissions = _.filter(userpermissions, function(users) {
+            return users.type == user.type
+        })[0] ? _.filter(userpermissions, function(users) {
+            return users.type == user.type
+        })[0].permission : [];
+        if (!_.includes(thisuserspermissions, col.property)) {
+            col.cell = [];
+        }
+    })
     var pagination = this.state.pagination;
 
     var data = this.state.data;
