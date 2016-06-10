@@ -28,6 +28,7 @@ var generateData = require('./generate_data');
 //var rowdata = require('./data/dummyrowdata.js');
 var dummyusers = require('./data/dummyusers.js');
 var categoriesandsub = require('./data/categoriesandsub.js');
+var categoriesandsub1 = categoriesandsub;
 
 var highlight = require('../src/formatters/highlight');
 
@@ -91,16 +92,16 @@ module.exports = React.createClass({
                     });
                     arr.push(dataobj);
                 });
-                data = _.sortBy(arr, 'rowIndex');
+                data = query ? _.filter(_.sortBy(arr, 'rowIndex'), function(d) { return d.category == query}) : _.sortBy(arr, 'rowIndex');
                 self.setState({
-                    data: _.sortBy(arr, 'rowIndex')
+                    data:query ? _.filter(_.sortBy(arr, 'rowIndex'), function(d) { return d.category == query}) : _.sortBy(arr, 'rowIndex')
                 });
 
             }
         })
 
 var editable = cells.edit.bind(this, 'editedCell', (value, celldata, rowIndex, property) => {
-    console.log('editable', celldata, rowIndex, celldata[rowIndex].id, property);
+    console.log('editable', celldata, rowIndex, celldata[rowIndex].id, property, this);
     var idx = findIndex(this.state.data, {
         id: celldata[rowIndex].id,
     });
@@ -109,7 +110,7 @@ var editable = cells.edit.bind(this, 'editedCell', (value, celldata, rowIndex, p
     //            console.log('id', celldata, value);
     this.state.data[row][property] = val;
     this.setState({
-        data: data,
+        data: query ? _.filter(_.sortBy(data, 'rowIndex'), function(d) { return d.category == query}) : data
     });
 });
 
@@ -121,8 +122,7 @@ var highlighter = (column) => highlight((value) => {
     return Search.matches(column, value, this.state.search.query);
 });
 
-var t = _.filter(categoriesandsub, function(c){ return c.value == 'men'})[0].subcategories;
-
+var self = this;
 return {
 
 
@@ -175,8 +175,7 @@ columns: [
     property: 'name',
         header: 'Name',
     cell: [editable({
-    editor: editors.input(),
-})],
+    editor: editors.input()}), highlighter('name')],
     columnorder: '0'
 },
 //{
@@ -191,9 +190,7 @@ columns: [
 {
     property: 'category',
         header: 'Category',
-    cell: [editable({
-        editor: editors.input(),
-    }), highlighter('name')],
+    cell: [ highlighter('category')],
         columnorder: '0'
 },
 {
@@ -224,7 +221,7 @@ columns: [
     property: 'doubleexposuresubcategory',
     header: 'Double Exposure Subcategory',
     cell: [editable({
-        editor: editors.checkbox(t, 'cat')
+        editor: editors.checkbox(categoriesandsub1, 'doubleexposure', self)
     }), highlighter('doubleexposuresubcategory')],
     columnorder: '0'
 },
@@ -739,10 +736,11 @@ render() {
                 return {
                 className: rowIndex % 2 ? 'odd-row row-'+d.id : 'even-row row-'+d.id,
                 onClick: () => {
-                    console.log('clicked row', d); 
-                    window.row = d.id; highlightRow(this,d.id);
+                    window.row = d.id;
+                    console.log('clicked row', d);
+                    highlightRow(this,d.id);
                 },
-                dataRow: d.id
+                dataRow: d.id,
                 };
                 }}
             >

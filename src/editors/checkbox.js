@@ -3,10 +3,9 @@
 var React = require('react');
 
 
-module.exports = (options, cat, fields={}) => {
+module.exports = (options, cat, dat, fields={}) => {
     const nameField = fields.name || 'name';
     const valueField = fields.value || 'value';
-    console.log(cat, options, 'in checkbox');
     return React.createClass({
         displayName: 'Checkbox',
 
@@ -34,6 +33,7 @@ module.exports = (options, cat, fields={}) => {
 
 
         },
+
         render() {
 
             const edit = (e) =>
@@ -52,9 +52,26 @@ module.exports = (options, cat, fields={}) => {
                 this.props.onValue({ val: checkboxesChecked, row: window.row-1 });
             }
 
+            var filteredoptions = options;
+
+            if (cat) {
+                var cat1 = _.filter(dat.state.data, function (d) {
+                    return d.rowIndex == window.row
+                })[0][cat];
+
+                if (typeof _.filter(filteredoptions, function (cat) { return cat.value == cat1})[0] !== 'undefined') {
+                    filteredoptions = cat1 ? _.filter(options, function (cat) {
+                        return cat.value == cat1
+                    })[0].subcategories : options;
+                } else {
+                    filteredoptions = options;
+                }
+            }
+
+
             return (
                 <form>
-                    {options.map((option, i) =>
+                    {filteredoptions.map((option, i) =>
                         <div><input type="checkbox"
                         key={i}
                         value={option[valueField]}
