@@ -2,6 +2,8 @@
 var mongoose = require('mongoose');
 require('../../../server/db/models');
 var User = mongoose.model('User');
+var Cell = mongoose.model('Cell');
+var Row = mongoose.model('Row');
 
 var expect = require('chai').expect;
 
@@ -23,13 +25,42 @@ describe('Rows Route', function () {
     clearDB(done);
   });
 
+  var _cell, _row;
+  beforeEach(function (done) {
+    Cell.create({
+      rowIndex: 123,
+      columnIndex: '0',
+      columnName: 'womens',
+      data: "this is a test"
+    }).then(function(cell) {
+      _cell = cell;
+      return Row.create( {
+        entries: [_cell],
+        index: 123
+      });
+    }).then(function(row) {
+      _row = row;
+      done()
+    }, done)
+  });
+
   describe('Unauthenticated request', function () {
     it('GET /api/rows returns 200', function (done) {
       agent.get('/api/rows').expect(200).end(function (err, response) {
         if (err) return done(err);
         expect(response.body).to.be.an('array');
+        // expect(response.body).to.have.length(100);
         done();
       });
+    });
+
+    it('GET /api/rows/:category returns 200 and an array', function (done) {
+      agent.get('/api/rows/womens').expect(200).end(function(err,response) {
+        if(err) return done(err);
+        expect(response.body).to.be.an('array');
+        expect(response.body[0].entries[0].columnName).to.equal('womens');
+        done();
+      })
     });
 
   });   
@@ -55,11 +86,12 @@ describe('Rows Route', function () {
       loggedInAgent.get('/api/rows').expect(200).end(function (err, response) {
         if (err) return done(err);
         expect(response.body).to.be.an('array');
+        // expect(response.body).to.have.length(100);
         done();
       });
     });
 
-    it('PUT /api/rows returns 200', function (done) {
+    xit('PUT /api/rows returns 200', function (done) {
       loggedInAgent.put('/api/rows')
         .send(
           {

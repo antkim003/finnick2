@@ -24,6 +24,7 @@
     "build-stage": "rimraf dist && cross-env NODE_ENV=development webpack --config ./webpack.config.js --progress --profile --colors",
     "eslint": "eslint .",
     "test": "mocha --compilers js:babel-register --recursive tests/server/*",
+    "test-routes": "mocha --compilers js:babel-register tests/server/routes",
     "jscs": "jscs ."
   },
   "dependencies": {
