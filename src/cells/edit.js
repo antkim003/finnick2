@@ -12,7 +12,6 @@ module.exports = function(editProperty, onValue, o) {
     return (value, data, rowIndex, property) => {
         var idx = rowIndex.toString() + '-' + property;
         var editedCell = context.state[editProperty];
-
         if(editedCell === idx) {
             return {
                 value: React.createElement(editor, {

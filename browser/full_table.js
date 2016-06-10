@@ -29,6 +29,8 @@ var generateData = require('./generate_data');
 var dummyusers = require('./data/dummyusers.js');
 var categoriesandsub = require('./data/categoriesandsub.js');
 var categoriesandsub1 = categoriesandsub;
+var categoriesandsub2 = categoriesandsub;
+var columns = require('./data/columnsschema.js');;
 
 var highlight = require('../src/formatters/highlight');
 
@@ -76,10 +78,11 @@ module.exports = React.createClass({
             url: '/api/rows',
             success: function(data1) {
                 var allrows = _.map(data1, 'entries');
+                window.data = data1;
                 var arr = [];
                 _.each(allrows, function(row, i) {
-                    var dataobj = {};
-
+                    //fill in empty subcategories
+                    var allobj = _.zipObject(_.map(columns, 'property'), _.range(columns.length).map(function () { return '' }));
                     _.each(row, function(cell, j) {
                         var all = {};
                         if (cell.columnName != 'sortnumber' && cell.columnName != 'id') {
@@ -88,9 +91,9 @@ module.exports = React.createClass({
                             all[cell.columnName] = parseInt(cell.data);
                         }
                         all.rowIndex = parseInt(cell.rowIndex);
-                        _.extend(dataobj,all)
+                        _.extend(allobj,all)
                     });
-                    arr.push(dataobj);
+                    arr.push(allobj);
                 });
                 data = query ? _.filter(_.sortBy(arr, 'rowIndex'), function(d) { return d.category == query}) : _.sortBy(arr, 'rowIndex');
                 self.setState({
@@ -197,8 +200,8 @@ columns: [
     property: 'subcategories',
         header: 'Subcategories',
     cell: [editable({
-    editor: editors.input(),
-}), highlighter('name')],
+    editor: editors.checkbox(categoriesandsub2, 'category', self)
+}), highlighter('subcategories')],
     columnorder: '0'
 },
 {
