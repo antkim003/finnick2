@@ -23,7 +23,7 @@ router.get('/', function (req, res, next) {
 });
 
 router.get('/:category', function(req,res,next) {
-    return Cell.find({columnName: req.params.category})
+  Cell.find({columnName: "category", data: req.params.category})
     .then(function(cells) {
       return Promise.map(cells, function(cell) {
         return Row.find({index: cell.rowIndex}).populate('entries')
