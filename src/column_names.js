@@ -29,11 +29,13 @@ module.exports = React.createClass({
                     className = className || '';
                     className += ' ' + column.headerClass;
 
+
                     return (
                         <th
                             key={i + '-header'}
-                            className={className}
+                            className={className + (column.cell.length == 0 ? ' header-noedit' : ' header-editor')}
                             {...props}
+                            data-edit={column.cell.length == 0 ? 'noedit' : 'editor'}
                         >{column.header}</th>
                     );
                 })}
