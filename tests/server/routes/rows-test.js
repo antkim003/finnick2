@@ -55,10 +55,10 @@ describe('Rows Route', function () {
     });
 
     it('GET /api/rows/:category returns 200 and an array', function (done) {
-      agent.get('/api/rows/womens').expect(200).end(function(err,response) {
+      agent.get('/api/rows/women').expect(200).end(function(err,response) {
         if(err) return done(err);
         expect(response.body).to.be.an('array');
-        expect(response.body[0].entries[0].columnName).to.equal('womens');
+        expect(response.body[0].entries[0].columnName).to.equal('women');
         done();
       })
     });

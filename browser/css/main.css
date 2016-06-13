@@ -159,3 +159,30 @@ table {
     /*width: inherit;*/
     /*top: 0;*/
 }
+[data-edit="editor"]:before {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(113,198,113,0.2);
+    content: ' ';
+    z-index: -1;
+}
+[data-edit="noedit"],[data-edit="editor"] {
+    /*opacity: 0.8 !important;*/
+    position: relative;
+}
+[data-edit="noedit"]:before {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255,255,255,0.1);
+    content: ' ';
+    z-index: 0;
+}
+.header-editor {
+    background: #baffc0;
+}
