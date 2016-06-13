@@ -11,16 +11,11 @@ form label {
 }
 
 header {
-    position: fixed;
     padding: 0.5em;
     top: 0;
-
     text-align: center;
-
     color: #333;
     border: 0.1em solid #bbb;
-
-    /*background-image: url(./images/bgnoise_lg.png);*/
 }
 
 h1 {
@@ -185,4 +180,36 @@ table {
 }
 .header-editor {
     background: #baffc0;
+}
+
+[data-property="id"] {
+    position: fixed;
+    z-index: 100;
+    color: #fff;
+    background: none !important;
+    /*background: #000;*/
+    width: 12px;
+}
+
+/*.header:before {*/
+    /*z-index: 100;*/
+/*}*/
+[data-property="id"]:before {
+    /*background: #000;*/
+    background: rgba(0,0,0,0.5);
+    height: calc(100% - 2px);
+}
+.pure-table {
+}
+.fixedHead {
+    position: fixed;
+    z-index: 99;
+    margin-top: -2px;
+    background: inherit;
+    margin-left: -14px;
+    width: inherit;
+    padding: 6px 10px;
+    visibility: hidden;
+    border-right: 1px solid #ccc;
+    /*opacity: 0.7;*/
 }

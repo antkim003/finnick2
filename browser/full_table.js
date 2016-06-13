@@ -118,6 +118,54 @@ module.exports = React.createClass({
 //
 //            }
 //        })
+        var lastScrollTop = 0;
+        var lastScrollLeft = 0;
+
+
+        var scrollFunc = function() {
+            var st = $(window).scrollTop();
+            var sl = $(window).scrollLeft();
+            $('[data-property=id]').css(
+                {
+                    'margin-top': -$(window).scrollTop(),
+                    'margin-left': '-1px'
+                }
+            );
+            $('.fixedHead').css(
+                {
+                    'margin-top': '-83px',
+                    'margin-left': -$(window).scrollLeft()-13,
+//                    'width': $(this).parent().width()
+                }
+            );
+            _.each($('.fixedHead'), function (fh, i) {
+                var wid = i == 0 ? 5 : 6;
+                $(fh).css({'width': $(fh).parent().width()+wid, 'height': $(fh).parent().height(), 'visibility':'visible'});
+            });
+
+            if (st > lastScrollTop){
+                console.log('scroll down')
+
+                // downscroll code
+            } else if ( st < lastScrollTop ){
+                console.log('scroll up')
+            } else if (st == lastScrollTop) {
+                //side scroll
+                if (sl > lastScrollLeft) {
+                    console.log('side scroll right');
+                } else {
+                    console.log('side scroll left');
+                }
+            }
+            lastScrollTop = st;
+            lastScrollLeft = sl;
+
+        }
+
+
+
+        $(window)
+            .on('scroll', scrollFunc);
 
 var editable = cells.edit.bind(this, 'editedCell', (value, celldata, rowIndex, property) => {
 //    console.log('editable', celldata, rowIndex, celldata[rowIndex].id, property, this);
@@ -184,7 +232,7 @@ columns: [
 },
     {
         property: 'sortnumber',
-        header: 'sort number',
+        header: 'Sort Number',
         cell: [editable({
             editor: editors.input(),
         })],
