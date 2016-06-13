@@ -10,7 +10,7 @@ module.exports = (options, fields={}) => {
         displayName: 'Dropdown',
 
         propTypes: {
-            value: React.PropTypes.string,
+//            value: React.PropTypes.string,
             onValue: React.PropTypes.func,
         },
 

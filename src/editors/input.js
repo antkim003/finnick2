@@ -85,7 +85,7 @@ module.exports = (attrs) => {
                         alert(attrs[0].error);
                     }
 
-                }else {
+                } else {
                     var test = r.test(e.target.value);
                     if (test) {
                         self.props.onValue(ReactDOM.findDOMNode(self).value)

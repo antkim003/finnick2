@@ -246,7 +246,7 @@ columns: [
 },
 {
     property: 'pricingcategory',
-        header: 'Pricing Category',
+    header: 'Pricing Category',
     cell: [editable({
     editor: editors.input()
 }), highlighter('name')],
@@ -254,7 +254,7 @@ columns: [
 },
 {
     property: 'instorespecial',
-        header: 'In Store Special',
+    header: 'In Store Special',
     cell: [editable({
     editor: editors.input(),
 })],
@@ -262,23 +262,23 @@ columns: [
 },
 {
     property: 'storeregularprice',
-        header: 'Store Reg Price (range)',
+    header: 'Store Reg Price (range)',
     cell: [editable({
-    editor: editors.rangeinput(),
-}), highlighter('name')],
+        editor: editors.input(_.filter(validations, function(v) { return v.name == 'currency'})),
+    }), highlighter('storeregularprice')],
     columnorder: '0'
 },
 {
     property: 'storespecialprice',
         header: 'Store Special Price (range)',
     cell: [editable({
-    editor: editors.rangeinput(),
-}), highlighter('name')],
+        editor: editors.input(_.filter(validations, function(v) { return v.name == 'currency'})),
+    }), highlighter('name')],
     columnorder: '0'
 },
 {
     property: 'mcomspecial',
-        header: 'MCOM Special',
+    header: 'MCOM Special',
     cell: [editable({
     editor: editors.input(),
 })],
@@ -286,17 +286,17 @@ columns: [
 },
 {
     property: 'pricinginfo',
-        header: 'Additional Pricing Info',
+    header: 'Additional Pricing Info',
     cell: [editable({
-        editor: editors.input(),
-    }), highlighter('name')],
+        editor: editors.dropdown([{name:'Only At Macys', value:'Only At Macys'},{name:'Not Applicable', value:'Not Applicable'},{name:'Custom', value:'Custom'}]),
+    }), highlighter('pricinginfo')],
     columnorder: '0'
 },
 {
     property: 'mcomregprice',
-        header: 'MCOM Reg Price (range)',
+    header: 'MCOM Reg Price (range)',
     cell: [editable({
-    editor: editors.rangeinput(),
+    editor: editors.input(_.filter(validations, function(v) { return v.name == 'currency'})),
 })],
     columnorder: '0'
 },
@@ -304,16 +304,16 @@ columns: [
     property: 'mcomspecialprice',
         header: 'MCOM Special Price (range)',
     cell: [editable({
-    editor: editors.rangeinput(),
+    editor: editors.input(_.filter(validations, function(v) { return v.name == 'currency'})),
 }), highlighter('name')],
     columnorder: '0'
 },
 {
     property: 'pricingcomments',
-        header: 'Pricing Comments',
+    header: 'Pricing Comments',
     cell: [editable({
-    editor: editors.input(),
-}), highlighter('name')],
+        editor: editors.dropdown([{name:'Not Congruent', value:'Not Congruent'},{name:'Congruent', value:'Congruent'},{name:'All Sizes', value:'All Sizes'},{name:'TV Offer', value:'TV Offer'},{name:'GWP', value:'GWP'},{name:'40% Off', value:'40% Off'},{name:'30% Off', value:'30% Off'},{name:'50% Off', value:'50% Off'},{name:'Custom', value:'Custom'}]),
+    }), highlighter('pricingcomments')],
     columnorder: '0'
 },
 {
@@ -342,10 +342,10 @@ columns: [
 },
 {
     property: 'salesfor2015',
-        header: 'Sales For 2015',
+    header: 'Sales For 2015',
     cell: [editable({
-    editor: editors.rangeinput(),
-}), highlighter('name')],
+        editor: editors.input(_.filter(validations, function(v) { return v.name == 'currency'})),
+    }), highlighter('name')],
     columnorder: '0'
 },
 {
@@ -470,8 +470,8 @@ columns: [
     property: 'petitessavedset',
         header: 'Petites Saved Set',
     cell: [editable({
-    editor: editors.input(),
-})],
+        editor: editors.input(_.filter(validations, function(v) { return v.name == 'numerical'})),
+    })],
     columnorder: '0'
 },
 {
@@ -494,8 +494,8 @@ columns: [
     property: 'livedate',
     header: 'Live Date',
     cell: [editable({
-    editor: editors.input(),
-})],
+        editor: editors.input(),
+    })],
     columnorder: '0'
 },
 {
@@ -548,7 +548,7 @@ columns: [
 },
 {
     property: 'petitesurl',
-        header: 'Petites Url Linking',
+    header: 'Petites Url Linking',
     cell: [editable({
     editor: editors.input(),
 }), highlighter('name')],
@@ -558,16 +558,16 @@ columns: [
     property: 'omniprojectedsales',
     header: 'Omni Projected Sales',
     cell: [editable({
-    editor: editors.rangeinput(),
-})],
+        editor: editors.input(_.filter(validations, function(v) { return v.name == 'currency'})),
+    })],
     columnorder: '0'
 },
 {
     property: 'extraomniprojectedsales',
     header: 'Extra Omni Projected Sales',
     cell: [editable({
-    editor: editors.rangeinput(),
-})],
+        editor: editors.input(_.filter(validations, function(v) { return v.name == 'currency'})),
+    })],
     columnorder: '0'
 },
 {
@@ -578,85 +578,85 @@ columns: [
     })],
     columnorder: '0'
 },
-{
-    cell: function(value, celldata, rowIndex) {
-        var idx = findIndex(this.state.data, {
-            id: celldata[rowIndex].id,
-        });
-
-        var edit = () => {
-            var schema = {
-                type: 'object',
-                properties: properties,
-            };
-
-            var onSubmit = (editData, editValue) => {
-                this.refs.modal.hide();
-
-                if(editValue === 'Cancel') {
-                    return;
-                }
-
-                this.state.data[idx] = editData;
-
-                this.setState({
-                    data: this.state.data
-                });
-            };
-
-            var getButtons = (submit) => {
-                return (
-                    <span>
-                        <input type='submit'
-                        className='pure-button pure-button-primary ok-button'
-                        key='ok' value='OK'
-                        onClick={submit} />
-                        <input type='submit'
-                        className='pure-button cancel-button'
-                        key='cancel' value='Cancel'
-                        onClick={submit} />
-                    </span>
-                    );
-            };
-
-            this.setState({
-                modal: {
-                    title: 'Edit',
-                    content: <Form
-                    className='pure-form pure-form-aligned'
-                    fieldWrapper={FieldWrapper}
-                    sectionWrapper={SectionWrapper}
-                    buttons={getButtons}
-                    schema={schema}
-                    validate={validate}
-                    values={this.state.data[idx]}
-                    onSubmit={onSubmit}/>
-                }
-            });
-
-            this.refs.modal.show();
-        };
-
-        var remove = () => {
-            // this could go through flux etc.
-            this.state.data.splice(idx, 1);
-
-            this.setState({
-                data: this.state.data
-            });
-        };
-
-        return {
-            value: (
-                <span>
-                    <span className='edit' onClick={edit.bind(this)} style={{cursor: 'pointer'}}>
-                    &#8665;
-                    </span>
-                </span>
-                )
-        };
-    }.bind(this),
-},
+//{
+//    cell: function(value, celldata, rowIndex) {
+//        var idx = findIndex(this.state.data, {
+//            id: celldata[rowIndex].id,
+//        });
+//
+//        var edit = () => {
+//            var schema = {
+//                type: 'object',
+//                properties: properties,
+//            };
+//
+//            var onSubmit = (editData, editValue) => {
+//                this.refs.modal.hide();
+//
+//                if(editValue === 'Cancel') {
+//                    return;
+//                }
+//
+//                this.state.data[idx] = editData;
+//
+//                this.setState({
+//                    data: this.state.data
+//                });
+//            };
+//
+//            var getButtons = (submit) => {
+//                return (
+//                    <span>
+//                        <input type='submit'
+//                        className='pure-button pure-button-primary ok-button'
+//                        key='ok' value='OK'
+//                        onClick={submit} />
+//                        <input type='submit'
+//                        className='pure-button cancel-button'
+//                        key='cancel' value='Cancel'
+//                        onClick={submit} />
+//                    </span>
+//                    );
+//            };
+//
+//            this.setState({
+//                modal: {
+//                    title: 'Edit',
+//                    content: <Form
+//                    className='pure-form pure-form-aligned'
+//                    fieldWrapper={FieldWrapper}
+//                    sectionWrapper={SectionWrapper}
+//                    buttons={getButtons}
+//                    schema={schema}
+//                    validate={validate}
+//                    values={this.state.data[idx]}
+//                    onSubmit={onSubmit}/>
+//                }
+//            });
+//
+//            this.refs.modal.show();
+//        };
+//
+//        var remove = () => {
+//            // this could go through flux etc.
+//            this.state.data.splice(idx, 1);
+//
+//            this.setState({
+//                data: this.state.data
+//            });
+//        };
+//
+//        return {
+//            value: (
+//                <span>
+//                    <span className='edit' onClick={edit.bind(this)} style={{cursor: 'pointer'}}>
+//                    &#8665;
+//                    </span>
+//                </span>
+//                )
+//        };
+//    }.bind(this),
+//},
 ],
 modal: {
     title: 'title',
