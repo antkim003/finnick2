@@ -1,6 +1,7 @@
 'use strict';
 
 var React = require('react');
+var ReactDOM = require('react-dom')
 
 
 module.exports = (attrs) => {
@@ -17,7 +18,7 @@ module.exports = (attrs) => {
         displayName: 'Input',
 
         propTypes: {
-            value: React.PropTypes.string,
+//            value: React.PropTypes.string,
             onValue: React.PropTypes.func,
         },
 
@@ -28,7 +29,6 @@ module.exports = (attrs) => {
         },
 
         render() {
-        console.log(attrs, 'input');
             return (
                 <input
                     value={this.state.value}
@@ -79,7 +79,8 @@ module.exports = (attrs) => {
                     });
 
                     if (identical(valid)) {
-                        self.props.onValue(self.getDOMNode().value);
+                        self.props.onValue(ReactDOM.findDOMNode(self).value)
+//                        self.props.onValue(self.getDOMNode().value);
                     } else {
                         alert(attrs[0].error);
                     }
@@ -87,7 +88,8 @@ module.exports = (attrs) => {
                 }else {
                     var test = r.test(e.target.value);
                     if (test) {
-                        self.props.onValue(self.getDOMNode().value);
+                        self.props.onValue(ReactDOM.findDOMNode(self).value)
+//                        self.props.onValue(self.getDOMNode().value);
                     } else {
                         if (typeof attrs[0].error != 'undefined') {
                             alert(attrs[0].error);
@@ -98,7 +100,8 @@ module.exports = (attrs) => {
                 }
 
             } else {
-                self.props.onValue(self.getDOMNode().value);
+                self.props.onValue(ReactDOM.findDOMNode(self).value)
+//                self.props.onValue(self.getDOMNode().value);
             }
 
         },

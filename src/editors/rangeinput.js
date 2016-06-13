@@ -1,7 +1,7 @@
 'use strict';
 
 var React = require('react');
-
+var ReactDOM = require('react-dom')
 
 module.exports = (attrs) => {
     attrs = attrs || {};
@@ -63,15 +63,16 @@ module.exports = (attrs) => {
         var test2 = r.test(e.target.value.split('-')[0]) && r.test(e.target.value.split('-')[1])
         var val = '';
         if (test) {
-            this.props.onValue(this.getDOMNode().value);
+            this.props.onValue(ReactDOM.findDOMNode(this).value)
+//            this.props.onValue(this.getDOMNode().value);
         } else if (test2){
-            this.props.onValue(this.getDOMNode().value);
+            this.props.onValue(ReactDOM.findDOMNode(this).value)
+//            this.props.onValue(this.getDOMNode().value);
         } else {
             alert('not a value value, please add decimals e.g. $1,000.00');
         }
         if (attrs == 'sortnumber') {
             console.log('trigger sorting');
-
         }
     },
 });

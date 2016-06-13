@@ -478,16 +478,16 @@ columns: [
     property: 'needsavedset',
     header: 'Need Saved Set?',
     cell: [editable({
-    editor: editors.input(),
-})],
+        editor: editors.dropdown([{name:'true', value:'true'},{name:'false', value:'false'}]),
+    })],
     columnorder: '0'
 },
 {
     property: 'linktype',
     header: 'Link Type',
     cell: [editable({
-    editor: editors.input(),
-})],
+        editor: editors.dropdown([{name:'url (u)', value:'url (u)'},{name:'category (c)', value:'category (c)'},{name:'product (p)', value:'product (p)'}]),
+    })],
     columnorder: '0'
 },
 {
@@ -526,8 +526,8 @@ columns: [
     property: 'petiteslinktype',
     header: 'Petites Link Type',
     cell: [editable({
-    editor: editors.input(),
-})],
+        editor: editors.dropdown([{name:'url (u)', value:'url (u)'},{name:'category (c)', value:'category (c)'},{name:'product (p)', value:'product (p)'}]),
+    })],
     columnorder: '0'
 },
 {
@@ -664,7 +664,7 @@ modal: {
 },
 pagination: {
     page: 1,
-        perPage: 1000
+        perPage: 50
 }
 };
 },
@@ -770,8 +770,6 @@ render() {
                 className: rowIndex % 2 ? 'odd-row row-'+d.id : 'even-row row-'+d.id,
                 onClick: () => {
                     window.row = d.id;
-                    console.log('clicked row', d);
-                    highlightRow(this,d.id);
                 },
                 dataRow: d.id,
                 };
