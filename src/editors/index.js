@@ -6,4 +6,5 @@ module.exports = {
     dropdown: require('./dropdown'),
     input: require('./input'),
     checkbox: require('./checkbox'),
+    rangeinput: require('./rangeinput'),
 };

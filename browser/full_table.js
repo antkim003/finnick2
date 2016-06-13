@@ -25,13 +25,14 @@ var FieldWrapper = require('./field_wrapper.js');
 var SectionWrapper = require('./section_wrapper.js');
 var countries = require('./data/countries');
 var generateData = require('./generate_data');
-//var rowdata = require('./data/dummyrowdata.js');
+var rowdata = require('./data/dummyrowdata.js');
 var dummyusers = require('./data/dummyusers.js');
 var categoriesandsub = require('./data/categoriesandsub.js');
 var categoriesandsub1 = categoriesandsub;
 var categoriesandsub2 = categoriesandsub;
 var columns = require('./data/columnsschema.js');
 var userpermissions = require('./data/userpermissions.js');;
+var validations = require('./data/validations.js');;
 
 var highlight = require('../src/formatters/highlight');
 
@@ -68,44 +69,58 @@ module.exports = React.createClass({
 
         var users = dummyusers;
 
-        window.user = users[Math.floor(Math.random()*users.length)];
-
+//        window.user = users[Math.floor(Math.random()*users.length)];
+        window.user = {"name":"Jonathan Garza","email":"jgarza3@columbia.edu","type":"admin","locked":false};
         var data = [];
 
         var self = this;
         var query = window.location.search.split('?')[1];
-        $.ajax({
-            type: "GET",
-            url: '/api/rows',
-            success: function(data1) {
-                var allrows = _.map(data1, 'entries');
-                window.data = data1;
-                var arr = [];
-                _.each(allrows, function(row, i) {
-                    //fill in empty subcategories
-                    var allobj = _.zipObject(_.map(columns, 'property'), _.range(columns.length).map(function () { return '' }));
-                    _.each(row, function(cell, j) {
-                        var all = {};
-                        if (cell.columnName != 'sortnumber' && cell.columnName != 'id') {
-                            all[cell.columnName] = cell.data;
-                        } else {
-                            all[cell.columnName] = parseInt(cell.data);
-                        }
-                        all.rowIndex = parseInt(cell.rowIndex);
-                        _.extend(allobj,all)
-                    });
-                    arr.push(allobj);
-                });
-                data = query ? _.filter(_.sortBy(arr, 'rowIndex'), function(d) { return d.category == query}) : _.sortBy(arr, 'rowIndex');
-                self.setState({
-                    data:query ? _.filter(_.sortBy(arr, 'rowIndex'), function(d) { return d.category == query}) : _.sortBy(arr, 'rowIndex')
-                });
+//        console.log(allobj);
+//
 
-            }
+        _.each(rowdata, function(row, j) {
+            var allobj = _.zipObject(_.map(columns, 'property'), _.range(columns.length).map(function () { return '' }));
+            rowdata[j] = _.extend(allobj,row);
         })
+        var data =  rowdata;
+        self.setState({
+            data:data
+        });
+//        $.ajax({
+//            type: "GET",
+//            url: '/api/rows',
+//            success: function(data1) {
+//                var allrows = _.map(data1, 'entries');
+//                window.data = data1;
+//                var arr = [];
+//                _.each(allrows, function(row, i) {
+//                    //fill in empty subcategories
+//                    var allobj = _.zipObject(_.map(columns, 'property'), _.range(columns.length).map(function () { return '' }));
+//                    _.each(row, function(cell, j) {
+//                        var all = {};
+//                        if (cell.columnName != 'sortnumber' && cell.columnName != 'id') {
+//                            all[cell.columnName] = cell.data;
+//                        } else {
+//                            all[cell.columnName] = parseInt(cell.data);
+//                        }
+//                        all.rowIndex = parseInt(cell.rowIndex);
+//                        _.extend(allobj,all)
+//                    });
+//                    arr.push(allobj);
+//                });
+//                data = query ? _.filter(_.sortBy(arr, 'rowIndex'), function(d) { return d.category == query}) : _.sortBy(arr, 'rowIndex');
+//                self.setState({
+//                    data:query ? _.filter(_.sortBy(arr, 'rowIndex'), function(d) { return d.category == query}) : _.sortBy(arr, 'rowIndex')
+//                });
+//
+//            },
+//            complete: function() {
+//
+//            }
+//        })
 
 var editable = cells.edit.bind(this, 'editedCell', (value, celldata, rowIndex, property) => {
-    console.log('editable', celldata, rowIndex, celldata[rowIndex].id, property, this);
+//    console.log('editable', celldata, rowIndex, celldata[rowIndex].id, property, this);
     var idx = findIndex(this.state.data, {
         id: celldata[rowIndex].id,
     });
@@ -139,16 +154,16 @@ return {
     },
     header: {
         onClick: (column) => {
-        // reset edits
-        this.setState({
-            editedCell: null
-        });
+            // reset edits
+            this.setState({
+                editedCell: null
+            });
 
-        sortColumn(
-            this.state.columns,
-            column,
-            this.setState.bind(this)
-        );
+            sortColumn(
+                this.state.columns,
+                column,
+                this.setState.bind(this)
+            );
         },
         className: cx(['header'])
     },
@@ -249,7 +264,7 @@ columns: [
     property: 'storeregularprice',
         header: 'Store Reg Price (range)',
     cell: [editable({
-    editor: editors.input(),
+    editor: editors.rangeinput(),
 }), highlighter('name')],
     columnorder: '0'
 },
@@ -257,7 +272,7 @@ columns: [
     property: 'storespecialprice',
         header: 'Store Special Price (range)',
     cell: [editable({
-    editor: editors.input(),
+    editor: editors.rangeinput(),
 }), highlighter('name')],
     columnorder: '0'
 },
@@ -271,17 +286,17 @@ columns: [
 },
 {
     property: 'pricinginfo',
-        header: 'Additional Pricing Info eg. BOGO qualifier, mail in rebate, disclaimer',
+        header: 'Additional Pricing Info',
     cell: [editable({
-    editor: editors.input(),
-}), highlighter('name')],
+        editor: editors.input(),
+    }), highlighter('name')],
     columnorder: '0'
 },
 {
     property: 'mcomregprice',
         header: 'MCOM Reg Price (range)',
     cell: [editable({
-    editor: editors.input(),
+    editor: editors.rangeinput(),
 })],
     columnorder: '0'
 },
@@ -289,7 +304,7 @@ columns: [
     property: 'mcomspecialprice',
         header: 'MCOM Special Price (range)',
     cell: [editable({
-    editor: editors.input(),
+    editor: editors.rangeinput(),
 }), highlighter('name')],
     columnorder: '0'
 },
@@ -305,31 +320,31 @@ columns: [
     property: 'markettointernational',
         header: 'Market to International',
     cell: [editable({
-    editor: editors.input(),
-})],
+        editor: editors.dropdown([{name:'true', value:'true'},{name:'false', value:'false'}]),
+    })],
     columnorder: '0'
 },
 {
     property: 'projectedunits',
         header: 'Projected Units',
     cell: [editable({
-    editor: editors.input(),
-})],
+        editor: editors.input(_.filter(validations, function(v) { return v.name == 'numerical'})),
+    })],
     columnorder: '0'
 },
 {
     property: 'projectedsales',
         header: 'MCOM Projected Sales',
     cell: [editable({
-    editor: editors.input(),
-})],
+        editor: editors.rangeinput('sortnumber'),
+    })],
     columnorder: '0'
 },
 {
     property: 'salesfor2015',
         header: 'Sales For 2015',
     cell: [editable({
-    editor: editors.input(),
+    editor: editors.rangeinput(),
 }), highlighter('name')],
     columnorder: '0'
 },
@@ -337,48 +352,54 @@ columns: [
     property: 'imageid',
         header: 'Image Id',
     cell: [editable({
-    editor: editors.input(),
-})],
+        editor: editors.input(_.filter(validations, function(v) { return v.name == 'numerical'})),
+    }), highlighter('imageid')],
     columnorder: '0'
 },
 {
     property: 'arimageid',
-        header: 'AR Image Id',
-    cell: [editable({
-    editor: editors.input(),
-}), highlighter('name')],
+    header: 'AR Image Id',
+    cell: [
+        editable({
+            editor: editors.input(_.filter(validations, function(v) { return v.name == 'numerical'})),
+        }),
+        highlighter('arimageid')],
     columnorder: '0'
 },
 {
     property: 'singleormultiple',
-        header: 'Single or Multiple',
+    header: 'Single or Multiple',
     cell: [editable({
-    editor: editors.input(),
-})],
+        editor: editors.dropdown([{name: 'Single', value: 'Single'},{name: 'Multiple', value: 'Multiple'}]),
+        }), highlighter('singleormultiple')],
     columnorder: '0'
 },
 {
     property: 'featureproductid',
         header: 'Feature Product Ids',
-    cell: [editable({
-    editor: editors.input(),
-})],
+    cell: [
+        editable({
+            editor: editors.input(_.filter(validations, function(v) { return v.name == 'multinumerical'})),
+        }),
+        highlighter('featureproductid')],
     columnorder: '0'
 },
 {
     property: 'savedsetid',
         header: 'Saved Set Ids',
     cell: [editable({
-    editor: editors.input(),
-})],
+        editor: editors.input(_.filter(validations, function(v) { return v.name == 'numerical'})),
+    })],
     columnorder: '0'
 },
 {
     property: 'tileimage',
-        header: 'Tile Image',
-    cell: [editable({
-    editor: editors.input(),
-})],
+    header: 'Tile Image',
+    cell: [
+        editable({
+            editor: editors.input(_.filter(validations, function(v) { return v.name == 'numerical'})),
+        }),
+        highlighter('tileimage')],
     columnorder: '0'
 },
 {
@@ -415,34 +436,34 @@ columns: [
 },
 {
     property: 'plenti',
-        header: 'Plenti Watermark',
+    header: 'Plenti Watermark',
     cell: [editable({
-    editor: editors.input(),
-})],
+        editor: editors.dropdown([{name:'true', value:'true'},{name:'false', value:'false'}]),
+    })],
     columnorder: '0'
 },
 {
     property: 'bffavorites',
         header: 'Black Friday Favorites',
     cell: [editable({
-    editor: editors.input(),
-})],
+        editor: editors.dropdown([{name:'true', value:'true'},{name:'false', value:'false'}]),
+    })],
     columnorder: '0'
 },
 {
     property: 'goingfast',
         header: 'Going Fast',
     cell: [editable({
-    editor: editors.input(),
-})],
+        editor: editors.dropdown([{name:'true', value:'true'},{name:'false', value:'false'}]),
+    })],
     columnorder: '0'
 },
 {
     property: 'alsoinpetites',
         header: 'Also in Petites',
     cell: [editable({
-    editor: editors.input(),
-}), highlighter('name')],
+        editor: editors.dropdown([{name:'true', value:'true'},{name:'false', value:'false'}]),
+    })],
     columnorder: '0'
 },
 {
@@ -463,7 +484,7 @@ columns: [
 },
 {
     property: 'linktype',
-        header: 'Link Type',
+    header: 'Link Type',
     cell: [editable({
     editor: editors.input(),
 })],
@@ -471,7 +492,7 @@ columns: [
 },
 {
     property: 'livedate',
-        header: 'Live Date',
+    header: 'Live Date',
     cell: [editable({
     editor: editors.input(),
 })],
@@ -481,16 +502,16 @@ columns: [
     property: 'categoryid',
         header: 'Category Id linking',
     cell: [editable({
-    editor: editors.input(),
-})],
+        editor: editors.input(_.filter(validations, function(v) { return v.name == 'numerical'})),
+    })],
     columnorder: '0'
 },
 {
     property: 'productid',
-        header: 'Product Id linking',
+    header: 'Product Id linking',
     cell: [editable({
-    editor: editors.input(),
-})],
+        editor: editors.input(_.filter(validations, function(v) { return v.name == 'numerical'})),
+    })],
     columnorder: '0'
 },
 {
@@ -503,7 +524,7 @@ columns: [
 },
 {
     property: 'petiteslinktype',
-        header: 'Petites Link Type',
+    header: 'Petites Link Type',
     cell: [editable({
     editor: editors.input(),
 })],
@@ -511,18 +532,18 @@ columns: [
 },
 {
     property: 'petitescategoryid',
-        header: 'Petites Category Linking',
+    header: 'Petites Category Linking',
     cell: [editable({
-    editor: editors.input(),
-}), highlighter('name')],
+        editor: editors.input(_.filter(validations, function(v) { return v.name == 'numerical'})),
+    }), highlighter('petitescategoryid')],
     columnorder: '0'
 },
 {
     property: 'petitesproductid',
-        header: 'Petites Product Linking',
+    header: 'Petites Product Linking',
     cell: [editable({
-    editor: editors.input(),
-}), highlighter('name')],
+        editor: editors.input(_.filter(validations, function(v) { return v.name == 'numerical'})),
+    }), highlighter('petitesproductid')],
     columnorder: '0'
 },
 {
@@ -535,9 +556,9 @@ columns: [
 },
 {
     property: 'omniprojectedsales',
-        header: 'Omni Projected Sales',
+    header: 'Omni Projected Sales',
     cell: [editable({
-    editor: editors.input(),
+    editor: editors.rangeinput(),
 })],
     columnorder: '0'
 },
@@ -545,16 +566,16 @@ columns: [
     property: 'extraomniprojectedsales',
     header: 'Extra Omni Projected Sales',
     cell: [editable({
-    editor: editors.input(),
+    editor: editors.rangeinput(),
 })],
     columnorder: '0'
 },
 {
     property: 'killedrow',
-        header: 'Killed Row',
+    header: 'Killed Row',
     cell: [editable({
-    editor: editors.input(),
-})],
+        editor: editors.dropdown([{name:'true', value:'true'},{name:'false', value:'false'}]),
+    })],
     columnorder: '0'
 },
 {
@@ -643,7 +664,7 @@ modal: {
 },
 pagination: {
     page: 1,
-        perPage: 10
+        perPage: 1000
 }
 };
 },
@@ -705,7 +726,7 @@ render() {
         })[0] ? _.filter(userpermissions, function(users) {
             return users.type == user.type
         })[0].permission : [];
-        if (!_.includes(thisuserspermissions, col.property)) {
+        if ((!_.includes(thisuserspermissions, col.property) && user.type != 'admin') || user.locked) {
             col.cell = [];
         }
     })

@@ -18,22 +18,22 @@ module.exports = (options, fields={}) => {
             var self = this;
             const edit = (e) => {
             window.socket;
-
-            var soc = setInterval(function() {
-                if (typeof io != 'undefined') {
-                    window.socket = io.connect('http://localhost:3000');
-                    window.socket.on('my other event', function (data) {
-                        console.log(data, 'thadhafd');
-                    });
-                    window.socket.on('new message', function (data) {
-                        self.props.onValue(e.target.value);
-                    });
-                    clearInterval(soc);
-                } else {
-
-                }
-
-            },100);
+            this.props.onValue(e.target.value);
+//            var soc = setInterval(function() {
+//                if (typeof io != 'undefined') {
+//                    window.socket = io.connect('http://localhost:3000');
+//                    window.socket.on('my other event', function (data) {
+//                        console.log(data, 'thadhafd');
+//                    });
+//                    window.socket.on('new message', function (data) {
+//                        self.props.onValue(e.target.value);
+//                    });
+//                    clearInterval(soc);
+//                } else {
+//
+//                }
+//
+//            },100);
 
         }
 

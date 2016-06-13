@@ -15,18 +15,20 @@ module.exports = React.createClass({
     // inputs does nothing right now (but we can implement filtering or insertion here)
     /*                            {column.property ? <input className="header-input" placeholder={'Insert '+column.property} /> : ''}*/
 
-    render() {
-        const columns = this.props.columns;
-
-        return(
-            <tr>
+/*
+<tr>
                 {columns.map((column, i) => {
                     return (
                         <td key={i + '-custom-header'}>
                         </td>
-                    );
-                })}
-            </tr>
+                        );
+                    })}
+</tr>*/
+    render() {
+        const columns = this.props.columns;
+
+        return(
+            <tr></tr>
         );
     }
 
