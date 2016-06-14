@@ -23,13 +23,9 @@ router.get('/', function (req, res, next) {
 });
 
 router.get('/:category', function(req,res,next) {
-  Cell.find({columnName: "category", data: req.params.category})
-    .then(function(cells) {
-      return Promise.map(cells, function(cell) {
-        return Row.find({index: cell.rowIndex}).populate('entries')
-      })
-    }).then(function(rows) {
-      res.json(_.flatten(rows));
+    Row.find().populate('entries').then(function(rows) {
+        var filteredrows = _.filter(rows, function(e){ return e.entries[_.findIndex(e.entries, function(eb){ return eb.columnName == 'category' } )].data == req.params.category })
+        res.json(filteredrows);
     });
 });
 
