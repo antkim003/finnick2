@@ -181,7 +181,9 @@ table {
 .header-editor {
     background: #baffc0;
 }
-
+.header-noedit {
+    background: #e0e0e0;
+}
 [data-property="id"] {
     position: fixed;
     z-index: 99;
@@ -191,7 +193,9 @@ table {
     width: 12px;
     /*transition: all 0.3s;*/
 }
-
+.pure-table th {
+    vertical-align: top;
+}
 /*.header:before {*/
     /*z-index: 100;*/
 /*}*/
@@ -199,6 +203,7 @@ table {
     /*background: #000;*/
     background: rgba(0,0,0,0.5);
     height: calc(100% - 2px);
+    z-index: -1;
 }
 .pure-table {
 }

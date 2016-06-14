@@ -22,7 +22,7 @@ router.get('/:id', function (req, res, next) {
 
 router.put('/', function(req,res,next) {
     // always come in as an array of cells
-    var cells = req.body;
+    var cells = req.body.data;
     return Promise.map(cells, function(cell) {
         return Cell.findByIdAndUpdate(cell._id, {$set: cell}, {new: true}).then(function(cell) {
             return cell;

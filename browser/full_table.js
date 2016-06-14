@@ -28,8 +28,8 @@ var generateData = require('./generate_data');
 //var rowdata = require('./data/dummyrowdata.js');
 var dummyusers = require('./data/dummyusers.js');
 var categoriesandsub = require('./data/categoriesandsub.js');
-var categoriesandsub1 = categoriesandsub;
-var categoriesandsub2 = categoriesandsub;
+var categoriesandsub1 = require('./data/categoriesandsub.js');
+var categoriesandsub2 = require('./data/categoriesandsub.js');
 var columns = require('./data/columnsschema.js');
 var userpermissions = require('./data/userpermissions.js');;
 var validations = require('./data/validations.js');;
@@ -70,7 +70,7 @@ module.exports = React.createClass({
         var users = dummyusers;
 
 //        window.user = users[Math.floor(Math.random()*users.length)];
-        window.user = {"name":"Jonathan Garza","email":"jgarza3@columbia.edu","type":"admin","locked":false};
+        window.user = {"name":"Jonathan Garza","email":"jgarza3@columbia.edu","type":"buyer","locked":false};
         var data = [];
 
         var self = this;
@@ -105,6 +105,7 @@ module.exports = React.createClass({
                             all[cell.columnName] = parseInt(cell.data);
                         }
                         all.rowIndex = parseInt(cell.rowIndex);
+//                        all._id = cell._id;
                         _.extend(allobj,all)
                     });
                     arr.push(allobj);
@@ -136,9 +137,7 @@ module.exports = React.createClass({
             );
             $('.fixedHead').css(
                 {
-//                    'margin-top': '-83px',
                     'margin-left': -$(window).scrollLeft()-13,
-//                    'width': $(this).parent().width()
                 }
             );
             if ($('thead')[0].getBoundingClientRect().top < 0) {
@@ -146,20 +145,15 @@ module.exports = React.createClass({
             } else {
                 $('.fixedHead').css({'display':'none' })
             }
-//            console.log(
-//                $('thead')[0].getBoundingClientRect().top < 0
-//            )
             _.each($('.fixedHead'), function (fh, i) {
                 var wid = i == 0 ? 5 : 6;
                 $(fh).css({'width': $(fh).parent().width()+wid, 'height': $(fh).parent().height(), 'visibility':'visible'});
             });
 
             if (st > lastScrollTop){
-//                console.log('scroll down')
                 $('article.pure-u-1 .controls:first-child').css({'position':'relative','top': '0'})
                 // downscroll code
             } else if ( st < lastScrollTop ){
-//                console.log('scroll up')
                 $('article.pure-u-1 .controls:first-child').css({'position':'relative','top': '0'})
 
             } else if (st == lastScrollTop) {
@@ -170,9 +164,7 @@ module.exports = React.createClass({
                 }
                 //side scroll
                 if (sl > lastScrollLeft) {
-//                    console.log('side scroll right');
                 } else {
-//                    console.log('side scroll left');
                 }
             }
             lastScrollTop = st;
@@ -181,12 +173,47 @@ module.exports = React.createClass({
         }
 
 
+//fixed headers and rows
+$(window).on('scroll', scrollFunc);
 
-        $(window)
-            .on('scroll', scrollFunc);
+
+
 
 var editable = cells.edit.bind(this, 'editedCell', (value, celldata, rowIndex, property) => {
-//    console.log('editable', celldata, rowIndex, celldata[rowIndex].id, property, this);
+
+//    _.each(window.data, function(data, i) {
+//        if (typeof data.entries[i] != 'undefined') {
+//            if (data.entries[i].columnName == property) {
+//                console.log(data.entries[i]._id)
+//                var info = {data:[{_id: data.entries[i]._id, data: value}]};
+////                $.ajax({
+////                    'type': "PUT",
+////                    'url': '/api/cells/',
+////                    'data': info,
+////                    'success': function() {
+////                        console.log('done');
+////                    }
+////                })
+//            }
+//        }
+//    })
+    _.each(window.data, function(data, i) {
+        if (typeof data.entries != 'undefined') {
+            var t = _.find(data.entries, function(d){ return d.columnName == property && d.rowIndex == rowIndex+1});
+            if (t != undefined) {
+                var info = {data:[{_id: t._id, data: value}]};
+                $.ajax({
+                    'type': "PUT",
+                    'url': '/api/cells/',
+                    'data': info,
+                    'success': function() {
+                        console.log('done');
+                    }
+                })
+            }
+        }
+    })
+
     var idx = findIndex(this.state.data, {
         id: celldata[rowIndex].id,
     });
