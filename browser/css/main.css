@@ -184,11 +184,12 @@ table {
 
 [data-property="id"] {
     position: fixed;
-    z-index: 100;
+    z-index: 99;
     color: #fff;
     background: none !important;
     /*background: #000;*/
     width: 12px;
+    /*transition: all 0.3s;*/
 }
 
 /*.header:before {*/
@@ -203,7 +204,7 @@ table {
 }
 .fixedHead {
     position: fixed;
-    z-index: 99;
+    z-index: 100;
     margin-top: -2px;
     background: inherit;
     margin-left: -14px;
@@ -212,4 +213,18 @@ table {
     visibility: hidden;
     border-right: 1px solid #ccc;
     /*opacity: 0.7;*/
+    top:0;
+    transition: all 0.1s;
+}
+article.pure-u-1 {
+    margin-top: 0;
+    /*margin-top:82px;*/
+}
+article.pure-u-1 .controls:first-child {
+    position: relative;
+    background: white;
+    z-index: 101;
+}
+.per-page-container input {
+    width: 50px;
 }

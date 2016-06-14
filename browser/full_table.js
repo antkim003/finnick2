@@ -78,46 +78,49 @@ module.exports = React.createClass({
 //        console.log(allobj);
 //
 
-        _.each(rowdata, function(row, j) {
-            var allobj = _.zipObject(_.map(columns, 'property'), _.range(columns.length).map(function () { return '' }));
-            rowdata[j] = _.extend(allobj,row);
-        })
-        var data =  rowdata;
-        self.setState({
-            data:data
-        });
-//        $.ajax({
-//            type: "GET",
-//            url: '/api/rows',
-//            success: function(data1) {
-//                var allrows = _.map(data1, 'entries');
-//                window.data = data1;
-//                var arr = [];
-//                _.each(allrows, function(row, i) {
-//                    //fill in empty subcategories
-//                    var allobj = _.zipObject(_.map(columns, 'property'), _.range(columns.length).map(function () { return '' }));
-//                    _.each(row, function(cell, j) {
-//                        var all = {};
-//                        if (cell.columnName != 'sortnumber' && cell.columnName != 'id') {
-//                            all[cell.columnName] = cell.data;
-//                        } else {
-//                            all[cell.columnName] = parseInt(cell.data);
-//                        }
-//                        all.rowIndex = parseInt(cell.rowIndex);
-//                        _.extend(allobj,all)
-//                    });
-//                    arr.push(allobj);
-//                });
-//                data = query ? _.filter(_.sortBy(arr, 'rowIndex'), function(d) { return d.category == query}) : _.sortBy(arr, 'rowIndex');
-//                self.setState({
-//                    data:query ? _.filter(_.sortBy(arr, 'rowIndex'), function(d) { return d.category == query}) : _.sortBy(arr, 'rowIndex')
-//                });
-//
-//            },
-//            complete: function() {
-//
-//            }
+//        _.each(rowdata, function(row, j) {
+//            var allobj = _.zipObject(_.map(columns, 'property'), _.range(columns.length).map(function () { return '' }));
+//            rowdata[j] = _.extend(allobj,row);
 //        })
+//        var data =  rowdata;
+//        self.setState({
+//            data:data
+//        });
+        var queryyes = query ? '/'+query : ''
+        $.ajax({
+            type: "GET",
+            url: '/api/rows'+queryyes,
+            success: function(data1) {
+                var allrows = _.map(data1, 'entries');
+                window.data = data1;
+                var arr = [];
+                _.each(allrows, function(row, i) {
+                    //fill in empty subcategories
+                    var allobj = _.zipObject(_.map(columns, 'property'), _.range(columns.length).map(function () { return '' }));
+                    _.each(row, function(cell, j) {
+                        var all = {};
+                        if (cell.columnName != 'sortnumber' && cell.columnName != 'id') {
+                            all[cell.columnName] = cell.data;
+                        } else {
+                            all[cell.columnName] = parseInt(cell.data);
+                        }
+                        all.rowIndex = parseInt(cell.rowIndex);
+                        _.extend(allobj,all)
+                    });
+                    arr.push(allobj);
+                });
+//                data = query ? _.filter(_.sortBy(arr, 'rowIndex'), function(d) { return d.category == query}) : _.sortBy(arr, 'rowIndex');
+                data = _.sortBy(arr, 'rowIndex');
+                self.setState({
+                    data: _.sortBy(arr, 'rowIndex')
+//                    data:query ? _.filter(_.sortBy(arr, 'rowIndex'), function(d) { return d.category == query}) : _.sortBy(arr, 'rowIndex')
+                });
+
+            },
+            complete: function() {
+
+            }
+        })
         var lastScrollTop = 0;
         var lastScrollLeft = 0;
 
@@ -133,28 +136,43 @@ module.exports = React.createClass({
             );
             $('.fixedHead').css(
                 {
-                    'margin-top': '-83px',
+//                    'margin-top': '-83px',
                     'margin-left': -$(window).scrollLeft()-13,
 //                    'width': $(this).parent().width()
                 }
             );
+            if ($('thead')[0].getBoundingClientRect().top < 0) {
+                $('.fixedHead').css({'display':'block'})
+            } else {
+                $('.fixedHead').css({'display':'none' })
+            }
+//            console.log(
+//                $('thead')[0].getBoundingClientRect().top < 0
+//            )
             _.each($('.fixedHead'), function (fh, i) {
                 var wid = i == 0 ? 5 : 6;
                 $(fh).css({'width': $(fh).parent().width()+wid, 'height': $(fh).parent().height(), 'visibility':'visible'});
             });
 
             if (st > lastScrollTop){
-                console.log('scroll down')
-
+//                console.log('scroll down')
+                $('article.pure-u-1 .controls:first-child').css({'position':'relative','top': '0'})
                 // downscroll code
             } else if ( st < lastScrollTop ){
-                console.log('scroll up')
+//                console.log('scroll up')
+                $('article.pure-u-1 .controls:first-child').css({'position':'relative','top': '0'})
+
             } else if (st == lastScrollTop) {
+                if ($('h1')[0].getBoundingClientRect().right < 0 && $('thead')[0].getBoundingClientRect().top > 0) {
+                    $('article.pure-u-1 .controls:first-child').css({'position': 'fixed', 'top': '0'})
+                } else {
+                    $('article.pure-u-1 .controls:first-child').css({'position':'relative','top': '0'})
+                }
                 //side scroll
                 if (sl > lastScrollLeft) {
-                    console.log('side scroll right');
+//                    console.log('side scroll right');
                 } else {
-                    console.log('side scroll left');
+//                    console.log('side scroll left');
                 }
             }
             lastScrollTop = st;
