@@ -14,9 +14,6 @@ var schema = new mongoose.Schema({
     },
     data: {
         type: String
-    },
-    fob: {
-        type: String
     }
 },
 {

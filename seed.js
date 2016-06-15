@@ -32,10 +32,11 @@ var seedRowData = function() {
             obj['data'] = fakeRowData[i][entry];
             obj['columnName'] = entry;
             obj['rowIndex'] = fakeRowData[i]['id'];
-            obj['fob'] = ['for_the_home', 'men', 'women'][getRandomInt(0,2)]
             innerArray.push(obj);
         }
+        console.log('innerarray length', innerArray.length);
         outerArray.push(innerArray);
+        console.log('outerArray length', outerArray.length);
     }
 
     function getRandomInt(min, max) {
@@ -46,7 +47,8 @@ var seedRowData = function() {
         return Cell.create(row).then(function(createdrow) {
             return Row.create({
                 entries: createdrow,
-                index: createdrow[0].rowIndex
+                index: createdrow[0].rowIndex,
+                fob: ['for_the_home', 'men', 'women'][getRandomInt(0,2)]
             });
         });
     }).then(function(everything) {

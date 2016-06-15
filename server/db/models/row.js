@@ -4,11 +4,14 @@ var _ = require('lodash');
 
 var schema = new mongoose.Schema({
     entries: [{
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'Cell'
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Cell'
     }],
     index: {
-      type: Number
+        type: Number
+    },
+    fob: {
+        type: String
     }
 },
 {
