@@ -201,15 +201,17 @@ var editable = cells.edit.bind(this, 'editedCell', (value, celldata, rowIndex, p
         if (typeof data.entries != 'undefined') {
             var t = _.find(data.entries, function(d){ return d.columnName == property && d.rowIndex == rowIndex+1});
             if (t != undefined) {
-                var info = {data:[{_id: t._id, data: value}]};
-                $.ajax({
-                    'type': "PUT",
-                    'url': '/api/cells/',
-                    'data': info,
-                    'success': function() {
-                        console.log('done');
+                var params = [{"_id":t._id, "data": value}];
+                var http = new XMLHttpRequest();
+                var url = "/api/cells/";
+                http.open("PUT", url, true);
+                http.setRequestHeader("Content-type", "application/json");
+                http.send(JSON.stringify(params));
+                http.onreadystatechange = function() {
+                    if (http.readyState == 4 && http.status == 200) {
+                        console.log('done! put into '+t._id)
                     }
-                })
+                };
             }
         }
     })
