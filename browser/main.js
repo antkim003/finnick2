@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App.js';
-
+import 'babel-polyfill';
 import { render } from 'react-dom';
 import { Router, Route, browserHistory } from 'react-router';
 // import Admin from '../admin/admin.js';

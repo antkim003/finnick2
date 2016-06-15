@@ -91,6 +91,8 @@ module.exports = React.createClass({
 //        });
 
         window.socket = io.connect();
+//        var clients = io.sockets.ada();
+//        console.log(clients, 'clients');
         var queryyes = query ? '/'+query : '';
         var getdata = function() {
             $.ajax({
@@ -675,85 +677,85 @@ columns: [
     })],
     columnorder: '0'
 },
-//{
-//    cell: function(value, celldata, rowIndex) {
-//        var idx = findIndex(this.state.data, {
-//            id: celldata[rowIndex].id,
-//        });
-//
-//        var edit = () => {
-//            var schema = {
-//                type: 'object',
-//                properties: properties,
-//            };
-//
-//            var onSubmit = (editData, editValue) => {
-//                this.refs.modal.hide();
-//
-//                if(editValue === 'Cancel') {
-//                    return;
-//                }
-//
-//                this.state.data[idx] = editData;
-//
-//                this.setState({
-//                    data: this.state.data
-//                });
-//            };
-//
-//            var getButtons = (submit) => {
-//                return (
-//                    <span>
-//                        <input type='submit'
-//                        className='pure-button pure-button-primary ok-button'
-//                        key='ok' value='OK'
-//                        onClick={submit} />
-//                        <input type='submit'
-//                        className='pure-button cancel-button'
-//                        key='cancel' value='Cancel'
-//                        onClick={submit} />
-//                    </span>
-//                    );
-//            };
-//
-//            this.setState({
-//                modal: {
-//                    title: 'Edit',
-//                    content: <Form
-//                    className='pure-form pure-form-aligned'
-//                    fieldWrapper={FieldWrapper}
-//                    sectionWrapper={SectionWrapper}
-//                    buttons={getButtons}
-//                    schema={schema}
-//                    validate={validate}
-//                    values={this.state.data[idx]}
-//                    onSubmit={onSubmit}/>
-//                }
-//            });
-//
-//            this.refs.modal.show();
-//        };
-//
-//        var remove = () => {
-//            // this could go through flux etc.
-//            this.state.data.splice(idx, 1);
-//
-//            this.setState({
-//                data: this.state.data
-//            });
-//        };
-//
-//        return {
-//            value: (
-//                <span>
-//                    <span className='edit' onClick={edit.bind(this)} style={{cursor: 'pointer'}}>
-//                    &#8665;
-//                    </span>
-//                </span>
-//                )
-//        };
-//    }.bind(this),
-//},
+{
+    cell: function(value, celldata, rowIndex) {
+        var idx = findIndex(this.state.data, {
+            id: celldata[rowIndex].id,
+        });
+
+        var edit = () => {
+            var schema = {
+                type: 'object',
+                properties: properties,
+            };
+
+            var onSubmit = (editData, editValue) => {
+                this.refs.modal.hide();
+
+                if(editValue === 'Cancel') {
+                    return;
+                }
+
+                this.state.data[idx] = editData;
+
+                this.setState({
+                    data: this.state.data
+                });
+            };
+
+            var getButtons = (submit) => {
+                return (
+                    <span>
+                        <input type='submit'
+                        className='pure-button pure-button-primary ok-button'
+                        key='ok' value='OK'
+                        onClick={submit} />
+                        <input type='submit'
+                        className='pure-button cancel-button'
+                        key='cancel' value='Cancel'
+                        onClick={submit} />
+                    </span>
+                    );
+            };
+
+            this.setState({
+                modal: {
+                    title: 'Edit',
+                    content: <Form
+                    className='pure-form pure-form-aligned'
+                    fieldWrapper={FieldWrapper}
+                    sectionWrapper={SectionWrapper}
+                    buttons={getButtons}
+                    schema={schema}
+                    validate={validate}
+                    values={this.state.data[idx]}
+                    onSubmit={onSubmit}/>
+                }
+            });
+
+            this.refs.modal.show();
+        };
+
+        var remove = () => {
+            // this could go through flux etc.
+            this.state.data.splice(idx, 1);
+
+            this.setState({
+                data: this.state.data
+            });
+        };
+
+        return {
+            value: (
+                <span>
+                    <span className='edit' onClick={edit.bind(this)} style={{cursor: 'pointer'}}>
+                    &#8665;
+                    </span>
+                </span>
+                )
+        };
+    }.bind(this),
+},
 ],
 modal: {
     title: 'title',
@@ -829,24 +831,19 @@ componentDidMount() {
     };
 
     window.socket.on('new data', function(data) {
-        console.log('data', data)
-        getdata();
+//        console.log('data', data)
+        _.delay(getdata(), 3000, '');
     });
 
     window.socket.on('other user editing', function(data) {
-        console.log(data);
+//        console.log(data);
         var user = data.user.name;
         var cell = data.cell.editedCell;
         $('.activeOtherCell').removeClass('activeOtherCell');
         $('').replaceAll('.userspan')
         $('.'+cell).addClass('activeOtherCell').append('<span class="userspan">'+user.split(' ')[0]+' '+user.split(' ')[1][0]+'</span>');
-
-
     })
-//    window.socket.on('my other event', function() {
-//        console.log('other event')
-//        getdata();
-//    });
+
 
 },
 
@@ -929,11 +926,8 @@ render() {
                     }
                 },
                 onMouseLeave: (e) => {
-//                    if (e.target.getAttribute('data-property') == ('tileimage')){
-                        $(e.target).parent().find('img').replaceWith('');
-//                    }
+                    $(e.target).parent().find('img').replaceWith('');
                 },
-
                 dataRow: d.id,
                 };
                 }}
@@ -1018,57 +1012,19 @@ function augmentWithTitles(o) {
     for (var property in o) {
         o[property].title = titleCase(property);
     }
-
     return o;
 }
 
-function getFieldGenerators(countryValues) {
-    return {
-        name: function() {
-            var forenames = ['Jack', 'Bo', 'John', 'Jill', 'Angus', 'Janet', 'Cecilia',
-                'Daniel', 'Marge', 'Homer', 'Trevor', 'Fiona', 'Margaret', 'Ofelia'];
-            var surnames = ['MacGyver', 'Johnson', 'Jackson', 'Robertson', 'Hull', 'Hill'];
-
-            return math.pick(forenames) + ' ' + math.pick(surnames);
-        },
-        position: function() {
-            var positions = ['Boss', 'Contractor', 'Client', ''];
-
-            return math.pick(positions);
-        },
-        salary: generators.number.bind(null, 0, 2),
-        country: function() {
-            return math.pick(countryValues);
-        }
-    };
-}
 
 function attachIds(arr) {
     return arr.map((o, i) => {
         o.id = i;
-
     return o;
 });
 }
 
 function find(arr, key, value) {
-//    console.log('console.log find ',key, value, arr )
-//    for( var i=0; i < value.length; i++) {
-//        console.log(value[i]);
-//    }
-
     return arr;
-//    var value = Array.isArray(value) ? value : [value];
-//
-//    value.forEach(function(country){
-//        if(arr[country]) {
-//            return arr[country];
-//        }
-//        console.log('inforeach,',arr, country, key, value)
-//    })
-
-
-//    return arr.reduce((a, b) => a[key] === value ? a : b[key] === value && b);
 }
 
 function findselect(arr, key, value) {
