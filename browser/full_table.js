@@ -194,16 +194,17 @@ $(window).on('scroll', scrollFunc);
 var editable = cells.edit.bind(this, 'editedCell', (value, celldata, rowIndex, property) => {
 //    var self = this;
 
-    console.log('editable');
+    console.log('editable ', value, rowIndex, property);
+    var val = value.hasOwnProperty('row') ? value.val : value;
 
-    window.socket.emit('my other event', { val: value, row: window.row-1 });
+    window.socket.emit('my other event', { val: val, row: window.row-1 });
     _.each(window.data, function(data, i) {
         if (typeof data.entries != 'undefined') {
             var t = _.find(data.entries, function(d){ return d.columnName == property && d.rowIndex == rowIndex+1});
             if (t != undefined) {
 //              var cellid = t._id
 //                var parentrowid = _.find(data, function(d) { return d.entries})
-                var params = [{"_id":t._id, "data": value}];
+                var params = [{"_id":t._id, "data": val}];
                 $.ajax({
                     'type': "PUT",
                     'url': '/api/cells/',
@@ -221,7 +222,7 @@ var editable = cells.edit.bind(this, 'editedCell', (value, celldata, rowIndex, p
         id: celldata[rowIndex].id,
     });
     var row = value.hasOwnProperty('row') ? value.row : rowIndex;
-    var val = value.hasOwnProperty('row') ? value.val : value;
+//    var val = value.hasOwnProperty('row') ? value.val : value;
     this.state.data[row][property] = val;
     this.setState({
         data: query ? _.filter(_.sortBy(data, 'rowIndex'), function(d) { return d.category == query}) : data
