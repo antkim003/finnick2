@@ -36,8 +36,12 @@ module.exports = function(editProperty, onValue, o) {
                     onClick: () => {
                         var state = {};
                         state[editProperty] = idx;
-
                         context.setState(state);
+                        console.log(window.user, 'user fob, and row', state)
+                        $('.activeCell').removeClass('activeCell')
+//                        $('').replaceAll('.userspan')
+                        $('.'+state.editedCell).addClass('activeCell');
+                        window.socket.emit('user editing', {user: window.user, cell: state, fob: window.location.search.split('?')[1]})
                     },
                 }
             };

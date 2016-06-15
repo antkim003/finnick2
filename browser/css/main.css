@@ -160,7 +160,7 @@ table {
     right: 0;
     width: 100%;
     height: 100%;
-    background: rgba(113,198,113,0.2);
+    background: rgba(113,198,113,0.18);
     content: ' ';
     z-index: -1;
 }
@@ -186,7 +186,7 @@ table {
 }
 [data-property="id"] {
     position: fixed;
-    z-index: 99;
+    z-index: 99 !important;
     color: #fff;
     background: none !important;
     /*background: #000;*/
@@ -232,4 +232,42 @@ article.pure-u-1 .controls:first-child {
 }
 .per-page-container input {
     width: 50px;
+}
+
+.activeCell:after {
+    width: calc(100% - 4px);
+    height: calc(100% - 4px);
+    content: ' ';
+    outline: 2px solid #70d680;
+    display: block;
+    position: absolute;
+    top: 2px;
+    left:2px;
+    pointer-events: none;
+}
+.activeOtherCell:after {
+    width: calc(100% - 4px);
+    height: calc(100% - 4px);
+    content: ' ';
+    display: block;
+    outline: 2px solid #ff694d;
+    position: absolute;
+    top: 2px;
+    left:2px;
+    pointer-events: none;
+}
+.pure-table-striped tr:nth-child(2n-1) td {
+    z-index: -1;
+}
+.userspan {
+    position: absolute;
+    display: inline-block;
+    top: 0px;
+    right: 0px;
+    background: #ff694d;
+    color: #fff;
+    padding: 3px;
+}
+button {
+    z-index: 1000;
 }
