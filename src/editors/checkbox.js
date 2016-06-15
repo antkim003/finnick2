@@ -15,21 +15,6 @@ module.exports = (options, cat, dat, fields={}) => {
         },
         componentDidMount: function() {
             var self = this;
-            window.socket;
-            var soc = setInterval(function() {
-                if (typeof io != 'undefined') {
-                    window.socket = io.connect('http://localhost:3000');
-                    window.socket.on('my other event', function (data) {
-                        console.log(data, 'thadhafd');
-                    });
-                    window.socket.on('new message', function (data) {
-                        self.props.onValue(data);
-                    });
-                    clearInterval(soc);
-                } else {
-
-                }
-            },100);
 
 
         },
@@ -48,7 +33,7 @@ module.exports = (options, cat, dat, fields={}) => {
                         checkboxesChecked.push(checkboxes[i].value);
                     }
                 }
-                window.socket.emit('my other event', { val: checkboxesChecked, row: window.row-1 });
+//                window.socket.emit('my other event', { val: checkboxesChecked, row: window.row-1 });
                 this.props.onValue({ val: checkboxesChecked, row: window.row-1 });
             }
 

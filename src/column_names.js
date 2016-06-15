@@ -36,7 +36,7 @@ module.exports = React.createClass({
                             className={className + (column.cell.length == 0 ? ' header-noedit' : ' header-editor')}
                             {...props}
                             data-edit={column.cell.length == 0 ? 'noedit' : 'editor'}
-                        >{column.header}</th>
+                        ><div>{column.header}</div><div className="fixedHead">{column.header}</div></th>
                     );
                 })}
             </tr>

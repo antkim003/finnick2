@@ -1,16 +1,24 @@
 'use strict';
 
 var React = require('react');
+var ReactDOM = require('react-dom')
 
 
 module.exports = (attrs) => {
     attrs = attrs || {};
-
+    function identical(array) {
+        for(var i = 0; i < array.length - 1; i++) {
+            if(array[i] !== array[i+1]) {
+                return false;
+            }
+        }
+        return true;
+    }
     return React.createClass({
         displayName: 'Input',
 
         propTypes: {
-            value: React.PropTypes.string,
+//            value: React.PropTypes.string,
             onValue: React.PropTypes.func,
         },
 
@@ -50,12 +58,52 @@ module.exports = (attrs) => {
 
         keyUp(e) {
             if(e.keyCode === 13) {
-                this.done();
+                this.done(e);
             }
         },
 
-        done() {
-            this.props.onValue(this.getDOMNode().value);
+        done(e) {
+            var self = this;
+            if (typeof attrs[0] !== 'undefined') {
+                var r = new RegExp(attrs[0].value);
+
+                if (typeof attrs[0].multidelimeter !== 'undefined') {
+                    var vals = e.target.value.split(attrs[0].multidelimeter);
+                    var valid = [];
+                    _.each(vals, function(val, i){
+                        if (val != '') {
+                            valid.push(r.test(val));
+                        } else {
+                            valid.push(false);
+                        }
+                    });
+
+                    if (identical(valid)) {
+                        self.props.onValue(ReactDOM.findDOMNode(self).value)
+//                        self.props.onValue(self.getDOMNode().value);
+                    } else {
+                        alert(attrs[0].error);
+                    }
+
+                } else {
+                    var test = r.test(e.target.value);
+                    if (test) {
+                        self.props.onValue(ReactDOM.findDOMNode(self).value)
+//                        self.props.onValue(self.getDOMNode().value);
+                    } else {
+                        if (typeof attrs[0].error != 'undefined') {
+                            alert(attrs[0].error);
+                        } else {
+                            alert('not valid');
+                        }
+                    }
+                }
+
+            } else {
+                self.props.onValue(ReactDOM.findDOMNode(self).value)
+//                self.props.onValue(self.getDOMNode().value);
+            }
+
         },
     });
 };

@@ -162,7 +162,8 @@ module.exports =
     {
         property: 'productid',
         forWho: ["admin","site_merch","site_merch_lead"],
-    },
+    }
+    ,
     {
         property: 'url',
         forWho: ["admin","site_merch","site_merch_lead"],
@@ -197,6 +198,10 @@ module.exports =
     },
     {
         property: 'typeofspecial',
+        forWho: ["admin","buyer","buyer_lead"],
+    },
+    {
+        property: 'country',
         forWho: ["admin","buyer","buyer_lead"],
     }
 ]

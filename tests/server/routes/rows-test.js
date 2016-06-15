@@ -30,8 +30,9 @@ describe('Rows Route', function () {
     Cell.create({
       rowIndex: 123,
       columnIndex: '0',
-      columnName: 'womens',
-      data: "this is a test"
+      columnName: 'women',
+      data: "this is a test",
+      fob: 'women'
     }).then(function(cell) {
       _cell = cell;
       return Row.create( {
@@ -58,12 +59,13 @@ describe('Rows Route', function () {
       agent.get('/api/rows/women').expect(200).end(function(err,response) {
         if(err) return done(err);
         expect(response.body).to.be.an('array');
+        console.log('heres the response', response.body.entries);
         expect(response.body[0].entries[0].columnName).to.equal('women');
         done();
       })
     });
 
-  });   
+  });
   describe('Authenticated request', function () {
 
     var loggedInAgent;
