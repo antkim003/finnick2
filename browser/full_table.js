@@ -495,7 +495,8 @@ columns: [
         editable({
             editor: editors.input(_.filter(validations, function(v) { return v.name == 'numerical'})),
         }),
-        highlighter('tileimage')],
+        highlighter('tileimage'),
+        ],
     columnorder: '0'
 },
 {
@@ -904,6 +905,35 @@ render() {
                 onClick: () => {
                     window.row = d.id;
                 },
+                onMouseEnter: (e) => {
+                    if ((e.target.getAttribute('data-property') == 'tileimage') || (e.target.getAttribute('data-property') == 'imageid')) {
+                        var parts = e.target.innerText.split('').reverse().join('') || '';
+                        parts = parts.match(/[\s\S]{1,2}/g) || []
+                        var withslash = '';
+
+                        if (parts.length > 0) {
+                            if (parts.length == 4) {
+                                if (parts[parts.length-1].length < 2) {
+                                    parts[parts.length-1] = parts[parts.length-1]+'0';
+                                    withslash = parts.join('/').split('').reverse().join('');
+                                } else {
+                                    withslash = parts.join('/').split('').reverse().join('');
+                                }
+                            } else {
+                                parts[3] = '00';
+                                withslash = parts.join('/').split('').reverse().join('');
+                            }
+                        }
+                        var url = 'https://stars.macys.com/preview/'+withslash+'/final/'+e.target.innerText+'-214x261.jpg';
+                        $(e.target).append('<img class="imagehover" src="'+url+'" onerror="this.onerror=null;this.src=\'https://stars.macys.com/UI/Common/Graphics/Main/product-image-not-available.jpeg\';"/>')
+                    }
+                },
+                onMouseLeave: (e) => {
+//                    if (e.target.getAttribute('data-property') == ('tileimage')){
+                        $(e.target).parent().find('img').replaceWith('');
+//                    }
+                },
+
                 dataRow: d.id,
                 };
                 }}

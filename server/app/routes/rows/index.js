@@ -21,13 +21,13 @@ router.get('/', function (req, res, next) {
 });
 
 router.get('/:category', function(req,res,next) {
-    Row.find({fob: req.params.category}).populate('entries').then(function(rows) {
-        res.json(rows);
+//    Row.find({fob: req.params.category}).populate('entries').then(function(rows) {
+//        res.json(rows);
+//    });
+    Row.find().populate('entries').then(function(rows) {
+         var filteredrows = _.filter(rows, function(e){ return e.entries[_.findIndex(e.entries, function(eb){ return eb.columnName == 'category' } )].data == req.params.category })
+         res.json(filteredrows);
     });
-    // Row.find().populate('entries').then(function(rows) {
-    //     var filteredrows = _.filter(rows, function(e){ return e.entries[_.findIndex(e.entries, function(eb){ return eb.columnName == 'category' } )].data == req.params.category })
-    //     res.json(filteredrows);
-    // });
 });
 
 router.post('/boost', function(req,res,next) {
