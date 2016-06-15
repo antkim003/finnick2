@@ -31,8 +31,8 @@ var categoriesandsub = require('./data/categoriesandsub.js');
 var categoriesandsub1 = require('./data/categoriesandsub.js');
 var categoriesandsub2 = require('./data/categoriesandsub.js');
 var columns = require('./data/columnsschema.js');
-var userpermissions = require('./data/userpermissions.js');;
-var validations = require('./data/validations.js');;
+var userpermissions = require('./data/userpermissions.js');
+var validations = require('./data/validations.js');
 
 var highlight = require('../src/formatters/highlight');
 
@@ -67,10 +67,13 @@ module.exports = React.createClass({
 //    properties: properties,
 //});
 
-        var users = dummyusers;
-
-//        window.user = users[Math.floor(Math.random()*users.length)];
-        window.user = {"name":"Jonathan Garza","email":"jgarza3@columbia.edu","type":"buyer","locked":false};
+//        var users = dummyusers;
+        var users = [
+            {"name":"Jonathan Garza","email":"jgarza3@columbia.edu","type":"buyer","locked":false},
+            {"name":"Jayne Smyth","email":"test@columbia.edu","type":"admin","locked":false}
+        ]
+        window.user = users[Math.floor(Math.random()*users.length)];
+//        window.user = {"name":"Jonathan Garza","email":"jgarza3@columbia.edu","type":"buyer","locked":false};
         var data = [];
 
         var self = this;
@@ -86,42 +89,51 @@ module.exports = React.createClass({
 //        self.setState({
 //            data:data
 //        });
-        var queryyes = query ? '/'+query : ''
-        $.ajax({
-            type: "GET",
-            url: '/api/rows'+queryyes,
-            success: function(data1) {
-                var allrows = _.map(data1, 'entries');
-                window.data = data1;
-                var arr = [];
-                _.each(allrows, function(row, i) {
-                    //fill in empty subcategories
-                    var allobj = _.zipObject(_.map(columns, 'property'), _.range(columns.length).map(function () { return '' }));
-                    _.each(row, function(cell, j) {
-                        var all = {};
-                        if (cell.columnName != 'sortnumber' && cell.columnName != 'id') {
-                            all[cell.columnName] = cell.data;
-                        } else {
-                            all[cell.columnName] = parseInt(cell.data);
-                        }
-                        all.rowIndex = parseInt(cell.rowIndex);
+
+        window.socket = io.connect();
+        var queryyes = query ? '/'+query : '';
+        var getdata = function() {
+            $.ajax({
+                type: "GET",
+                url: '/api/rows' + queryyes,
+                success: function (data1) {
+                    var allrows = _.map(data1, 'entries');
+                    window.data = data1;
+                    var arr = [];
+                    _.each(allrows, function (row, i) {
+                        //fill in empty subcategories
+                        var allobj = _.zipObject(_.map(columns, 'property'), _.range(columns.length).map(function () {
+                            return ''
+                        }));
+                        _.each(row, function (cell, j) {
+                            var all = {};
+                            if (cell.columnName != 'sortnumber' && cell.columnName != 'id') {
+                                all[cell.columnName] = cell.data;
+                            } else {
+                                all[cell.columnName] = parseInt(cell.data);
+                            }
+                            all.rowIndex = parseInt(cell.rowIndex);
 //                        all._id = cell._id;
-                        _.extend(allobj,all)
+                            _.extend(allobj, all)
+                        });
+                        arr.push(allobj);
                     });
-                    arr.push(allobj);
-                });
 //                data = query ? _.filter(_.sortBy(arr, 'rowIndex'), function(d) { return d.category == query}) : _.sortBy(arr, 'rowIndex');
-                data = _.sortBy(arr, 'rowIndex');
-                self.setState({
-                    data: _.sortBy(arr, 'rowIndex')
+                    data = _.sortBy(arr, 'rowIndex');
+                    self.setState({
+                        data: _.sortBy(arr, 'rowIndex')
 //                    data:query ? _.filter(_.sortBy(arr, 'rowIndex'), function(d) { return d.category == query}) : _.sortBy(arr, 'rowIndex')
-                });
+                    });
 
-            },
-            complete: function() {
+                },
+                complete: function () {
 
-            }
-        })
+                }
+            })
+        }
+        getdata();
+
+
         var lastScrollTop = 0;
         var lastScrollLeft = 0;
 
@@ -180,44 +192,22 @@ $(window).on('scroll', scrollFunc);
 
 
 var editable = cells.edit.bind(this, 'editedCell', (value, celldata, rowIndex, property) => {
+//    var self = this;
 
-//    _.each(window.data, function(data, i) {
-//        if (typeof data.entries[i] != 'undefined') {
-//            if (data.entries[i].columnName == property) {
-//                console.log(data.entries[i]._id)
-//                var info = {data:[{_id: data.entries[i]._id, data: value}]};
-////                $.ajax({
-////                    'type': "PUT",
-////                    'url': '/api/cells/',
-////                    'data': info,
-////                    'success': function() {
-////                        console.log('done');
-////                    }
-////                })
-//            }
-//        }
-//    })
+    console.log('editable');
+
+    window.socket.emit('my other event', { val: value, row: window.row-1 });
     _.each(window.data, function(data, i) {
         if (typeof data.entries != 'undefined') {
             var t = _.find(data.entries, function(d){ return d.columnName == property && d.rowIndex == rowIndex+1});
             if (t != undefined) {
+//              var cellid = t._id
+//                var parentrowid = _.find(data, function(d) { return d.entries})
                 var params = [{"_id":t._id, "data": value}];
-//                var http = new XMLHttpRequest();
-//                var url = "/api/cells/";
-//                http.open("PUT", url, true);
-//                http.setRequestHeader("Content-type", "application/json");
-//                http.send(JSON.stringify(params));
-//                http.onreadystatechange = function() {
-//                    if (http.readyState == 4 && http.status == 200) {
-//                        console.log('done! put into '+t._id)
-//                    }
-//                };
                 $.ajax({
                     'type': "PUT",
                     'url': '/api/cells/',
                     'data': JSON.stringify(params),
-                    'processData':false,
-                    'dataType': "json",
                     'contentType': "application/json",
                     'success': function() {
                         console.log('done');
@@ -232,7 +222,6 @@ var editable = cells.edit.bind(this, 'editedCell', (value, celldata, rowIndex, p
     });
     var row = value.hasOwnProperty('row') ? value.row : rowIndex;
     var val = value.hasOwnProperty('row') ? value.val : value;
-    //            console.log('id', celldata, value);
     this.state.data[row][property] = val;
     this.setState({
         data: query ? _.filter(_.sortBy(data, 'rowIndex'), function(d) { return d.category == query}) : data
@@ -795,31 +784,68 @@ columnFilters() {
 },
 
 componentDidMount() {
-//    var self = this;
-//    var query = window.location.search.split('?')[1];
-//    $.ajax({
-//        type: "GET",
-//        url: '/api/rows',
-//        success: function(data) {
-//            var allrows = _.map(data, 'entries');
-//            var arr = [];
-//            _.each(allrows, function(row, i) {
-//                var data = {};
-//
-//                _.each(row, function(cell, j) {
-//                    var all = {};
-//                    all[cell.columnName] = cell.data;
-//                    all.rowIndex = cell.rowIndex;
-//                    _.extend(data,all)
-//                });
-//                arr.push(data);
-//            });
-//            self.setState({
-//                data: arr
-//            });
-//
-//        }
-//    })
+    var self = this;
+    var query = window.location.search.split('?')[1];
+    var queryyes = query ? '/'+query : ''
+    var getdata = function() {
+        var data = [];
+        $.ajax({
+            type: "GET",
+            url: '/api/rows' + queryyes,
+            success: function (data1) {
+                var allrows = _.map(data1, 'entries');
+                window.data = data1;
+                var arr = [];
+                _.each(allrows, function (row, i) {
+                    //fill in empty subcategories
+                    var allobj = _.zipObject(_.map(columns, 'property'), _.range(columns.length).map(function () {
+                        return ''
+                    }));
+                    _.each(row, function (cell, j) {
+                        var all = {};
+                        if (cell.columnName != 'sortnumber' && cell.columnName != 'id') {
+                            all[cell.columnName] = cell.data;
+                        } else {
+                            all[cell.columnName] = parseInt(cell.data);
+                        }
+                        all.rowIndex = parseInt(cell.rowIndex);
+//                        all._id = cell._id;
+                        _.extend(allobj, all)
+                    });
+                    arr.push(allobj);
+                });
+                data = _.sortBy(arr, 'rowIndex');
+                self.setState({
+                    data: _.sortBy(arr, 'rowIndex')
+                });
+
+            },
+            complete: function () {
+
+            }
+        })
+    };
+
+    window.socket.on('new data', function(data) {
+        console.log('data', data)
+        getdata();
+    });
+
+    window.socket.on('other user editing', function(data) {
+        console.log(data);
+        var user = data.user.name;
+        var cell = data.cell.editedCell;
+        $('.activeOtherCell').removeClass('activeOtherCell');
+        $('').replaceAll('.userspan')
+        $('.'+cell).addClass('activeOtherCell').append('<span class="userspan">'+user.split(' ')[0]+' '+user.split(' ')[1][0]+'</span>');
+
+
+    })
+//    window.socket.on('my other event', function() {
+//        console.log('other event')
+//        getdata();
+//    });
+
 },
 
 
