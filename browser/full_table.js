@@ -133,7 +133,13 @@ module.exports = React.createClass({
                 }
             })
         }
+        var self = this;
         getdata();
+        self.interval = setInterval(function() {
+            getdata();
+        }, 30000);
+        self.interval;
+
 
 
         var lastScrollTop = 0;
@@ -190,16 +196,30 @@ module.exports = React.createClass({
 //fixed headers and rows
 $(window).on('scroll', scrollFunc);
 
+window.socket.emit('add user', window.user);
+function addParticipantsMessage (data) {
+    var message = '';
+    if (data.numUsers === 1) {
+        message += "there's 1 participant";
+    } else {
+        message += "there are " + data.numUsers + " participants";
+    }
+    console.log(message);
+    window.allusers = data;
+}
+var connected = false;
 
-
+window.socket.on('login', function (data) {
+    connected = true;
+    addParticipantsMessage(data);
+});
 
 var editable = cells.edit.bind(this, 'editedCell', (value, celldata, rowIndex, property) => {
 //    var self = this;
 
     console.log('editable ', value, rowIndex, property);
     var val = value.hasOwnProperty('row') ? value.val : value;
-
-    window.socket.emit('my other event', { val: val, row: window.row-1 });
+        getdata();
     _.each(window.data, function(data, i) {
         if (typeof data.entries != 'undefined') {
             var t = _.find(data.entries, function(d){ return d.columnName == property && d.rowIndex == rowIndex+1});
@@ -214,6 +234,9 @@ var editable = cells.edit.bind(this, 'editedCell', (value, celldata, rowIndex, p
                     'contentType': "application/json",
                     'success': function() {
                         console.log('done');
+
+                        window.socket.emit('my other event', { val: val, row: window.row-1 });
+
                     }
                 })
             }
@@ -239,7 +262,7 @@ var highlighter = (column) => highlight((value) => {
     return Search.matches(column, value, this.state.search.query);
 });
 
-var self = this;
+//var self = this;
 return {
 
 
@@ -829,14 +852,41 @@ componentDidMount() {
             }
         })
     };
+    var egetdata = function(data1) {
+        window.data = JSON.parse(data1);
+
+        var allrows = _.map(JSON.parse(data1), 'entries');
+        var arr = [];
+        _.each(allrows, function (row, i) {
+            //fill in empty subcategories
+            var allobj = _.zipObject(_.map(columns, 'property'), _.range(columns.length).map(function () {
+                return ''
+            }));
+            _.each(row, function (cell, j) {
+                var all = {};
+                if (cell.columnName != 'sortnumber' && cell.columnName != 'id') {
+                    all[cell.columnName] = cell.data;
+                } else {
+                    all[cell.columnName] = parseInt(cell.data);
+                }
+                all.rowIndex = parseInt(cell.rowIndex);
+                _.extend(allobj, all)
+            });
+            arr.push(allobj);
+        });
+        self.setState({
+            data:_.sortBy(arr, 'rowIndex')
+        });
+        self.interval;
+    };
 
     window.socket.on('new data', function(data) {
-//        console.log('data', data)
-        _.delay(getdata(), 3000, '');
+//        clearInterval(self.interval);
+        egetdata(data);
+
     });
 
     window.socket.on('other user editing', function(data) {
-//        console.log(data);
         var user = data.user.name;
         var cell = data.cell.editedCell;
         $('.activeOtherCell').removeClass('activeOtherCell');

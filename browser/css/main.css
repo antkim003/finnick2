@@ -288,7 +288,7 @@ table .sort-desc:after, .sort-desc .fixedHead:after {
     content: '\25B2';
     font-size: 1em;
 }
-.pure-table {
+.demonstration {
     margin-bottom: 200px;
 }
 .imagehover {
