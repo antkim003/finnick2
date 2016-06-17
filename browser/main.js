@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import Wrapper from './wrapper.js';
 import App from './App.js';
-
+import 'babel-polyfill';
 import { render } from 'react-dom';
 import { Router, Route, IndexRoute, browserHistory } from 'react-router';
 import ReduxThunk from 'redux-thunk';

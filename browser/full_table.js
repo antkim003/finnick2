@@ -91,6 +91,8 @@ module.exports = React.createClass({
 //        });
 
         window.socket = io.connect();
+//        var clients = io.sockets.ada();
+//        console.log(clients, 'clients');
         var queryyes = query ? '/'+query : '';
         var getdata = function() {
             $.ajax({
@@ -131,7 +133,13 @@ module.exports = React.createClass({
                 }
             })
         }
+        var self = this;
         getdata();
+        self.interval = setInterval(function() {
+            getdata();
+        }, 30000);
+        self.interval;
+
 
 
         var lastScrollTop = 0;
@@ -188,22 +196,37 @@ module.exports = React.createClass({
 //fixed headers and rows
 $(window).on('scroll', scrollFunc);
 
+window.socket.emit('add user', window.user);
+function addParticipantsMessage (data) {
+    var message = '';
+    if (data.numUsers === 1) {
+        message += "there's 1 participant";
+    } else {
+        message += "there are " + data.numUsers + " participants";
+    }
+    console.log(message);
+    window.allusers = data;
+}
+var connected = false;
 
-
+window.socket.on('login', function (data) {
+    connected = true;
+    addParticipantsMessage(data);
+});
 
 var editable = cells.edit.bind(this, 'editedCell', (value, celldata, rowIndex, property) => {
 //    var self = this;
 
-    console.log('editable');
-
-    window.socket.emit('my other event', { val: value, row: window.row-1 });
+    console.log('editable ', value, rowIndex, property);
+    var val = value.hasOwnProperty('row') ? value.val : value;
+        getdata();
     _.each(window.data, function(data, i) {
         if (typeof data.entries != 'undefined') {
             var t = _.find(data.entries, function(d){ return d.columnName == property && d.rowIndex == rowIndex+1});
             if (t != undefined) {
 //              var cellid = t._id
 //                var parentrowid = _.find(data, function(d) { return d.entries})
-                var params = [{"_id":t._id, "data": value}];
+                var params = [{"_id":t._id, "data": val}];
                 $.ajax({
                     'type': "PUT",
                     'url': '/api/cells/',
@@ -211,6 +234,9 @@ var editable = cells.edit.bind(this, 'editedCell', (value, celldata, rowIndex, p
                     'contentType': "application/json",
                     'success': function() {
                         console.log('done');
+
+                        window.socket.emit('my other event', { val: val, row: window.row-1 });
+
                     }
                 })
             }
@@ -221,7 +247,7 @@ var editable = cells.edit.bind(this, 'editedCell', (value, celldata, rowIndex, p
         id: celldata[rowIndex].id,
     });
     var row = value.hasOwnProperty('row') ? value.row : rowIndex;
-    var val = value.hasOwnProperty('row') ? value.val : value;
+//    var val = value.hasOwnProperty('row') ? value.val : value;
     this.state.data[row][property] = val;
     this.setState({
         data: query ? _.filter(_.sortBy(data, 'rowIndex'), function(d) { return d.category == query}) : data
@@ -236,7 +262,7 @@ var highlighter = (column) => highlight((value) => {
     return Search.matches(column, value, this.state.search.query);
 });
 
-var self = this;
+//var self = this;
 return {
 
 
@@ -494,7 +520,8 @@ columns: [
         editable({
             editor: editors.input(_.filter(validations, function(v) { return v.name == 'numerical'})),
         }),
-        highlighter('tileimage')],
+        highlighter('tileimage'),
+        ],
     columnorder: '0'
 },
 {
@@ -673,85 +700,85 @@ columns: [
     })],
     columnorder: '0'
 },
-//{
-//    cell: function(value, celldata, rowIndex) {
-//        var idx = findIndex(this.state.data, {
-//            id: celldata[rowIndex].id,
-//        });
-//
-//        var edit = () => {
-//            var schema = {
-//                type: 'object',
-//                properties: properties,
-//            };
-//
-//            var onSubmit = (editData, editValue) => {
-//                this.refs.modal.hide();
-//
-//                if(editValue === 'Cancel') {
-//                    return;
-//                }
-//
-//                this.state.data[idx] = editData;
-//
-//                this.setState({
-//                    data: this.state.data
-//                });
-//            };
-//
-//            var getButtons = (submit) => {
-//                return (
-//                    <span>
-//                        <input type='submit'
-//                        className='pure-button pure-button-primary ok-button'
-//                        key='ok' value='OK'
-//                        onClick={submit} />
-//                        <input type='submit'
-//                        className='pure-button cancel-button'
-//                        key='cancel' value='Cancel'
-//                        onClick={submit} />
-//                    </span>
-//                    );
-//            };
-//
-//            this.setState({
-//                modal: {
-//                    title: 'Edit',
-//                    content: <Form
-//                    className='pure-form pure-form-aligned'
-//                    fieldWrapper={FieldWrapper}
-//                    sectionWrapper={SectionWrapper}
-//                    buttons={getButtons}
-//                    schema={schema}
-//                    validate={validate}
-//                    values={this.state.data[idx]}
-//                    onSubmit={onSubmit}/>
-//                }
-//            });
-//
-//            this.refs.modal.show();
-//        };
-//
-//        var remove = () => {
-//            // this could go through flux etc.
-//            this.state.data.splice(idx, 1);
-//
-//            this.setState({
-//                data: this.state.data
-//            });
-//        };
-//
-//        return {
-//            value: (
-//                <span>
-//                    <span className='edit' onClick={edit.bind(this)} style={{cursor: 'pointer'}}>
-//                    &#8665;
-//                    </span>
-//                </span>
-//                )
-//        };
-//    }.bind(this),
-//},
+{
+    cell: function(value, celldata, rowIndex) {
+        var idx = findIndex(this.state.data, {
+            id: celldata[rowIndex].id,
+        });
+
+        var edit = () => {
+            var schema = {
+                type: 'object',
+                properties: properties,
+            };
+
+            var onSubmit = (editData, editValue) => {
+                this.refs.modal.hide();
+
+                if(editValue === 'Cancel') {
+                    return;
+                }
+
+                this.state.data[idx] = editData;
+
+                this.setState({
+                    data: this.state.data
+                });
+            };
+
+            var getButtons = (submit) => {
+                return (
+                    <span>
+                        <input type='submit'
+                        className='pure-button pure-button-primary ok-button'
+                        key='ok' value='OK'
+                        onClick={submit} />
+                        <input type='submit'
+                        className='pure-button cancel-button'
+                        key='cancel' value='Cancel'
+                        onClick={submit} />
+                    </span>
+                    );
+            };
+
+            this.setState({
+                modal: {
+                    title: 'Edit',
+                    content: <Form
+                    className='pure-form pure-form-aligned'
+                    fieldWrapper={FieldWrapper}
+                    sectionWrapper={SectionWrapper}
+                    buttons={getButtons}
+                    schema={schema}
+                    validate={validate}
+                    values={this.state.data[idx]}
+                    onSubmit={onSubmit}/>
+                }
+            });
+
+            this.refs.modal.show();
+        };
+
+        var remove = () => {
+            // this could go through flux etc.
+            this.state.data.splice(idx, 1);
+
+            this.setState({
+                data: this.state.data
+            });
+        };
+
+        return {
+            value: (
+                <span>
+                    <span className='edit' onClick={edit.bind(this)} style={{cursor: 'pointer'}}>
+                    &#8665;
+                    </span>
+                </span>
+                )
+        };
+    }.bind(this),
+},
 ],
 modal: {
     title: 'title',
@@ -825,26 +852,48 @@ componentDidMount() {
             }
         })
     };
+    var egetdata = function(data1) {
+        window.data = JSON.parse(data1);
+
+        var allrows = _.map(JSON.parse(data1), 'entries');
+        var arr = [];
+        _.each(allrows, function (row, i) {
+            //fill in empty subcategories
+            var allobj = _.zipObject(_.map(columns, 'property'), _.range(columns.length).map(function () {
+                return ''
+            }));
+            _.each(row, function (cell, j) {
+                var all = {};
+                if (cell.columnName != 'sortnumber' && cell.columnName != 'id') {
+                    all[cell.columnName] = cell.data;
+                } else {
+                    all[cell.columnName] = parseInt(cell.data);
+                }
+                all.rowIndex = parseInt(cell.rowIndex);
+                _.extend(allobj, all)
+            });
+            arr.push(allobj);
+        });
+        self.setState({
+            data:_.sortBy(arr, 'rowIndex')
+        });
+        self.interval;
+    };
 
     window.socket.on('new data', function(data) {
-        console.log('data', data)
-        getdata();
+//        clearInterval(self.interval);
+        egetdata(data);
+
     });
 
     window.socket.on('other user editing', function(data) {
-        console.log(data);
         var user = data.user.name;
         var cell = data.cell.editedCell;
         $('.activeOtherCell').removeClass('activeOtherCell');
         $('').replaceAll('.userspan')
         $('.'+cell).addClass('activeOtherCell').append('<span class="userspan">'+user.split(' ')[0]+' '+user.split(' ')[1][0]+'</span>');
-
-
     })
-//    window.socket.on('my other event', function() {
-//        console.log('other event')
-//        getdata();
-//    });
+
 
 },
 
@@ -902,6 +951,32 @@ render() {
                 className: rowIndex % 2 ? 'odd-row row-'+d.id : 'even-row row-'+d.id,
                 onClick: () => {
                     window.row = d.id;
+                },
+                onMouseEnter: (e) => {
+                    if ((e.target.getAttribute('data-property') == 'tileimage') || (e.target.getAttribute('data-property') == 'imageid')) {
+                        var parts = e.target.innerText.split('').reverse().join('') || '';
+                        parts = parts.match(/[\s\S]{1,2}/g) || []
+                        var withslash = '';
+
+                        if (parts.length > 0) {
+                            if (parts.length == 4) {
+                                if (parts[parts.length-1].length < 2) {
+                                    parts[parts.length-1] = parts[parts.length-1]+'0';
+                                    withslash = parts.join('/').split('').reverse().join('');
+                                } else {
+                                    withslash = parts.join('/').split('').reverse().join('');
+                                }
+                            } else {
+                                parts[3] = '00';
+                                withslash = parts.join('/').split('').reverse().join('');
+                            }
+                        }
+                        var url = 'https://stars.macys.com/preview/'+withslash+'/final/'+e.target.innerText+'-214x261.jpg';
+                        $(e.target).append('<img class="imagehover" src="'+url+'" onerror="this.onerror=null;this.src=\'https://stars.macys.com/UI/Common/Graphics/Main/product-image-not-available.jpeg\';"/>')
+                    }
+                },
+                onMouseLeave: (e) => {
+                    $(e.target).parent().find('img').replaceWith('');
                 },
                 dataRow: d.id,
                 };
@@ -987,57 +1062,19 @@ function augmentWithTitles(o) {
     for (var property in o) {
         o[property].title = titleCase(property);
     }
-
     return o;
 }
 
-function getFieldGenerators(countryValues) {
-    return {
-        name: function() {
-            var forenames = ['Jack', 'Bo', 'John', 'Jill', 'Angus', 'Janet', 'Cecilia',
-                'Daniel', 'Marge', 'Homer', 'Trevor', 'Fiona', 'Margaret', 'Ofelia'];
-            var surnames = ['MacGyver', 'Johnson', 'Jackson', 'Robertson', 'Hull', 'Hill'];
-
-            return math.pick(forenames) + ' ' + math.pick(surnames);
-        },
-        position: function() {
-            var positions = ['Boss', 'Contractor', 'Client', ''];
-
-            return math.pick(positions);
-        },
-        salary: generators.number.bind(null, 0, 2),
-        country: function() {
-            return math.pick(countryValues);
-        }
-    };
-}
 
 function attachIds(arr) {
     return arr.map((o, i) => {
         o.id = i;
-
     return o;
 });
 }
 
 function find(arr, key, value) {
-//    console.log('console.log find ',key, value, arr )
-//    for( var i=0; i < value.length; i++) {
-//        console.log(value[i]);
-//    }
-
     return arr;
-//    var value = Array.isArray(value) ? value : [value];
-//
-//    value.forEach(function(country){
-//        if(arr[country]) {
-//            return arr[country];
-//        }
-//        console.log('inforeach,',arr, country, key, value)
-//    })
-
-
-//    return arr.reduce((a, b) => a[key] === value ? a : b[key] === value && b);
 }
 
 function findselect(arr, key, value) {

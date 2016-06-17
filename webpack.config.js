@@ -8,7 +8,8 @@ module.exports = {
   devtool: 'eval-source-map',
   entry: [
     'webpack-hot-middleware/client?reload=true',
-    path.join(__dirname, 'browser/main.js')
+    path.join(__dirname, 'browser/main.js'),
+    'babel-polyfill', path.join(__dirname, 'browser/main.js')
   ],
   output: {
     path: path.join(__dirname, '/dist/'),
