@@ -1,25 +1,46 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import Wrapper from './wrapper.js';
 import App from './App.js';
 
 import { render } from 'react-dom';
-import { Router, Route, browserHistory } from 'react-router';
+import { Router, Route, IndexRoute, browserHistory } from 'react-router';
+import ReduxThunk from 'redux-thunk';
 
 import { Provider } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux';
+import RequireAuth from '../src/components/auth/require_auth';
 import reducers from '../src/reducers';
-import Async from '../src/middlewares/async';
-const createStoreWithMiddleware = applyMiddleware(Async)(createStore);
+import ReduxPromise from 'redux-promise';
+import { AUTH_USER } from '../src/actions/type';
+import { fetchSession }from '../src/actions';
 
+const createStoreWithMiddleware = applyMiddleware(ReduxPromise, ReduxThunk)(createStore);
+const store = createStoreWithMiddleware(reducers);
+
+const token = localStorage.getItem('token');
+
+if(token) {
+  store.dispatch({ type: AUTH_USER });
+  store.dispatch(fetchSession());
+}
 
 const Admin = require('../src/components/admin/admin.js');
+const Login = require('../src/components/auth/login.js');
+const Logout = require('../src/components/auth/logout.js');
+const Landing = require('../src/components/landing.js');
 // ReactDOM.render(<App />, document.getElementById('root'));
 
 ReactDOM.render(
-  <Provider store={createStoreWithMiddleware(reducers)}>
+  <Provider store={store}>
     <Router history={browserHistory}>
-      <Route path="/" component={App}/>
-      <Route path="/admin" component={Admin}/>
+      <Route path="/" component={Wrapper}>
+        <IndexRoute component={App} />
+        <Route path="admin" component={RequireAuth(Admin)}/>
+        <Route path="landing" component={Landing} />
+        <Route path="login" component={Login}/>
+        <Route path="logout" component={Logout}/>
+      </Route>
     </Router>
   </Provider>
   , document.getElementById('root'))

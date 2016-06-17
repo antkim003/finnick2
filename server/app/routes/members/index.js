@@ -18,6 +18,15 @@ router.get('/', function(req, res, next) {
     });
 });
 
+router.get('/session', function (req, res) {
+    if (req.user) {
+        res.json({ user: req.user.sanitize() });
+    } else {
+        res.status(401).send('No authenticated user.');
+    }
+});
+
+
 router.get('/secret-stash', ensureAuthenticated, function (req, res) {
 
     var theStash = [

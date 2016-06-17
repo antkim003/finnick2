@@ -6,7 +6,6 @@ class UserList extends Component {
   componentWillMount() {
     this.props.fetchUsers();
     this.props.fetchColumns();
-    console.log('this is here', this.props.users);
   }
 
   renderUser(user) {
@@ -23,7 +22,6 @@ class UserList extends Component {
 
 
   render() {
-    console.log("this.props.columns: ", this.props.columns, this.props.users);
     return (
       <div className="UserList">
         {this.props.users.map(this.renderUser)}
