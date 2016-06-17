@@ -38,6 +38,8 @@ module.exports = (columns, sortColumns, column, done) => {
 // sorter === lodash orderBy
 // https://lodash.com/docs#orderBy
 module.exports.sort = (data, sortColumns, sorter) => {
+    $('.activeOtherCell').removeClass('activeOtherCell');
+
     if (!sortColumns) {
         return data;
     }

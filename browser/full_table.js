@@ -23,23 +23,19 @@ var cells = require('../src/cells');
 var ColumnFilters = require('./column_filters.js');
 var FieldWrapper = require('./field_wrapper.js');
 var SectionWrapper = require('./section_wrapper.js');
-var countries = require('./data/countries');
-var generateData = require('./generate_data');
-//var rowdata = require('./data/dummyrowdata.js');
 var dummyusers = require('./data/dummyusers.js');
 var categoriesandsub = require('./data/categoriesandsub.js');
-var categoriesandsub1 = require('./data/categoriesandsub.js');
-var categoriesandsub2 = require('./data/categoriesandsub.js');
+var categoriesandsub1 = categoriesandsub;
+var categoriesandsub2 = categoriesandsub;
 var columns = require('./data/columnsschema.js');
 var userpermissions = require('./data/userpermissions.js');
 var validations = require('./data/validations.js');
-
 var highlight = require('../src/formatters/highlight');
 
 module.exports = React.createClass({
     displayName: 'FullTable',
     getInitialState: function(){
-    var countryValues = countries.map((c) => c.value);
+//    var countryValues = countries.map((c) => c.value);
     var categoryValues = categoriesandsub.map((c) => c.value);
 
     var properties = augmentWithTitles({
@@ -50,7 +46,7 @@ module.exports = React.createClass({
                 type: 'number'
             },
             instore: {
-                enum: countryValues,
+//                enum: countryValues,
         //                enumNames: countries.map((c) => c.name),
             },
             doubleexposure: {
@@ -197,6 +193,7 @@ module.exports = React.createClass({
 $(window).on('scroll', scrollFunc);
 
 window.socket.emit('add user', window.user);
+
 function addParticipantsMessage (data) {
     var message = '';
     if (data.numUsers === 1) {
@@ -204,7 +201,7 @@ function addParticipantsMessage (data) {
     } else {
         message += "there are " + data.numUsers + " participants";
     }
-    console.log(message);
+    console.log(message, data);
     window.allusers = data;
 }
 var connected = false;
@@ -214,12 +211,17 @@ window.socket.on('login', function (data) {
     addParticipantsMessage(data);
 });
 
+window.socket.on('user joined', function(data) {
+   console.log(data, 'user joined');
+    window.allusers = data.currentUsers;
+
+});
 var editable = cells.edit.bind(this, 'editedCell', (value, celldata, rowIndex, property) => {
 //    var self = this;
 
     console.log('editable ', value, rowIndex, property);
     var val = value.hasOwnProperty('row') ? value.val : value;
-        getdata();
+//        getdata();
     _.each(window.data, function(data, i) {
         if (typeof data.entries != 'undefined') {
             var t = _.find(data.entries, function(d){ return d.columnName == property && d.rowIndex == rowIndex+1});
@@ -236,7 +238,7 @@ var editable = cells.edit.bind(this, 'editedCell', (value, celldata, rowIndex, p
                         console.log('done');
 
                         window.socket.emit('my other event', { val: val, row: window.row-1 });
-
+                        getdata();
                     }
                 })
             }
@@ -700,89 +702,89 @@ columns: [
     })],
     columnorder: '0'
 },
-{
-    cell: function(value, celldata, rowIndex) {
-        var idx = findIndex(this.state.data, {
-            id: celldata[rowIndex].id,
-        });
-
-        var edit = () => {
-            var schema = {
-                type: 'object',
-                properties: properties,
-            };
-
-            var onSubmit = (editData, editValue) => {
-                this.refs.modal.hide();
-
-                if(editValue === 'Cancel') {
-                    return;
-                }
-
-                this.state.data[idx] = editData;
-
-                this.setState({
-                    data: this.state.data
-                });
-            };
-
-            var getButtons = (submit) => {
-                return (
-                    <span>
-                        <input type='submit'
-                        className='pure-button pure-button-primary ok-button'
-                        key='ok' value='OK'
-                        onClick={submit} />
-                        <input type='submit'
-                        className='pure-button cancel-button'
-                        key='cancel' value='Cancel'
-                        onClick={submit} />
-                    </span>
-                    );
-            };
-
-            this.setState({
-                modal: {
-                    title: 'Edit',
-                    content: <Form
-                    className='pure-form pure-form-aligned'
-                    fieldWrapper={FieldWrapper}
-                    sectionWrapper={SectionWrapper}
-                    buttons={getButtons}
-                    schema={schema}
-                    validate={validate}
-                    values={this.state.data[idx]}
-                    onSubmit={onSubmit}/>
-                }
-            });
-
-            this.refs.modal.show();
-        };
-
-        var remove = () => {
-            // this could go through flux etc.
-            this.state.data.splice(idx, 1);
-
-            this.setState({
-                data: this.state.data
-            });
-        };
-
-        return {
-            value: (
-                <span>
-                    <span className='edit' onClick={edit.bind(this)} style={{cursor: 'pointer'}}>
-                    &#8665;
-                    </span>
-                </span>
-                )
-        };
-    }.bind(this),
-},
+//{
+//    cell: function(value, celldata, rowIndex) {
+//        var idx = findIndex(this.state.data, {
+//            id: celldata[rowIndex].id,
+//        });
+//
+//        var edit = () => {
+//            var schema = {
+//                type: 'object',
+//                properties: properties,
+//            };
+//
+//            var onSubmit = (editData, editValue) => {
+//                this.refs.modal.hide();
+//
+//                if(editValue === 'Cancel') {
+//                    return;
+//                }
+//
+//                this.state.data[idx] = editData;
+//
+//                this.setState({
+//                    data: this.state.data
+//                });
+//            };
+//
+//            var getButtons = (submit) => {
+//                return (
+//                    <span>
+//                        <input type='submit'
+//                        className='pure-button pure-button-primary ok-button'
+//                        key='ok' value='OK'
+//                        onClick={submit} />
+//                        <input type='submit'
+//                        className='pure-button cancel-button'
+//                        key='cancel' value='Cancel'
+//                        onClick={submit} />
+//                    </span>
+//                    );
+//            };
+//
+//            this.setState({
+//                modal: {
+//                    title: 'Edit',
+//                    content: <Form
+//                    className='pure-form pure-form-aligned'
+//                    fieldWrapper={FieldWrapper}
+//                    sectionWrapper={SectionWrapper}
+//                    buttons={getButtons}
+//                    schema={schema}
+//                    validate={validate}
+//                    values={this.state.data[idx]}
+//                    onSubmit={onSubmit}/>
+//                }
+//            });
+//
+//            this.refs.modal.show();
+//        };
+//
+//        var remove = () => {
+//            // this could go through flux etc.
+//            this.state.data.splice(idx, 1);
+//
+//            this.setState({
+//                data: this.state.data
+//            });
+//        };
+//
+//        return {
+//            value: (
+//                <span>
+//                    <span className='edit' onClick={edit.bind(this)} style={{cursor: 'pointer'}}>
+//                    &#8665;
+//                    </span>
+//                </span>
+//                )
+//        };
+//    }.bind(this),
+//}
 ],
 modal: {
     title: 'title',
-        content: 'content',
+    content: 'content',
 },
 pagination: {
     page: 1,
@@ -853,9 +855,10 @@ componentDidMount() {
         })
     };
     var egetdata = function(data1) {
-        window.data = JSON.parse(data1);
 
-        var allrows = _.map(JSON.parse(data1), 'entries');
+        var filteredrows = _.filter(JSON.parse(data1), function(e){ return e.entries[_.findIndex(e.entries, function(eb){ return eb.columnName == 'category' } )].data == query })
+        console.log(filteredrows)
+        var allrows = _.map(filteredrows, 'entries');
         var arr = [];
         _.each(allrows, function (row, i) {
             //fill in empty subcategories
@@ -882,16 +885,21 @@ componentDidMount() {
 
     window.socket.on('new data', function(data) {
 //        clearInterval(self.interval);
-        egetdata(data);
-
+//        egetdata(data);
+            getdata()
     });
 
     window.socket.on('other user editing', function(data) {
         var user = data.user.name;
         var cell = data.cell.editedCell;
+        var cellrow = data.cell;
+        var fob = data.fob;
         $('.activeOtherCell').removeClass('activeOtherCell');
         $('').replaceAll('.userspan')
-        $('.'+cell).addClass('activeOtherCell').append('<span class="userspan">'+user.split(' ')[0]+' '+user.split(' ')[1][0]+'</span>');
+//        console.log(cellrow, 'testtest');
+        if (fob == query) {
+            $('[data-cell="'+cellrow+'"]').addClass('activeOtherCell').append('<span class="userspan">' + user.split(' ')[0] + ' ' + user.split(' ')[1][0] + '</span>');
+        }
     })
 
 
@@ -931,12 +939,15 @@ render() {
             isNaN(pagination.perPage) ? 1 : pagination.perPage, 1)
     );
 
+
+
     return (
         <div>
             <div className='controls'>
                 <div className='per-page-container'>
                 Per page <input type='text' defaultValue={pagination.perPage} onChange={this.onPerPage}></input>
                 </div>
+                <div><button onClick={this.hideCols}>Hide Columns</button></div>
                 <div className='search-container'>
                 Search <Search columns={columns} data={this.state.data} onChange={this.onSearch} />
                 </div>
@@ -957,7 +968,6 @@ render() {
                         var parts = e.target.innerText.split('').reverse().join('') || '';
                         parts = parts.match(/[\s\S]{1,2}/g) || []
                         var withslash = '';
-
                         if (parts.length > 0) {
                             if (parts.length == 4) {
                                 if (parts[parts.length-1].length < 2) {
@@ -979,8 +989,8 @@ render() {
                     $(e.target).parent().find('img').replaceWith('');
                 },
                 dataRow: d.id,
-                };
-                }}
+            };
+            }}
             >
 
             </Table>
@@ -1039,6 +1049,50 @@ onPerPage(e) {
         pagination: pagination
     });
 },
+hideCols() {
+    console.log('testing button', this.refs.modal)
+    var cols = [];
+    var hiding = [];
+
+    var hidecol = (e) => {
+        var hide = e.target.value;
+
+        if (e.target.checked) {
+            hiding.push(hide);
+        } else {
+            hiding = _.without(hiding, [hide])
+        }
+        this.setState({
+//            columns: _.without(columns, hiding)
+        })
+//        console.log(this, columntohide)
+    }
+
+    _.each(columns, function(c,i){
+        cols.push(<div className="showhidecol"> {c.property} <input type="checkbox" value={c.property} onChange={hidecol}/> </div>)
+    })
+
+
+    var onSubmit = (e) => {
+//        this.refs.modal.hide();
+        console.log(this, e);
+//        console.log(this.state.modal.content.props.children)
+    };
+    this.setState({
+        modal: {
+            title: 'Columns to Hide',
+            content: <div>{cols}
+                    <button onClick={onSubmit}>Ok</button>
+                    </div>
+        }
+    });
+
+    this.refs.modal.show();
+}
+
+
+
+
 });
 
 function paginate(data, o) {
@@ -1079,9 +1133,4 @@ function find(arr, key, value) {
 
 function findselect(arr, key, value) {
     return arr.reduce((a, b) => a[key] === value ? a : b[key] === value && b);
-}
-
-function highlightRow(self, row){
-//    console.log(self,'clicked', row)
-//    console.log(self.getDOMNode());
 }

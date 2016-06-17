@@ -28,7 +28,7 @@ module.exports = function (server) {
 //            socket.broadcast.emit('new data', data);
             var options = {
                 port: 3000,
-                path: '/api/rows/women'
+                path: '/api/rows/'
             };
             http.get(options, function(response){
                 var body = '';
@@ -42,6 +42,8 @@ module.exports = function (server) {
                 });
 //                socket.broadcast.emit('new data', response);
             });
+            socket.emit('new data', data);
+
         });
         socket.on('new data', function (data) {
             console.log('new data');
