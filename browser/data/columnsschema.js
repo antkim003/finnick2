@@ -4,6 +4,14 @@ var React = require('react');
 module.exports =
 [
     {
+        property: 'id',
+        forWho: ["admin"],
+    },
+    {
+        property: 'sortnumber',
+        forWho: ["admin"],
+    },
+    {
         property: 'name',
         forWho: ["admin"],
     },
@@ -194,10 +202,6 @@ module.exports =
     },
     {
         property: 'typeofspecial',
-        forWho: ["admin","buyer","buyer_lead"],
-    },
-    {
-        property: 'country',
         forWho: ["admin","buyer","buyer_lead"],
     }
 ]

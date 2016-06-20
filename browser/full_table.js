@@ -274,10 +274,10 @@ var highlighter = (column) => highlight((value) => {
 window.hiding = [];
 
 self.coltoedit = [
-        {
-            property: 'id',
-            header: 'row id',
-            cell: [(v) => ({
+{
+    property: 'id',
+    header: 'row id',
+    cell: [(v) => ({
                 value: v,
                 props: {
 
@@ -295,20 +295,20 @@ self.coltoedit = [
 },
 {
     property: 'name',
-        header: 'Name',
+    header: 'Name',
     cell: [editable({
     editor: editors.input()}), highlighter('name')],
     columnorder: '0'
 },
 {
     property: 'category',
-        header: 'Category',
+    header: 'Category',
     cell: [ highlighter('category')],
     columnorder: '0'
 },
 {
     property: 'subcategories',
-        header: 'Subcategories',
+    header: 'Subcategories',
     cell: [editable({
     editor: editors.checkbox(categoriesandsub2, 'category', self)
 }), highlighter('subcategories')],
@@ -316,7 +316,7 @@ self.coltoedit = [
 },
 {
     property: 'notesoncategory',
-        header: 'Notes on Category',
+    header: 'Notes on Category',
     cell: [editable({
     editor: editors.input(),
 })],
@@ -324,7 +324,7 @@ self.coltoedit = [
 },
 {
     property: 'doubleexposure',
-        header: 'Double Exposure',
+    header: 'Double Exposure',
     cell: [editable({
     editor: editors.checkbox(categoriesandsub)
 }), highlighter('doubleexposure')],
@@ -332,7 +332,7 @@ self.coltoedit = [
 },
 {
     property: 'doubleexposuresubcategory',
-        header: 'Double Exposure Subcategory',
+    header: 'Double Exposure Subcategory',
     cell: [editable({
     editor: editors.checkbox(categoriesandsub1, 'doubleexposure', self)
 }), highlighter('doubleexposuresubcategory')],
@@ -1005,7 +1005,7 @@ hideCols() {
             if ($(input).find('input:checked').length > 0 ) {
                 window.hiding.push($(input).find('input').val());
             } else {
-                window.hiding = _.without(window.hiding, $(input).find('input').val())
+                window.hiding = _.union(_.without(window.hiding, $(input).find('input').val()))
             }
         })
         this.refs.modal.hide();
