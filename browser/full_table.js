@@ -271,7 +271,7 @@ var highlighter = (column) => highlight((value) => {
 });
 
 //var self = this;
-self.hiding = [];
+window.hiding = [];
 
 self.coltoedit = [
         {
@@ -287,7 +287,7 @@ self.coltoedit = [
 },
 {
     property: 'sortnumber',
-        header: 'Sort Number',
+    header: 'Sort Number',
     cell: [editable({
     editor: editors.input(),
 })],
@@ -704,7 +704,7 @@ return {
     sortingColumn: null, // reference to sorting column
 
 
-columns: self.coltoedit,
+columns:  _.filter(this.coltoedit, function(col) { return !_.includes(localStorage.getItem('hidecol'), col.property) }),
 modal: {
     title: 'title',
     content: 'content',
@@ -835,6 +835,7 @@ componentDidMount() {
 
 render() {
     var columns = _.sortBy(this.state.columns, 'columnorder');
+//    console.log('columns', columns);
     columns = _.each(columns, function(col) {
         var thisuserspermissions = _.filter(userpermissions, function(users) {
             return users.type == user.type
@@ -977,31 +978,69 @@ onPerPage(e) {
 },
 hideCols() {
     var cols = [];
+
     var hidecol = (e) => {
-        var hide = e.target.value;
+//        var hide = e.target.value;
 //        console.log(this, self)
         if (e.target.checked) {
-            this.hiding.push(hide);
+            window.hiding.push(hide);
         } else {
-            this.hiding = _.without(self.hiding, hide)
+            window.hiding = _.without(window.hiding, hide)
         }
     }
     _.each(columns, function(c,i){
-        cols.push(<div className="showhidecol"> {c.property} <input type="checkbox" value={c.property} onChange={hidecol}/> </div>)
+        var hiddencolumns = localStorage.getItem('hidecol');
+        var propchecked = _.includes(hiddencolumns, c.property);
+        if (propchecked) {
+            cols.push(<div className="showhidecol"> {c.property} <input type="checkbox" value={c.property} checked onChange={hidecol}/> </div>)
+        } else {
+            cols.push(<div className="showhidecol"> {c.property} <input type="checkbox" value={c.property} /> </div>)
+        }
     })
     var onSubmit = (e) => {
         var self = this;
 //        console.log(this, self)
+        _.each($('#hideCols').find('.showhidecol'), function (input, i) {
+//            $(input).prop('checked', true);
+            if ($(input).find('input:checked').length > 0 ) {
+                window.hiding.push($(input).find('input').val());
+            } else {
+                window.hiding = _.without(window.hiding, $(input).find('input').val())
+            }
+        })
         this.refs.modal.hide();
+        localStorage.setItem('hidecol', window.hiding)
         this.setState({
-            columns: _.filter(this.coltoedit, function(col) { return !_.includes(self.hiding, col.property) })
+            columns: _.filter(this.coltoedit, function(col) { return !_.includes(localStorage.getItem('hidecol'), col.property) })
         })
     };
+    var formChange = (e) => {
+//        console.log($(e.currentTarget).find('input:checked'));
+        if (e.target.value == 'all') {
+            if (e.target.checked) {
+//                console.log('check all')
+                _.each($('#hideCols').find('.showhidecol').find('input'), function (input, i) {
+                    $(input).prop('checked', true);
+                })
+            } else {
+//                console.log('uncheck all')
+                _.each($('#hideCols').find('.showhidecol').find('input'), function (input, i) {
+                    $(input).prop('checked', false);
+                })
+            }
+        } else {
+
+        }
+
+
+    }
     this.setState({
         modal: {
             title: 'Columns to Hide',
-            content: <div>{cols}
-                    <button onClick={onSubmit}>Ok</button>
+            content: <div id="hideCols" onChange={formChange}>
+                        <div><input type="checkbox" value="all"/>hide all</div>
+                        {cols}
+                        <button onClick={onSubmit}>Ok</button>
                     </div>
         }
     });

@@ -4,10 +4,6 @@ var React = require('react');
 module.exports =
 [
     {
-        property: 'id',
-        forWho: ["admin"],
-    },
-    {
         property: 'name',
         forWho: ["admin"],
     },
