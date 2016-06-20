@@ -37,11 +37,11 @@ module.exports = function(editProperty, onValue, o) {
                         var state = {};
                         state[editProperty] = idx;
                         context.setState(state);
-                        console.log(window.user, 'user fob, and row', state)
+                        window.user = _.extend(window.user, state);
+//                        console.log(window.user, 'user fob, and row', state, $('.'+state.editedCell).attr('data-cell'))
                         $('.activeCell').removeClass('activeCell')
-//                        $('').replaceAll('.userspan')
                         $('.'+state.editedCell).addClass('activeCell');
-                        window.socket.emit('user editing', {user: window.user, cell: state, fob: window.location.search.split('?')[1]})
+                        window.socket.emit('user editing', {user: window.user, cell: $('.'+state.editedCell).attr('data-cell'), fob: window.location.search.split('?')[1]})
                     },
                 }
             };

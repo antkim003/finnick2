@@ -83,9 +83,9 @@ module.exports = React.createClass({
                             content = content || {};
                             var values = {};
 
+                            var rowid = parseInt(row.id-1)
 
-
-                            return <td data-property={property} data-edit={column.cell.length == 0 ? 'noedit' : 'editor'} data-cell="" className={'cell-'+j+' '+(row[rowKey] || i)+'-'+property} key={j + '-cell'} {...content.props} >{content.value}</td>;
+                            return <td data-property={property} data-edit={column.cell.length == 0 ? 'noedit' : 'editor'} data-cell={rowid+'-'+property} className={'cell-'+j+' '+(row[rowKey] || i)+'-'+property} key={j + '-cell'} {...content.props} >{content.value}</td>;
                         }
                     )}</tr>)}
                 </tbody>
