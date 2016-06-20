@@ -28,6 +28,7 @@ var categoriesandsub = require('./data/categoriesandsub.js');
 var categoriesandsub1 = categoriesandsub;
 var categoriesandsub2 = categoriesandsub;
 var columns = require('./data/columnsschema.js');
+//var columnedit = require('./data/columnedit.js')(editable);
 var userpermissions = require('./data/userpermissions.js');
 var validations = require('./data/validations.js');
 var highlight = require('../src/formatters/highlight');
@@ -131,10 +132,10 @@ module.exports = React.createClass({
         }
         var self = this;
         getdata();
-        self.interval = setInterval(function() {
+        window.datainterval = setInterval(function() {
             getdata();
         }, 30000);
-        self.interval;
+//        self.interval;
 
 
 
@@ -216,15 +217,16 @@ window.socket.on('user joined', function(data) {
     window.allusers = data.currentUsers;
 
 });
-var editable = cells.edit.bind(this, 'editedCell', (value, celldata, rowIndex, property) => {
+var editable = cells.edit.bind(this, 'editedCell', (value, celldata, rowIndex, property, datrow) => {
 //    var self = this;
+    clearInterval(window.datainterval);
 
-    console.log('editable ', value, rowIndex, property);
+    console.log('editable ', value, rowIndex, property, datrow);
     var val = value.hasOwnProperty('row') ? value.val : value;
-//        getdata();
+    var rowid = parseInt(datrow.split('-')[0])+1;
     _.each(window.data, function(data, i) {
         if (typeof data.entries != 'undefined') {
-            var t = _.find(data.entries, function(d){ return d.columnName == property && d.rowIndex == rowIndex+1});
+            var t = _.find(data.entries, function(d){ return d.columnName == property && d.rowIndex == rowid});
             if (t != undefined) {
 //              var cellid = t._id
 //                var parentrowid = _.find(data, function(d) { return d.entries})
@@ -236,9 +238,9 @@ var editable = cells.edit.bind(this, 'editedCell', (value, celldata, rowIndex, p
                     'contentType': "application/json",
                     'success': function() {
                         console.log('done');
-
                         window.socket.emit('my other event', { val: val, row: window.row-1 });
-                        getdata();
+//                        getdata();
+                        window.datainterval;
                     }
                 })
             }
@@ -248,9 +250,13 @@ var editable = cells.edit.bind(this, 'editedCell', (value, celldata, rowIndex, p
     var idx = findIndex(this.state.data, {
         id: celldata[rowIndex].id,
     });
+//        var idx = findIndex(this.state.data, {
+//            id: celldata[rowIndex].id,
+//        });
+//
+//    this.state.data[idx][property] = value;
     var row = value.hasOwnProperty('row') ? value.row : rowIndex;
-//    var val = value.hasOwnProperty('row') ? value.val : value;
-    this.state.data[row][property] = val;
+    this.state.data[idx][property] = val;
     this.setState({
         data: query ? _.filter(_.sortBy(data, 'rowIndex'), function(d) { return d.category == query}) : data
     });
@@ -265,54 +271,28 @@ var highlighter = (column) => highlight((value) => {
 });
 
 //var self = this;
-return {
+self.hiding = [];
 
+self.coltoedit = [
+        {
+            property: 'id',
+            header: 'row id',
+            cell: [(v) => ({
+                value: v,
+                props: {
 
-    editedCell: null,
-    data: data,
-    formatters: formatters,
-    search: {
-        column: '',
-        query: ''
-    },
-    header: {
-        onClick: (column) => {
-            // reset edits
-            this.setState({
-                editedCell: null
-            });
-
-            sortColumn(
-                this.state.columns,
-                column,
-                this.setState.bind(this)
-            );
-        },
-        className: cx(['header'])
-    },
-    sortingColumn: null, // reference to sorting column
-
-
-columns: [
-    {
-        property: 'id',
-        header: 'row id',
-        cell: [(v) => ({
-            value: v,
-            props: {
-
-            }
-        })],
+                }
+            })],
     columnorder: '0'
 },
-    {
-        property: 'sortnumber',
+{
+    property: 'sortnumber',
         header: 'Sort Number',
-        cell: [editable({
-            editor: editors.input(),
-        })],
-        columnorder: '0'
-    },
+    cell: [editable({
+    editor: editors.input(),
+})],
+    columnorder: '0'
+},
 {
     property: 'name',
         header: 'Name',
@@ -320,20 +300,11 @@ columns: [
     editor: editors.input()}), highlighter('name')],
     columnorder: '0'
 },
-//{
-//    property: 'country',
-//        header: 'Country',
-//    search: formatters.country,
-//    cell: [editable({
-//    editor: editors.checkbox(countries),
-//}), formatters.country, highlighter('country')],
-//    columnorder: '1'
-//},
 {
     property: 'category',
         header: 'Category',
     cell: [ highlighter('category')],
-        columnorder: '0'
+    columnorder: '0'
 },
 {
     property: 'subcategories',
@@ -345,7 +316,7 @@ columns: [
 },
 {
     property: 'notesoncategory',
-    header: 'Notes on Category',
+        header: 'Notes on Category',
     cell: [editable({
     editor: editors.input(),
 })],
@@ -353,23 +324,23 @@ columns: [
 },
 {
     property: 'doubleexposure',
-    header: 'Double Exposure',
+        header: 'Double Exposure',
     cell: [editable({
-        editor: editors.checkbox(categoriesandsub)
-    }), highlighter('doubleexposure')],
+    editor: editors.checkbox(categoriesandsub)
+}), highlighter('doubleexposure')],
     columnorder: '0'
 },
 {
     property: 'doubleexposuresubcategory',
-    header: 'Double Exposure Subcategory',
+        header: 'Double Exposure Subcategory',
     cell: [editable({
-        editor: editors.checkbox(categoriesandsub1, 'doubleexposure', self)
-    }), highlighter('doubleexposuresubcategory')],
+    editor: editors.checkbox(categoriesandsub1, 'doubleexposure', self)
+}), highlighter('doubleexposuresubcategory')],
     columnorder: '0'
 },
 {
     property: 'pricingcategory',
-    header: 'Pricing Category',
+        header: 'Pricing Category',
     cell: [editable({
     editor: editors.input()
 }), highlighter('name')],
@@ -377,7 +348,7 @@ columns: [
 },
 {
     property: 'instorespecial',
-    header: 'In Store Special',
+        header: 'In Store Special',
     cell: [editable({
     editor: editors.input(),
 })],
@@ -385,23 +356,23 @@ columns: [
 },
 {
     property: 'storeregularprice',
-    header: 'Store Reg Price (range)',
+        header: 'Store Reg Price (range)',
     cell: [editable({
-        editor: editors.input(_.filter(validations, function(v) { return v.name == 'currency'})),
-    }), highlighter('storeregularprice')],
+    editor: editors.input(_.filter(validations, function(v) { return v.name == 'currency'})),
+}), highlighter('storeregularprice')],
     columnorder: '0'
 },
 {
     property: 'storespecialprice',
         header: 'Store Special Price (range)',
     cell: [editable({
-        editor: editors.input(_.filter(validations, function(v) { return v.name == 'currency'})),
-    }), highlighter('name')],
+    editor: editors.input(_.filter(validations, function(v) { return v.name == 'currency'})),
+}), highlighter('name')],
     columnorder: '0'
 },
 {
     property: 'mcomspecial',
-    header: 'MCOM Special',
+        header: 'MCOM Special',
     cell: [editable({
     editor: editors.input(),
 })],
@@ -409,15 +380,15 @@ columns: [
 },
 {
     property: 'pricinginfo',
-    header: 'Additional Pricing Info',
+        header: 'Additional Pricing Info',
     cell: [editable({
-        editor: editors.dropdown([{name:'Only At Macys', value:'Only At Macys'},{name:'Not Applicable', value:'Not Applicable'},{name:'Custom', value:'Custom'}]),
-    }), highlighter('pricinginfo')],
+    editor: editors.dropdown([{name:'Only At Macys', value:'Only At Macys'},{name:'Not Applicable', value:'Not Applicable'},{name:'Custom', value:'Custom'}]),
+}), highlighter('pricinginfo')],
     columnorder: '0'
 },
 {
     property: 'mcomregprice',
-    header: 'MCOM Reg Price (range)',
+        header: 'MCOM Reg Price (range)',
     cell: [editable({
     editor: editors.input(_.filter(validations, function(v) { return v.name == 'currency'})),
 })],
@@ -433,97 +404,97 @@ columns: [
 },
 {
     property: 'pricingcomments',
-    header: 'Pricing Comments',
+        header: 'Pricing Comments',
     cell: [editable({
-        editor: editors.dropdown([{name:'Not Congruent', value:'Not Congruent'},{name:'Congruent', value:'Congruent'},{name:'All Sizes', value:'All Sizes'},{name:'TV Offer', value:'TV Offer'},{name:'GWP', value:'GWP'},{name:'40% Off', value:'40% Off'},{name:'30% Off', value:'30% Off'},{name:'50% Off', value:'50% Off'},{name:'Custom', value:'Custom'}]),
-    }), highlighter('pricingcomments')],
+    editor: editors.dropdown([{name:'Not Congruent', value:'Not Congruent'},{name:'Congruent', value:'Congruent'},{name:'All Sizes', value:'All Sizes'},{name:'TV Offer', value:'TV Offer'},{name:'GWP', value:'GWP'},{name:'40% Off', value:'40% Off'},{name:'30% Off', value:'30% Off'},{name:'50% Off', value:'50% Off'},{name:'Custom', value:'Custom'}]),
+}), highlighter('pricingcomments')],
     columnorder: '0'
 },
 {
     property: 'markettointernational',
         header: 'Market to International',
     cell: [editable({
-        editor: editors.dropdown([{name:'true', value:'true'},{name:'false', value:'false'}]),
-    })],
+    editor: editors.dropdown([{name:'true', value:'true'},{name:'false', value:'false'}]),
+})],
     columnorder: '0'
 },
 {
     property: 'projectedunits',
         header: 'Projected Units',
     cell: [editable({
-        editor: editors.input(_.filter(validations, function(v) { return v.name == 'numerical'})),
-    })],
+    editor: editors.input(_.filter(validations, function(v) { return v.name == 'numerical'})),
+})],
     columnorder: '0'
 },
 {
     property: 'projectedsales',
         header: 'MCOM Projected Sales',
     cell: [editable({
-        editor: editors.rangeinput('sortnumber'),
-    })],
+    editor: editors.rangeinput('sortnumber'),
+})],
     columnorder: '0'
 },
 {
     property: 'salesfor2015',
-    header: 'Sales For 2015',
+        header: 'Sales For 2015',
     cell: [editable({
-        editor: editors.input(_.filter(validations, function(v) { return v.name == 'currency'})),
-    }), highlighter('name')],
+    editor: editors.input(_.filter(validations, function(v) { return v.name == 'currency'})),
+}), highlighter('name')],
     columnorder: '0'
 },
 {
     property: 'imageid',
         header: 'Image Id',
     cell: [editable({
-        editor: editors.input(_.filter(validations, function(v) { return v.name == 'numerical'})),
-    }), highlighter('imageid')],
+    editor: editors.input(_.filter(validations, function(v) { return v.name == 'numerical'})),
+}), highlighter('imageid')],
     columnorder: '0'
 },
 {
     property: 'arimageid',
-    header: 'AR Image Id',
+        header: 'AR Image Id',
     cell: [
-        editable({
-            editor: editors.input(_.filter(validations, function(v) { return v.name == 'numerical'})),
-        }),
-        highlighter('arimageid')],
+    editable({
+        editor: editors.input(_.filter(validations, function(v) { return v.name == 'numerical'})),
+    }),
+    highlighter('arimageid')],
     columnorder: '0'
 },
 {
     property: 'singleormultiple',
-    header: 'Single or Multiple',
+        header: 'Single or Multiple',
     cell: [editable({
-        editor: editors.dropdown([{name: 'Single', value: 'Single'},{name: 'Multiple', value: 'Multiple'}]),
-        }), highlighter('singleormultiple')],
+    editor: editors.dropdown([{name: 'Single', value: 'Single'},{name: 'Multiple', value: 'Multiple'}]),
+}), highlighter('singleormultiple')],
     columnorder: '0'
 },
 {
     property: 'featureproductid',
         header: 'Feature Product Ids',
     cell: [
-        editable({
-            editor: editors.input(_.filter(validations, function(v) { return v.name == 'multinumerical'})),
-        }),
-        highlighter('featureproductid')],
+    editable({
+        editor: editors.input(_.filter(validations, function(v) { return v.name == 'multinumerical'})),
+    }),
+    highlighter('featureproductid')],
     columnorder: '0'
 },
 {
     property: 'savedsetid',
         header: 'Saved Set Ids',
     cell: [editable({
-        editor: editors.input(_.filter(validations, function(v) { return v.name == 'numerical'})),
-    })],
+    editor: editors.input(_.filter(validations, function(v) { return v.name == 'numerical'})),
+})],
     columnorder: '0'
 },
 {
     property: 'tileimage',
-    header: 'Tile Image',
+        header: 'Tile Image',
     cell: [
-        editable({
-            editor: editors.input(_.filter(validations, function(v) { return v.name == 'numerical'})),
-        }),
-        highlighter('tileimage'),
-        ],
+    editable({
+        editor: editors.input(_.filter(validations, function(v) { return v.name == 'numerical'})),
+    }),
+    highlighter('tileimage'),
+],
     columnorder: '0'
 },
 {
@@ -560,82 +531,82 @@ columns: [
 },
 {
     property: 'plenti',
-    header: 'Plenti Watermark',
+        header: 'Plenti Watermark',
     cell: [editable({
-        editor: editors.dropdown([{name:'true', value:'true'},{name:'false', value:'false'}]),
-    })],
+    editor: editors.dropdown([{name:'true', value:'true'},{name:'false', value:'false'}]),
+})],
     columnorder: '0'
 },
 {
     property: 'bffavorites',
         header: 'Black Friday Favorites',
     cell: [editable({
-        editor: editors.dropdown([{name:'true', value:'true'},{name:'false', value:'false'}]),
-    })],
+    editor: editors.dropdown([{name:'true', value:'true'},{name:'false', value:'false'}]),
+})],
     columnorder: '0'
 },
 {
     property: 'goingfast',
         header: 'Going Fast',
     cell: [editable({
-        editor: editors.dropdown([{name:'true', value:'true'},{name:'false', value:'false'}]),
-    })],
+    editor: editors.dropdown([{name:'true', value:'true'},{name:'false', value:'false'}]),
+})],
     columnorder: '0'
 },
 {
     property: 'alsoinpetites',
         header: 'Also in Petites',
     cell: [editable({
-        editor: editors.dropdown([{name:'true', value:'true'},{name:'false', value:'false'}]),
-    })],
+    editor: editors.dropdown([{name:'true', value:'true'},{name:'false', value:'false'}]),
+})],
     columnorder: '0'
 },
 {
     property: 'petitessavedset',
         header: 'Petites Saved Set',
     cell: [editable({
-        editor: editors.input(_.filter(validations, function(v) { return v.name == 'numerical'})),
-    })],
+    editor: editors.input(_.filter(validations, function(v) { return v.name == 'numerical'})),
+})],
     columnorder: '0'
 },
 {
     property: 'needsavedset',
-    header: 'Need Saved Set?',
+        header: 'Need Saved Set?',
     cell: [editable({
-        editor: editors.dropdown([{name:'true', value:'true'},{name:'false', value:'false'}]),
-    })],
+    editor: editors.dropdown([{name:'true', value:'true'},{name:'false', value:'false'}]),
+})],
     columnorder: '0'
 },
 {
     property: 'linktype',
-    header: 'Link Type',
+        header: 'Link Type',
     cell: [editable({
-        editor: editors.dropdown([{name:'url (u)', value:'url (u)'},{name:'category (c)', value:'category (c)'},{name:'product (p)', value:'product (p)'}]),
-    })],
+    editor: editors.dropdown([{name:'url (u)', value:'url (u)'},{name:'category (c)', value:'category (c)'},{name:'product (p)', value:'product (p)'}]),
+})],
     columnorder: '0'
 },
 {
     property: 'livedate',
-    header: 'Live Date',
+        header: 'Live Date',
     cell: [editable({
-        editor: editors.input(),
-    })],
+    editor: editors.input(),
+})],
     columnorder: '0'
 },
 {
     property: 'categoryid',
         header: 'Category Id linking',
     cell: [editable({
-        editor: editors.input(_.filter(validations, function(v) { return v.name == 'numerical'})),
-    })],
+    editor: editors.input(_.filter(validations, function(v) { return v.name == 'numerical'})),
+})],
     columnorder: '0'
 },
 {
     property: 'productid',
-    header: 'Product Id linking',
+        header: 'Product Id linking',
     cell: [editable({
-        editor: editors.input(_.filter(validations, function(v) { return v.name == 'numerical'})),
-    })],
+    editor: editors.input(_.filter(validations, function(v) { return v.name == 'numerical'})),
+})],
     columnorder: '0'
 },
 {
@@ -648,31 +619,31 @@ columns: [
 },
 {
     property: 'petiteslinktype',
-    header: 'Petites Link Type',
+        header: 'Petites Link Type',
     cell: [editable({
-        editor: editors.dropdown([{name:'url (u)', value:'url (u)'},{name:'category (c)', value:'category (c)'},{name:'product (p)', value:'product (p)'}]),
-    })],
+    editor: editors.dropdown([{name:'url (u)', value:'url (u)'},{name:'category (c)', value:'category (c)'},{name:'product (p)', value:'product (p)'}]),
+})],
     columnorder: '0'
 },
 {
     property: 'petitescategoryid',
-    header: 'Petites Category Linking',
+        header: 'Petites Category Linking',
     cell: [editable({
-        editor: editors.input(_.filter(validations, function(v) { return v.name == 'numerical'})),
-    }), highlighter('petitescategoryid')],
+    editor: editors.input(_.filter(validations, function(v) { return v.name == 'numerical'})),
+}), highlighter('petitescategoryid')],
     columnorder: '0'
 },
 {
     property: 'petitesproductid',
-    header: 'Petites Product Linking',
+        header: 'Petites Product Linking',
     cell: [editable({
-        editor: editors.input(_.filter(validations, function(v) { return v.name == 'numerical'})),
-    }), highlighter('petitesproductid')],
+    editor: editors.input(_.filter(validations, function(v) { return v.name == 'numerical'})),
+}), highlighter('petitesproductid')],
     columnorder: '0'
 },
 {
     property: 'petitesurl',
-    header: 'Petites Url Linking',
+        header: 'Petites Url Linking',
     cell: [editable({
     editor: editors.input(),
 }), highlighter('name')],
@@ -680,108 +651,60 @@ columns: [
 },
 {
     property: 'omniprojectedsales',
-    header: 'Omni Projected Sales',
+        header: 'Omni Projected Sales',
     cell: [editable({
-        editor: editors.input(_.filter(validations, function(v) { return v.name == 'currency'})),
-    })],
+    editor: editors.input(_.filter(validations, function(v) { return v.name == 'currency'})),
+})],
     columnorder: '0'
 },
 {
     property: 'extraomniprojectedsales',
-    header: 'Extra Omni Projected Sales',
+        header: 'Extra Omni Projected Sales',
     cell: [editable({
-        editor: editors.input(_.filter(validations, function(v) { return v.name == 'currency'})),
-    })],
+    editor: editors.input(_.filter(validations, function(v) { return v.name == 'currency'})),
+})],
     columnorder: '0'
 },
 {
     property: 'killedrow',
-    header: 'Killed Row',
+        header: 'Killed Row',
     cell: [editable({
-        editor: editors.dropdown([{name:'true', value:'true'},{name:'false', value:'false'}]),
-    })],
+    editor: editors.dropdown([{name:'true', value:'true'},{name:'false', value:'false'}]),
+})],
     columnorder: '0'
-},
-//{
-//    cell: function(value, celldata, rowIndex) {
-//        var idx = findIndex(this.state.data, {
-//            id: celldata[rowIndex].id,
-//        });
-//
-//        var edit = () => {
-//            var schema = {
-//                type: 'object',
-//                properties: properties,
-//            };
-//
-//            var onSubmit = (editData, editValue) => {
-//                this.refs.modal.hide();
-//
-//                if(editValue === 'Cancel') {
-//                    return;
-//                }
-//
-//                this.state.data[idx] = editData;
-//
-//                this.setState({
-//                    data: this.state.data
-//                });
-//            };
-//
-//            var getButtons = (submit) => {
-//                return (
-//                    <span>
-//                        <input type='submit'
-//                        className='pure-button pure-button-primary ok-button'
-//                        key='ok' value='OK'
-//                        onClick={submit} />
-//                        <input type='submit'
-//                        className='pure-button cancel-button'
-//                        key='cancel' value='Cancel'
-//                        onClick={submit} />
-//                    </span>
-//                    );
-//            };
-//
-//            this.setState({
-//                modal: {
-//                    title: 'Edit',
-//                    content: <Form
-//                    className='pure-form pure-form-aligned'
-//                    fieldWrapper={FieldWrapper}
-//                    sectionWrapper={SectionWrapper}
-//                    buttons={getButtons}
-//                    schema={schema}
-//                    validate={validate}
-//                    values={this.state.data[idx]}
-//                    onSubmit={onSubmit}/>
-//                }
-//            });
-//
-//            this.refs.modal.show();
-//        };
-//
-//        var remove = () => {
-//            // this could go through flux etc.
-//            this.state.data.splice(idx, 1);
-//
-//            this.setState({
-//                data: this.state.data
-//            });
-//        };
-//
-//        return {
-//            value: (
-//                <span>
-//                    <span className='edit' onClick={edit.bind(this)} style={{cursor: 'pointer'}}>
-//                    &#8665;
-//                    </span>
-//                </span>
-//                )
-//        };
-//    }.bind(this),
-//}
-],
+}
+]
+
+
+return {
+
+
+    editedCell: null,
+    data: data,
+    formatters: formatters,
+    search: {
+        column: '',
+        query: ''
+    },
+    header: {
+        onClick: (column) => {
+            // reset edits
+            this.setState({
+                editedCell: null
+            });
+
+            sortColumn(
+                this.state.columns,
+                column,
+                this.setState.bind(this)
+            );
+        },
+        className: cx(['header'])
+    },
+    sortingColumn: null, // reference to sorting column
+
+
+columns: self.coltoedit,
 modal: {
     title: 'title',
     content: 'content',
@@ -813,7 +736,10 @@ columnFilters() {
 },
 
 componentDidMount() {
+
     var self = this;
+
+    self.originalcolumns = this.columnedit;
     var query = window.location.search.split('?')[1];
     var queryyes = query ? '/'+query : ''
     var getdata = function() {
@@ -880,7 +806,7 @@ componentDidMount() {
         self.setState({
             data:_.sortBy(arr, 'rowIndex')
         });
-        self.interval;
+        window.datainterval;
     };
 
     window.socket.on('new data', function(data) {
@@ -895,7 +821,7 @@ componentDidMount() {
         var cellrow = data.cell;
         var fob = data.fob;
         $('.activeOtherCell').removeClass('activeOtherCell');
-        $('').replaceAll('.userspan')
+        $('').replaceAll('.userspan');
 //        console.log(cellrow, 'testtest');
         if (fob == query) {
             $('[data-cell="'+cellrow+'"]').addClass('activeOtherCell').append('<span class="userspan">' + user.split(' ')[0] + ' ' + user.split(' ')[1][0] + '</span>');
@@ -1050,33 +976,26 @@ onPerPage(e) {
     });
 },
 hideCols() {
-    console.log('testing button', this.refs.modal)
     var cols = [];
-    var hiding = [];
-
     var hidecol = (e) => {
         var hide = e.target.value;
-
+//        console.log(this, self)
         if (e.target.checked) {
-            hiding.push(hide);
+            this.hiding.push(hide);
         } else {
-            hiding = _.without(hiding, [hide])
+            this.hiding = _.without(self.hiding, hide)
         }
-        this.setState({
-//            columns: _.without(columns, hiding)
-        })
-//        console.log(this, columntohide)
     }
-
     _.each(columns, function(c,i){
         cols.push(<div className="showhidecol"> {c.property} <input type="checkbox" value={c.property} onChange={hidecol}/> </div>)
     })
-
-
     var onSubmit = (e) => {
-//        this.refs.modal.hide();
-        console.log(this, e);
-//        console.log(this.state.modal.content.props.children)
+        var self = this;
+//        console.log(this, self)
+        this.refs.modal.hide();
+        this.setState({
+            columns: _.filter(this.coltoedit, function(col) { return !_.includes(self.hiding, col.property) })
+        })
     };
     this.setState({
         modal: {

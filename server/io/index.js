@@ -42,7 +42,7 @@ module.exports = function (server) {
                 });
 //                socket.broadcast.emit('new data', response);
             });
-            socket.emit('new data', data);
+//            socket.emit('new data', data);
 
         });
         socket.on('new data', function (data) {

@@ -297,4 +297,15 @@ table .sort-desc:after, .sort-desc .fixedHead:after {
 }
 .showhidecol {
     float: left;
+    padding: 0 10px;
+    border: 1px solid lightblue;
+    border-radius: 3px;
+    /*background-color: #d1dee6;*/
+    margin: 0 6px 6px 0;
+}
+.showhidecol:nth-child(even) {
+    /*background-color: #fff;*/
+}
+.controls {
+    width: 100%;
 }
