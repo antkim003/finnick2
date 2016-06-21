@@ -1,13 +1,13 @@
 'use strict';
 
 var React = require('react');
-var Form = require('plexus-form');
-var validate = require('plexus-validate');
+//var Form = require('plexus-form');
+//var validate = require('plexus-validate');
 var SkyLight = require('react-skylight').default;
-var generators = require('annogenerate');
-var math = require('annomath');
+//var generators = require('annogenerate');
+//var math = require('annomath');
 var Paginator = require('react-pagify').default;
-var titleCase = require('title-case');
+//var titleCase = require('title-case');
 var findIndex = require('lodash/findIndex');
 var orderBy = require('lodash/orderBy');
 var cx = require('classnames');
@@ -23,80 +23,45 @@ var cells = require('../src/cells');
 var ColumnFilters = require('./column_filters.js');
 var FieldWrapper = require('./field_wrapper.js');
 var SectionWrapper = require('./section_wrapper.js');
-var dummyusers = require('./data/dummyusers.js');
+//var dummyusers = require('./data/dummyusers.js');
 var categoriesandsub = require('./data/categoriesandsub.js');
 var categoriesandsub1 = categoriesandsub;
 var categoriesandsub2 = categoriesandsub;
-var columns = require('./data/columnsschema.js');
-//var columnedit = require('./data/columnedit.js')(editable);
+//var columns = require('./data/columnsschema.js');
+//var columnstoedit = require('./data/columnedit.js')
 var userpermissions = require('./data/userpermissions.js');
 var validations = require('./data/validations.js');
 var highlight = require('../src/formatters/highlight');
+var scrolling = require('./scrolling.js');
+var sockets = require('./sockets.js');
 
 module.exports = React.createClass({
     displayName: 'FullTable',
     getInitialState: function(){
-//    var countryValues = countries.map((c) => c.value);
-    var categoryValues = categoriesandsub.map((c) => c.value);
+        var self = this;
 
-    var properties = augmentWithTitles({
-            name: {
-                type: 'string'
-            },
-            sortnumber: {
-                type: 'number'
-            },
-            instore: {
-//                enum: countryValues,
-        //                enumNames: countries.map((c) => c.name),
-            },
-            doubleexposure: {
-                enum: categoryValues
-            },
-            doubleexposuresubcategory: {
-                enum: categoryValues
-            }
-
-    });
-//var data = generateData({
-//    amount: 100,
-//    fieldGenerators: getFieldGenerators(countryValues),
-//    properties: properties,
-//});
-
-//        var users = dummyusers;
+        scrolling();
+//      var users = dummyusers;
         var users = [
             {"name":"Jonathan Garza","email":"jgarza3@columbia.edu","type":"buyer","locked":false},
             {"name":"Jayne Smyth","email":"test@columbia.edu","type":"admin","locked":false}
         ]
         window.user = users[Math.floor(Math.random()*users.length)];
-//        window.user = {"name":"Jonathan Garza","email":"jgarza3@columbia.edu","type":"buyer","locked":false};
+
         var data = [];
 
-        var self = this;
+        sockets();
+
         var query = window.location.search.split('?')[1];
-//        console.log(allobj);
-//
-
-//        _.each(rowdata, function(row, j) {
-//            var allobj = _.zipObject(_.map(columns, 'property'), _.range(columns.length).map(function () { return '' }));
-//            rowdata[j] = _.extend(allobj,row);
-//        })
-//        var data =  rowdata;
-//        self.setState({
-//            data:data
-//        });
-
-        window.socket = io.connect();
-//        var clients = io.sockets.ada();
-//        console.log(clients, 'clients');
         var queryyes = query ? '/'+query : '';
+
         var getdata = function() {
             $.ajax({
                 type: "GET",
                 url: '/api/rows' + queryyes,
                 success: function (data1) {
                     var allrows = _.map(data1, 'entries');
+                    var columns = self.coltoedit;
                     window.data = data1;
                     var arr = [];
                     _.each(allrows, function (row, i) {
@@ -112,16 +77,13 @@ module.exports = React.createClass({
                                 all[cell.columnName] = parseInt(cell.data);
                             }
                             all.rowIndex = parseInt(cell.rowIndex);
-//                        all._id = cell._id;
                             _.extend(allobj, all)
                         });
                         arr.push(allobj);
                     });
-//                data = query ? _.filter(_.sortBy(arr, 'rowIndex'), function(d) { return d.category == query}) : _.sortBy(arr, 'rowIndex');
                     data = _.sortBy(arr, 'rowIndex');
                     self.setState({
                         data: _.sortBy(arr, 'rowIndex')
-//                    data:query ? _.filter(_.sortBy(arr, 'rowIndex'), function(d) { return d.category == query}) : _.sortBy(arr, 'rowIndex')
                     });
 
                 },
@@ -130,7 +92,7 @@ module.exports = React.createClass({
                 }
             })
         }
-        var self = this;
+
         getdata();
         window.datainterval = setInterval(function() {
             getdata();
@@ -139,84 +101,6 @@ module.exports = React.createClass({
 
 
 
-        var lastScrollTop = 0;
-        var lastScrollLeft = 0;
-
-
-        var scrollFunc = function() {
-            var st = $(window).scrollTop();
-            var sl = $(window).scrollLeft();
-            $('[data-property=id]').css(
-                {
-                    'margin-top': -$(window).scrollTop(),
-                    'margin-left': '-1px'
-                }
-            );
-            $('.fixedHead').css(
-                {
-                    'margin-left': -$(window).scrollLeft()-13,
-                }
-            );
-            if ($('thead')[0].getBoundingClientRect().top < 0) {
-                $('.fixedHead').css({'display':'block'})
-            } else {
-                $('.fixedHead').css({'display':'none' })
-            }
-            _.each($('.fixedHead'), function (fh, i) {
-                var wid = i == 0 ? 5 : 6;
-                $(fh).css({'width': $(fh).parent().width()+wid, 'height': $(fh).parent().height(), 'visibility':'visible'});
-            });
-
-            if (st > lastScrollTop){
-                $('article.pure-u-1 .controls:first-child').css({'position':'relative','top': '0'})
-                // downscroll code
-            } else if ( st < lastScrollTop ){
-                $('article.pure-u-1 .controls:first-child').css({'position':'relative','top': '0'})
-
-            } else if (st == lastScrollTop) {
-                if ($('h1')[0].getBoundingClientRect().right < 0 && $('thead')[0].getBoundingClientRect().top > 0) {
-                    $('article.pure-u-1 .controls:first-child').css({'position': 'fixed', 'top': '0'})
-                } else {
-                    $('article.pure-u-1 .controls:first-child').css({'position':'relative','top': '0'})
-                }
-                //side scroll
-                if (sl > lastScrollLeft) {
-                } else {
-                }
-            }
-            lastScrollTop = st;
-            lastScrollLeft = sl;
-
-        }
-
-
-//fixed headers and rows
-$(window).on('scroll', scrollFunc);
-
-window.socket.emit('add user', window.user);
-
-function addParticipantsMessage (data) {
-    var message = '';
-    if (data.numUsers === 1) {
-        message += "there's 1 participant";
-    } else {
-        message += "there are " + data.numUsers + " participants";
-    }
-    console.log(message, data);
-    window.allusers = data;
-}
-var connected = false;
-
-window.socket.on('login', function (data) {
-    connected = true;
-    addParticipantsMessage(data);
-});
-
-window.socket.on('user joined', function(data) {
-   console.log(data, 'user joined');
-    window.allusers = data.currentUsers;
-
-});
 var editable = cells.edit.bind(this, 'editedCell', (value, celldata, rowIndex, property, datrow) => {
 //    var self = this;
     clearInterval(window.datainterval);
@@ -228,8 +112,6 @@ var editable = cells.edit.bind(this, 'editedCell', (value, celldata, rowIndex, p
         if (typeof data.entries != 'undefined') {
             var t = _.find(data.entries, function(d){ return d.columnName == property && d.rowIndex == rowid});
             if (t != undefined) {
-//              var cellid = t._id
-//                var parentrowid = _.find(data, function(d) { return d.entries})
                 var params = [{"_id":t._id, "data": val}];
                 $.ajax({
                     'type': "PUT",
@@ -250,11 +132,7 @@ var editable = cells.edit.bind(this, 'editedCell', (value, celldata, rowIndex, p
     var idx = findIndex(this.state.data, {
         id: celldata[rowIndex].id,
     });
-//        var idx = findIndex(this.state.data, {
-//            id: celldata[rowIndex].id,
-//        });
 //
-//    this.state.data[idx][property] = value;
     var row = value.hasOwnProperty('row') ? value.row : rowIndex;
     this.state.data[idx][property] = val;
     this.setState({
@@ -262,15 +140,12 @@ var editable = cells.edit.bind(this, 'editedCell', (value, celldata, rowIndex, p
     });
 });
 
-var formatters = {
-        country: (country) => find(countries, 'value', country).name,
-    };
 
 var highlighter = (column) => highlight((value) => {
     return Search.matches(column, value, this.state.search.query);
 });
 
-//var self = this;
+
 window.hiding = [];
 
 self.coltoedit = [
@@ -278,16 +153,14 @@ self.coltoedit = [
     property: 'id',
     header: 'row id',
     cell: [(v) => ({
-                value: v,
-                props: {
-
-                }
-            })],
+            value: v,
+            props: { }
+        })],
     columnorder: '0'
 },
 {
     property: 'sortnumber',
-    header: 'Sort Number',
+        header: 'Sort Number',
     cell: [editable({
     editor: editors.input(),
 })],
@@ -295,20 +168,20 @@ self.coltoedit = [
 },
 {
     property: 'name',
-    header: 'Name',
+        header: 'Name',
     cell: [editable({
     editor: editors.input()}), highlighter('name')],
     columnorder: '0'
 },
 {
     property: 'category',
-    header: 'Category',
+        header: 'Category',
     cell: [ highlighter('category')],
     columnorder: '0'
 },
 {
     property: 'subcategories',
-    header: 'Subcategories',
+        header: 'Subcategories',
     cell: [editable({
     editor: editors.checkbox(categoriesandsub2, 'category', self)
 }), highlighter('subcategories')],
@@ -316,7 +189,7 @@ self.coltoedit = [
 },
 {
     property: 'notesoncategory',
-    header: 'Notes on Category',
+        header: 'Notes on Category',
     cell: [editable({
     editor: editors.input(),
 })],
@@ -324,7 +197,7 @@ self.coltoedit = [
 },
 {
     property: 'doubleexposure',
-    header: 'Double Exposure',
+        header: 'Double Exposure',
     cell: [editable({
     editor: editors.checkbox(categoriesandsub)
 }), highlighter('doubleexposure')],
@@ -332,7 +205,7 @@ self.coltoedit = [
 },
 {
     property: 'doubleexposuresubcategory',
-    header: 'Double Exposure Subcategory',
+        header: 'Double Exposure Subcategory',
     cell: [editable({
     editor: editors.checkbox(categoriesandsub1, 'doubleexposure', self)
 }), highlighter('doubleexposuresubcategory')],
@@ -673,7 +546,7 @@ self.coltoedit = [
 })],
     columnorder: '0'
 }
-]
+];
 
 
 return {
@@ -681,7 +554,7 @@ return {
 
     editedCell: null,
     data: data,
-    formatters: formatters,
+    formatters: null,
     search: {
         column: '',
         query: ''
@@ -738,8 +611,8 @@ columnFilters() {
 componentDidMount() {
 
     var self = this;
+    var columns = _.sortBy(this.state.columns, 'columnorder');
 
-    self.originalcolumns = this.columnedit;
     var query = window.location.search.split('?')[1];
     var queryyes = query ? '/'+query : ''
     var getdata = function() {
@@ -780,53 +653,40 @@ componentDidMount() {
             }
         })
     };
-    var egetdata = function(data1) {
 
-        var filteredrows = _.filter(JSON.parse(data1), function(e){ return e.entries[_.findIndex(e.entries, function(eb){ return eb.columnName == 'category' } )].data == query })
-        console.log(filteredrows)
-        var allrows = _.map(filteredrows, 'entries');
-        var arr = [];
-        _.each(allrows, function (row, i) {
-            //fill in empty subcategories
-            var allobj = _.zipObject(_.map(columns, 'property'), _.range(columns.length).map(function () {
-                return ''
-            }));
-            _.each(row, function (cell, j) {
-                var all = {};
-                if (cell.columnName != 'sortnumber' && cell.columnName != 'id') {
-                    all[cell.columnName] = cell.data;
-                } else {
-                    all[cell.columnName] = parseInt(cell.data);
-                }
-                all.rowIndex = parseInt(cell.rowIndex);
-                _.extend(allobj, all)
-            });
-            arr.push(allobj);
-        });
-        self.setState({
-            data:_.sortBy(arr, 'rowIndex')
-        });
-        window.datainterval;
-    };
+//    var egetdata = function(data1) {
+//        var filteredrows = _.filter(JSON.parse(data1), function(e){ return e.entries[_.findIndex(e.entries, function(eb){ return eb.columnName == 'category' } )].data == query })
+//        console.log(filteredrows)
+//        var allrows = _.map(filteredrows, 'entries');
+//        var arr = [];
+//        _.each(allrows, function (row, i) {
+//            //fill in empty subcategories
+//            var allobj = _.zipObject(_.map(columns, 'property'), _.range(columns.length).map(function () {
+//                return ''
+//            }));
+//            _.each(row, function (cell, j) {
+//                var all = {};
+//                if (cell.columnName != 'sortnumber' && cell.columnName != 'id') {
+//                    all[cell.columnName] = cell.data;
+//                } else {
+//                    all[cell.columnName] = parseInt(cell.data);
+//                }
+//                all.rowIndex = parseInt(cell.rowIndex);
+//                _.extend(allobj, all)
+//            });
+//            arr.push(allobj);
+//        });
+//        self.setState({
+//            data:_.sortBy(arr, 'rowIndex')
+//        });
+//        window.datainterval;
+//    };
 
     window.socket.on('new data', function(data) {
 //        clearInterval(self.interval);
 //        egetdata(data);
             getdata()
     });
-
-    window.socket.on('other user editing', function(data) {
-        var user = data.user.name;
-        var cell = data.cell.editedCell;
-        var cellrow = data.cell;
-        var fob = data.fob;
-        $('.activeOtherCell').removeClass('activeOtherCell');
-        $('').replaceAll('.userspan');
-//        console.log(cellrow, 'testtest');
-        if (fob == query) {
-            $('[data-cell="'+cellrow+'"]').addClass('activeOtherCell').append('<span class="userspan">' + user.split(' ')[0] + ' ' + user.split(' ')[1][0] + '</span>');
-        }
-    })
 
 
 },
@@ -835,7 +695,6 @@ componentDidMount() {
 
 render() {
     var columns = _.sortBy(this.state.columns, 'columnorder');
-//    console.log('columns', columns);
     columns = _.each(columns, function(col) {
         var thisuserspermissions = _.filter(userpermissions, function(users) {
             return users.type == user.type
@@ -846,6 +705,7 @@ render() {
             col.cell = [];
         }
     })
+
     var pagination = this.state.pagination;
 
     var data = this.state.data;
@@ -865,7 +725,6 @@ render() {
     var pages = Math.ceil(data.length / Math.max(
             isNaN(pagination.perPage) ? 1 : pagination.perPage, 1)
     );
-
 
 
     return (
@@ -980,10 +839,10 @@ hideCols() {
     var cols = [];
 
     var hidecol = (e) => {
-//        var hide = e.target.value;
+        var hide = e.target.value;
 //        console.log(this, self)
         if (e.target.checked) {
-            window.hiding.push(hide);
+            window.hiding = window.hiding.push(hide);
         } else {
             window.hiding = _.without(window.hiding, hide)
         }
@@ -993,7 +852,9 @@ hideCols() {
         var propchecked = _.includes(hiddencolumns, c.property);
         if (propchecked) {
             cols.push(<div className="showhidecol"> {c.property} <input type="checkbox" value={c.property} checked onChange={hidecol}/> </div>)
-        } else {
+        } else if (c.property == 'id') {
+            cols.push(<div></div>)
+        }else {
             cols.push(<div className="showhidecol"> {c.property} <input type="checkbox" value={c.property} /> </div>)
         }
     })
@@ -1015,15 +876,12 @@ hideCols() {
         })
     };
     var formChange = (e) => {
-//        console.log($(e.currentTarget).find('input:checked'));
         if (e.target.value == 'all') {
             if (e.target.checked) {
-//                console.log('check all')
                 _.each($('#hideCols').find('.showhidecol').find('input'), function (input, i) {
                     $(input).prop('checked', true);
                 })
             } else {
-//                console.log('uncheck all')
                 _.each($('#hideCols').find('.showhidecol').find('input'), function (input, i) {
                     $(input).prop('checked', false);
                 })
@@ -1031,8 +889,6 @@ hideCols() {
         } else {
 
         }
-
-
     }
     this.setState({
         modal: {
@@ -1068,13 +924,6 @@ function paginate(data, o) {
         data: data.slice(startPage * perPage, startPage * perPage + perPage),
         page: startPage
     };
-}
-
-function augmentWithTitles(o) {
-    for (var property in o) {
-        o[property].title = titleCase(property);
-    }
-    return o;
 }
 
 
