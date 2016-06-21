@@ -51,7 +51,6 @@ module.exports = (app) => {
             id: celldata[rowIndex].id,
         });
 
-    //
         var row = value.hasOwnProperty('row') ? value.row : rowIndex;
         app.state.data[idx][property] = val;
         app.setState({

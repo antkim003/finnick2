@@ -46,22 +46,17 @@ module.exports = React.createClass({
             {"name":"Jayne Smyth","email":"test@columbia.edu","type":"admin","locked":false}
         ]
         window.user = users[Math.floor(Math.random()*users.length)];
-
         window.statedata = [];
-
         sockets();
-
         var query = window.location.search.split('?')[1];
         var queryyes = query ? '/'+query : '';
-
-
 
         var getdata = function() {
             $.ajax({
                 type: "GET",
                 url: '/api/rows' + queryyes,
                 success: function (data1) {
-                    console.log(window.coledit, 'in get data')
+//                    console.log(window.coledit, 'in get data')
                     var allrows = _.map(data1, 'entries');
                     var columns = window.coledit;
                     window.data = data1;
@@ -105,60 +100,12 @@ module.exports = React.createClass({
 //        self.interval;
 
 
-//        columnstoedit(self);
-//var editable = cells.edit.bind(this, 'editedCell', (value, celldata, rowIndex, property, datrow) => {
-////    var self = this;
-//    clearInterval(window.datainterval);
-//
-//    console.log('editable ', value, rowIndex, property, datrow);
-//    var val = value.hasOwnProperty('row') ? value.val : value;
-//    var rowid = parseInt(datrow.split('-')[0])+1;
-//    _.each(window.data, function(data, i) {
-//        if (typeof data.entries != 'undefined') {
-//            var t = _.find(data.entries, function(d){ return d.columnName == property && d.rowIndex == rowid});
-//            if (t != undefined) {
-//                var params = [{"_id":t._id, "data": val}];
-//                $.ajax({
-//                    'type': "PUT",
-//                    'url': '/api/cells/',
-//                    'data': JSON.stringify(params),
-//                    'contentType': "application/json",
-//                    'success': function() {
-//                        console.log('done');
-//                        window.socket.emit('my other event', { val: val, row: window.row-1 });
-////                        getdata();
-//                        window.datainterval;
-//                    }
-//                })
-//            }
-//        }
-//    })
-//
-//    var idx = findIndex(this.state.data, {
-//        id: celldata[rowIndex].id,
-//    });
-////
-//    var row = value.hasOwnProperty('row') ? value.row : rowIndex;
-//    this.state.data[idx][property] = val;
-//    this.setState({
-//        data: query ? _.filter(_.sortBy(data, 'rowIndex'), function(d) { return d.category == query}) : data
-//    });
-//});
-
-
-//var highlighter = (column) => highlight((value) => {
-//    return Search.matches(column, value, this.state.search.query);
-//});
-
-
 window.hiding = [];
 
 
 
 
 return {
-
-
     editedCell: null,
     data: statedata,
     formatters: null,
@@ -182,17 +129,16 @@ return {
         className: cx(['header'])
     },
     sortingColumn: null, // reference to sorting column
-
-
-columns:  _.filter(window.coledit, function(col) { return !_.includes(localStorage.getItem('hidecol'), col.property) }),
-modal: {
-    title: 'title',
-    content: 'content',
-},
-pagination: {
-    page: 1,
+    columns:  _.filter(window.coledit, function(col) { return !_.includes(localStorage.getItem('hidecol'), col.property) }),
+    modal: {
+        title: 'title',
+        content: 'content',
+    },
+    pagination: {
+        page: 1,
         perPage: 50
-}
+    },
+    hiddencolumns: []
 };
 },
 
@@ -443,33 +389,25 @@ onPerPage(e) {
     });
 },
 hideCols() {
+    var columns = _.filter(window.coledit, function(col) { return col.property != 'id'});
     var cols = [];
-    var columns = window.coledit;
 
-    var hidecol = (e) => {
-        var hide = e.target.value;
-//        console.log(this, self)
-        if (e.target.checked) {
-            window.hiding = window.hiding.push(hide);
-        } else {
-            window.hiding = _.without(window.hiding, hide)
-        }
-    }
+    var hiddencolumns = localStorage.getItem('hidecol');
+
     _.each(columns, function(c,i){
-        var hiddencolumns = localStorage.getItem('hidecol');
+        var hiddencolumns = localStorage.getItem('hidecol') ;
         var propchecked = _.includes(hiddencolumns, c.property);
         if (propchecked) {
-            cols.push(<div className="showhidecol"> {c.property} <input type="checkbox" value={c.property} checked onChange={hidecol}/> </div>)
+            cols.push(<div className="showhidecol">{c.property}<input type="checkbox" value={c.property} checked/> </div>)
         } else if (c.property == 'id') {
-            cols.push(<div></div>)
         }else {
-            cols.push(<div className="showhidecol"> {c.property} <input type="checkbox" value={c.property} /> </div>)
+            cols.push(<div className="showhidecol">{c.property}<input type="checkbox" value={c.property} /></div>)
         }
     })
+
     var onSubmit = (e) => {
         var self = this;
         _.each($('#hideCols').find('.showhidecol'), function (input, i) {
-//            $(input).prop('checked', true);
             if ($(input).find('input:checked').length > 0 ) {
                 window.hiding.push($(input).find('input').val());
             } else {
@@ -479,7 +417,7 @@ hideCols() {
         this.refs.modal.hide();
         localStorage.setItem('hidecol', window.hiding)
         this.setState({
-            columns: _.filter(window.coledit, function(col) { return !_.includes(localStorage.getItem('hidecol'), col.property) })
+            columns: _.filter(window.coledit, function(col) { return !_.includes(localStorage.getItem('hidecol'), col.property) || col.property == 'id'})
         })
     };
     var formChange = (e) => {
@@ -494,19 +432,57 @@ hideCols() {
                 })
             }
         } else {
+            console.log('in form change');
+            var hide = e.target.value;
+            var hiddencolumns = localStorage.getItem('hidecol');
 
+            if (e.target.checked) {
+//                $(e.target).removeProp('checked');
+                window.hiding = _.uniq(window.hiding.push(hide));
+                localStorage.setItem('hidecol',window.hiding)
+                cols = [];
+               _.each(columns, function(c,i) {
+                    var propchecked = _.includes(window.hiding, c.property);
+                    if (propchecked) {
+                        cols.push(<div className="showhidecol">{c.property}<input type="checkbox" value={c.property} checked/></div>)
+                    } else if (c.property == 'id') {
+                    } else {
+                        cols.push(<div className="showhidecol">{c.property}<input type="checkbox" value={c.property} /></div>)
+                    }
+                });
+                colstate();
+            } else {
+                window.hiding = _.uniq(_.without(window.hiding, hide));
+                localStorage.setItem('hidecol',window.hiding)
+                cols = [];
+                _.each(columns, function(c,i) {
+                    var propchecked = _.includes(window.hiding, c.property);
+                    if (propchecked) {
+                        cols.push(<div className="showhidecol">{c.property}<input type="checkbox" value={c.property} checked/></div>)
+                    } else if (c.property == 'id') {
+                    } else {
+                        cols.push(<div className="showhidecol">{c.property}<input type="checkbox" value={c.property} /></div>)
+                    }
+                });
+                colstate();
+            }
         }
+
     }
-    this.setState({
-        modal: {
-            title: 'Columns to Hide',
-            content: <div id="hideCols" onChange={formChange}>
-                        <div><input type="checkbox" value="all"/>hide all</div>
+    var colstate = () => {
+        this.setState({
+            modal: {
+                title: 'Columns to Hide',
+                content: <div id="hideCols" onChange={formChange}>
+                    <div><input type="checkbox" value="all"/>hide all</div>
                         {cols}
-                        <button onClick={onSubmit}>Ok</button>
-                    </div>
-        }
-    });
+                    <button onClick={onSubmit}>Ok</button>
+                </div>
+            }
+        });
+    }
+    colstate();
+
 
     this.refs.modal.show();
 }

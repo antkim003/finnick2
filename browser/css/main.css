@@ -313,3 +313,6 @@ table .sort-desc:after, .sort-desc .fixedHead:after {
     float:left;
     padding: 15px 0;
 }
+[data-property] input {
+    width: 90%;
+}
