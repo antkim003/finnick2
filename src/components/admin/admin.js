@@ -6,6 +6,7 @@ import * as actions from '../../actions';
 
 import NavBar from '../../containers/navbar'
 
+
 class Admin extends Component {
   renderUser(session) {
     if (session.user) {
@@ -36,4 +37,4 @@ function mapStateToProps(state) {
   }
 }
 
-module.exports = connect(mapStateToProps, null)(Admin);
+module.exports = connect(mapStateToProps, actions)(Admin);
