@@ -297,11 +297,12 @@ table .sort-desc:after, .sort-desc .fixedHead:after {
 }
 .showhidecol {
     float: left;
-    padding: 0 10px;
+    padding: 0 5px;
     border: 1px solid lightblue;
     border-radius: 3px;
-    /*background-color: #d1dee6;*/
-    margin: 0 6px 6px 0;
+    margin: 0 7px 7px 0;
+    font-size: 12px;
+    background: #fafafa;
 }
 .showhidecol:nth-child(even) {
     /*background-color: #fff;*/
@@ -315,4 +316,7 @@ table .sort-desc:after, .sort-desc .fixedHead:after {
 }
 [data-property] input {
     width: 90%;
+}
+.skylight-wrapper h2 {
+    margin-bottom: 5px;
 }

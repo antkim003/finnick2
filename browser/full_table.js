@@ -398,10 +398,10 @@ hideCols() {
         var hiddencolumns = localStorage.getItem('hidecol') ;
         var propchecked = _.includes(hiddencolumns, c.property);
         if (propchecked) {
-            cols.push(<div className="showhidecol">{c.property}<input type="checkbox" value={c.property} checked/> </div>)
+            cols.push(<div className="showhidecol"><label for={'name-'+c.property}>{c.property}</label><input type="checkbox" value={c.property} checked id={'name-'+c.property} /> </div>)
         } else if (c.property == 'id') {
         }else {
-            cols.push(<div className="showhidecol">{c.property}<input type="checkbox" value={c.property} /></div>)
+            cols.push(<div className="showhidecol"><label for={'name-'+c.property}>{c.property}</label><input type="checkbox" id={'name-'+c.property} value={c.property} /></div>)
         }
     })
 
@@ -443,12 +443,12 @@ hideCols() {
                 cols = [];
                _.each(columns, function(c,i) {
                     var propchecked = _.includes(window.hiding, c.property);
-                    if (propchecked) {
-                        cols.push(<div className="showhidecol">{c.property}<input type="checkbox" value={c.property} checked/></div>)
-                    } else if (c.property == 'id') {
-                    } else {
-                        cols.push(<div className="showhidecol">{c.property}<input type="checkbox" value={c.property} /></div>)
-                    }
+                   if (propchecked) {
+                       cols.push(<div className="showhidecol"><label for={'name-'+c.property}>{c.property}</label><input type="checkbox" value={c.property} checked id={'name-'+c.property} /> </div>)
+                   } else if (c.property == 'id') {
+                   }else {
+                       cols.push(<div className="showhidecol"><label for={'name-'+c.property}>{c.property}</label><input type="checkbox" id={'name-'+c.property} value={c.property} /></div>)
+                   }
                 });
                 colstate();
             } else {
@@ -458,10 +458,10 @@ hideCols() {
                 _.each(columns, function(c,i) {
                     var propchecked = _.includes(window.hiding, c.property);
                     if (propchecked) {
-                        cols.push(<div className="showhidecol">{c.property}<input type="checkbox" value={c.property} checked/></div>)
+                        cols.push(<div className="showhidecol"><label for={'name-'+c.property}>{c.property}</label><input type="checkbox" value={c.property} checked id={'name-'+c.property} /> </div>)
                     } else if (c.property == 'id') {
-                    } else {
-                        cols.push(<div className="showhidecol">{c.property}<input type="checkbox" value={c.property} /></div>)
+                    }else {
+                        cols.push(<div className="showhidecol"><label for={'name-'+c.property}>{c.property}</label><input type="checkbox" id={'name-'+c.property} value={c.property} /></div>)
                     }
                 });
                 colstate();
