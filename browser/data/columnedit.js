@@ -7,16 +7,22 @@ var categoriesandsub = require('./categoriesandsub.js');
 var categoriesandsub1 = categoriesandsub;
 var categoriesandsub2 = categoriesandsub;
 var validations = require('./validations.js');
+var findIndex = require('lodash/findIndex');
 
 
 module.exports = (app) => {
+    var query = window.location.search.split('?')[1];
+
     app.highlighter = (column) => highlight((value) => {
         return Search.matches(column, value, app.state.search.query);
     });
+    var data = [];
+
 
     app.editable = cells.edit.bind(app, 'editedCell', (value, celldata, rowIndex, property, datrow) => {
 //    var self = this;
         clearInterval(window.datainterval);
+
         console.log('editable ', value, rowIndex, property, datrow);
         var val = value.hasOwnProperty('row') ? value.val : value;
         var rowid = parseInt(datrow.split('-')[0])+1;
@@ -33,22 +39,23 @@ module.exports = (app) => {
                         'success': function() {
                             console.log('done');
                             window.socket.emit('my other event', { val: val, row: window.row-1 });
-    //                        getdata();
                             window.datainterval;
+
                         }
                     })
                 }
             }
         })
 
-        var idx = findIndex(this.state.data, {
+        var idx = findIndex(app.state.data, {
             id: celldata[rowIndex].id,
         });
+
     //
         var row = value.hasOwnProperty('row') ? value.row : rowIndex;
         app.state.data[idx][property] = val;
         app.setState({
-            data: query ? _.filter(_.sortBy(data, 'rowIndex'), function(d) { return d.category == query}) : data
+            data: query ? _.filter(_.sortBy(statedata, 'rowIndex'), function(d) { return d.category == query}) : statedata
         });
     });
 
@@ -88,7 +95,7 @@ window.coledit =     [
     property: 'subcategories',
         header: 'Subcategories',
     cell: [app.editable({
-    editor: editors.checkbox(categoriesandsub2, 'category', self)
+    editor: editors.checkbox(categoriesandsub2, 'category', app)
 }), app.highlighter('subcategories')],
     columnorder: '0'
 },
@@ -112,7 +119,7 @@ window.coledit =     [
     property: 'doubleexposuresubcategory',
         header: 'Double Exposure Subcategory',
     cell: [app.editable({
-    editor: editors.checkbox(categoriesandsub1, 'doubleexposure', self)
+    editor: editors.checkbox(categoriesandsub1, 'doubleexposure', app)
 }), app.highlighter('doubleexposuresubcategory')],
     columnorder: '0'
 },

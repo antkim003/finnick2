@@ -8,7 +8,6 @@ var SkyLight = require('react-skylight').default;
 //var math = require('annomath');
 var Paginator = require('react-pagify').default;
 //var titleCase = require('title-case');
-var findIndex = require('lodash/findIndex');
 var orderBy = require('lodash/orderBy');
 var cx = require('classnames');
 var segmentize = require('segmentize');
@@ -48,7 +47,7 @@ module.exports = React.createClass({
         ]
         window.user = users[Math.floor(Math.random()*users.length)];
 
-        var data = [];
+        window.statedata = [];
 
         sockets();
 
@@ -84,7 +83,7 @@ module.exports = React.createClass({
                         });
                         arr.push(allobj);
                     });
-                    data = _.sortBy(arr, 'rowIndex');
+                    window.statedata = _.sortBy(arr, 'rowIndex');
                     self.setState({
                         data: _.sortBy(arr, 'rowIndex')
                     });
@@ -161,7 +160,7 @@ return {
 
 
     editedCell: null,
-    data: data,
+    data: statedata,
     formatters: null,
     search: {
         column: '',
@@ -341,7 +340,7 @@ render() {
                 <div className='per-page-container'>
                 Per page <input type='text' defaultValue={pagination.perPage} onChange={this.onPerPage}></input>
                 </div>
-                <div><button onClick={this.hideCols}>Hide Columns</button></div>
+                <div className="buttonscontainer"><button onClick={this.hideCols}>Hide Columns</button></div>
                 <div className='search-container'>
                 Search <Search columns={columns} data={this.state.data} onChange={this.onSearch} />
                 </div>

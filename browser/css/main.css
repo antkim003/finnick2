@@ -309,3 +309,7 @@ table .sort-desc:after, .sort-desc .fixedHead:after {
 .controls {
     width: 100%;
 }
+.buttonscontainer {
+    float:left;
+    padding: 15px 0;
+}
