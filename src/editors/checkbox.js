@@ -57,7 +57,7 @@ module.exports = (options, cat, dat, fields={}) => {
             return (
                 <form>
                     {filteredoptions.map((option, i) =>
-                        <div><input type="checkbox"
+                        <div className="checkboxselect"><input type="checkbox"
                         key={i}
                         value={option[valueField]}
                         name="checkbox2"

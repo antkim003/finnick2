@@ -8,6 +8,7 @@ var categoriesandsub1 = categoriesandsub;
 var categoriesandsub2 = categoriesandsub;
 var validations = require('./validations.js');
 var findIndex = require('lodash/findIndex');
+var React = require('react');
 
 
 module.exports = (app) => {
@@ -26,36 +27,102 @@ module.exports = (app) => {
         console.log('editable ', value, rowIndex, property, datrow);
         var val = value.hasOwnProperty('row') ? value.val : value;
         var rowid = parseInt(datrow.split('-')[0])+1;
-        _.each(window.data, function(data, i) {
-            if (typeof data.entries != 'undefined') {
-                var t = _.find(data.entries, function(d){ return d.columnName == property && d.rowIndex == rowid});
-                if (t != undefined) {
-                    var params = [{"_id":t._id, "data": val}];
-                    $.ajax({
-                        'type': "PUT",
-                        'url': '/api/cells/',
-                        'data': JSON.stringify(params),
-                        'contentType': "application/json",
-                        'success': function() {
-                            console.log('done');
-                            window.socket.emit('my other event', { val: val, row: window.row-1 });
-                            window.datainterval;
 
+        if ( val.toLowerCase() == 'custom' ) {
+            var customsave = (e) => {
+                val = e.target.previousSibling.value;
+                app.refs.modal.hide();
+                _.each(window.data, function(data, i) {
+                    if (typeof data.entries != 'undefined') {
+                        var t = _.find(data.entries, function(d){ return d.columnName == property && d.rowIndex == rowid});
+                        if (t != undefined) {
+                            var params = [{"_id":t._id, "data": val}];
+                            $.ajax({
+                                'type': "PUT",
+                                'url': '/api/cells/',
+                                'data': JSON.stringify(params),
+                                'contentType': "application/json",
+                                'success': function() {
+                                    console.log('done');
+                                    window.socket.emit('my other event', { val: val, row: window.row-1 });
+                                    window.datainterval;
+                                    var idx = findIndex(app.state.data, {
+                                        id: celldata[rowIndex].id,
+                                    });
+
+                                    app.state.data[idx][property] = val;
+                                    app.setState({
+                                        data: query ? _.filter(_.sortBy(statedata, 'rowIndex'), function(d) { return d.category == query}) : statedata
+                                    });
+                                }
+                            })
                         }
-                    })
-                }
+                    }
+                })
             }
-        })
+            app.setState(
+                {
+                    modal: {
+                        title: 'Columns to Hide',
+                        content: <div><input/><button onClick={customsave}>Save Custom</button></div>
+                    }
+                });
+            app.refs.modal.show();
+        } else {
+            var idx = findIndex(app.state.data, {
+                id: celldata[rowIndex].id,
+            });
 
-        var idx = findIndex(app.state.data, {
-            id: celldata[rowIndex].id,
-        });
+            app.state.data[idx][property] = val;
+            app.setState({
+                data: query ? _.filter(_.sortBy(statedata, 'rowIndex'), function(d) { return d.category == query}) : statedata
+            });
+            _.each(window.data, function(data, i) {
+                if (typeof data.entries != 'undefined') {
+                    var t = _.find(data.entries, function(d){ return d.columnName == property && d.rowIndex == rowid});
+                    if (t != undefined) {
+                        var params = [{"_id":t._id, "data": val}];
+                        $.ajax({
+                            'type': "PUT",
+                            'url': '/api/cells/',
+                            'data': JSON.stringify(params),
+                            'contentType': "application/json",
+                            'success': function() {
+                                console.log('done');
+                                window.socket.emit('my other event', { val: val, row: window.row-1 });
+                                window.datainterval;
+
+                            }
+                        })
+                    }
+                }
+            })
+        }
+
+//        _.each(window.data, function(data, i) {
+//            if (typeof data.entries != 'undefined') {
+//                var t = _.find(data.entries, function(d){ return d.columnName == property && d.rowIndex == rowid});
+//                if (t != undefined) {
+//                    var params = [{"_id":t._id, "data": val}];
+//                    $.ajax({
+//                        'type': "PUT",
+//                        'url': '/api/cells/',
+//                        'data': JSON.stringify(params),
+//                        'contentType': "application/json",
+//                        'success': function() {
+//                            console.log('done');
+//                            window.socket.emit('my other event', { val: val, row: window.row-1 });
+//                            window.datainterval;
+//
+//                        }
+//                    })
+//                }
+//            }
+//        })
+
 
         var row = value.hasOwnProperty('row') ? value.row : rowIndex;
-        app.state.data[idx][property] = val;
-        app.setState({
-            data: query ? _.filter(_.sortBy(statedata, 'rowIndex'), function(d) { return d.category == query}) : statedata
-        });
+
     });
 
 

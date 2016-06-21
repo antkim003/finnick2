@@ -31,16 +31,16 @@ module.exports = () =>
         });
 
         if (st > lastScrollTop) {
-            $('article.pure-u-1 .controls:first-child').css({'position': 'relative', 'top': '0'})
+//            $('article.pure-u-1 .controls:first-child').css({'position': 'relative', 'top': '0'})
             // downscroll code
         } else if (st < lastScrollTop) {
-            $('article.pure-u-1 .controls:first-child').css({'position': 'relative', 'top': '0'})
+//            $('article.pure-u-1 .controls:first-child').css({'position': 'relative', 'top': '0'})
 
         } else if (st == lastScrollTop) {
             if ($('h1')[0].getBoundingClientRect().right < 0 && $('thead')[0].getBoundingClientRect().top > 0) {
-                $('article.pure-u-1 .controls:first-child').css({'position': 'fixed', 'top': '0'})
+//                $('article.pure-u-1 .controls:first-child').css({'position': 'fixed', 'top': '0'})
             } else {
-                $('article.pure-u-1 .controls:first-child').css({'position': 'relative', 'top': '0'})
+//                $('article.pure-u-1 .controls:first-child').css({'position': 'relative', 'top': '0'})
             }
             //side scroll
             if (sl > lastScrollLeft) {

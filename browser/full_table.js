@@ -474,9 +474,8 @@ hideCols() {
             modal: {
                 title: 'Columns to Hide',
                 content: <div id="hideCols" onChange={formChange}>
-                    <div><input type="checkbox" value="all"/>hide all</div>
-                        {cols}
-                    <button onClick={onSubmit}>Ok</button>
+                    <div><input type="checkbox" value="all"/>hide all <button onClick={onSubmit}>Ok</button></div>
+                    {cols}
                 </div>
             }
         });
