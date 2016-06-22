@@ -6,14 +6,7 @@ var ReactDOM = require('react-dom')
 
 module.exports = (attrs) => {
     attrs = attrs || {};
-    function identical(array) {
-        for(var i = 0; i < array.length - 1; i++) {
-            if(array[i] !== array[i+1]) {
-                return false;
-            }
-        }
-        return true;
-    }
+
     return React.createClass({
         displayName: 'Input',
 
@@ -29,6 +22,10 @@ module.exports = (attrs) => {
         },
 
         render() {
+
+
+
+            console.log('input', attrs, this);
             return (
                 <input
                     value={this.state.value}
@@ -63,11 +60,22 @@ module.exports = (attrs) => {
         },
 
         done(e) {
+            function identical(array) {
+                for(var i = 0; i < array.length - 1; i++) {
+                    if(array[i] !== array[i+1] && !array[i]) {
+                        return false;
+                    }
+                }
+                return true;
+            }
+            console.log('in done', e.target.value)
             var self = this;
             if (typeof attrs[0] !== 'undefined') {
                 var r = new RegExp(attrs[0].value);
 
                 if (typeof attrs[0].multidelimeter !== 'undefined') {
+                    console.log('! multi val')
+
                     var vals = e.target.value.split(attrs[0].multidelimeter);
                     var valid = [];
                     _.each(vals, function(val, i){
@@ -78,7 +86,8 @@ module.exports = (attrs) => {
                         }
                     });
 
-                    if (identical(valid)) {
+//                    console.log(identical(valid), valid);
+                    if (identical(valid) && valid[0]) {
                         self.props.onValue(ReactDOM.findDOMNode(self).value)
 //                        self.props.onValue(self.getDOMNode().value);
                     } else {
@@ -86,6 +95,7 @@ module.exports = (attrs) => {
                     }
 
                 } else {
+                    console.log('! one val')
                     var test = r.test(e.target.value);
                     if (test) {
                         self.props.onValue(ReactDOM.findDOMNode(self).value)
@@ -100,6 +110,8 @@ module.exports = (attrs) => {
                 }
 
             } else {
+                console.log('! no validation')
+
                 self.props.onValue(ReactDOM.findDOMNode(self).value)
 //                self.props.onValue(self.getDOMNode().value);
             }

@@ -138,7 +138,7 @@ table {
     float: right;
     font-size: 10px;
     white-space: nowrap;
-    width: calc(100% - 15px);
+    width: 50%;
     line-height: 18px;
 }
 .pure-table td {
@@ -297,4 +297,34 @@ table .sort-desc:after, .sort-desc .fixedHead:after {
 }
 .showhidecol {
     float: left;
+    padding: 0 5px;
+    border: 1px solid lightblue;
+    border-radius: 3px;
+    margin: 0 7px 7px 0;
+    font-size: 12px;
+    background: #fafafa;
+}
+.showhidecol:nth-child(even) {
+    /*background-color: #fff;*/
+}
+.controls {
+    width: 100%;
+}
+.buttonscontainer {
+    float:left;
+    padding: 15px 0;
+}
+[data-property] input {
+    width: 90%;
+}
+.skylight-wrapper h2 {
+    margin-bottom: 5px;
+}
+.checkboxselect {
+    position: relative;
+}
+.checkboxselect label {
+    position: absolute;
+    top:0;
+    left: 20px;
 }

@@ -9,7 +9,7 @@ module.exports = function(editProperty, onValue, o) {
     var context = this;
     var editor = o.editor;
 
-    return (value, data, rowIndex, property) => {
+    return (value, data, rowIndex, property, d) => {
         var idx = rowIndex.toString() + '-' + property;
         var editedCell = context.state[editProperty];
         if(editedCell === idx) {
@@ -23,7 +23,9 @@ module.exports = function(editProperty, onValue, o) {
 
                         context.setState(state);
 
-                        onValue(v, data, rowIndex, property);
+                        var datrow = $('.'+editedCell).attr('data-cell')
+//                        console.log('if editedCell', editedCell, datrow)
+                        onValue(v, data, rowIndex, property, datrow);
                     }
                 }),
             };
@@ -38,7 +40,6 @@ module.exports = function(editProperty, onValue, o) {
                         state[editProperty] = idx;
                         context.setState(state);
                         window.user = _.extend(window.user, state);
-//                        console.log(window.user, 'user fob, and row', state, $('.'+state.editedCell).attr('data-cell'))
                         $('.activeCell').removeClass('activeCell')
                         $('.'+state.editedCell).addClass('activeCell');
                         window.socket.emit('user editing', {user: window.user, cell: $('.'+state.editedCell).attr('data-cell'), fob: window.location.search.split('?')[1]})

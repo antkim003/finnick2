@@ -1,14 +1,13 @@
 'use strict';
 
 var React = require('react');
-var Form = require('plexus-form');
-var validate = require('plexus-validate');
+//var Form = require('plexus-form');
+//var validate = require('plexus-validate');
 var SkyLight = require('react-skylight').default;
-var generators = require('annogenerate');
-var math = require('annomath');
+//var generators = require('annogenerate');
+//var math = require('annomath');
 var Paginator = require('react-pagify').default;
-var titleCase = require('title-case');
-var findIndex = require('lodash/findIndex');
+//var titleCase = require('title-case');
 var orderBy = require('lodash/orderBy');
 var cx = require('classnames');
 var segmentize = require('segmentize');
@@ -18,84 +17,48 @@ var ColumnNames = require('../src/column_names');
 var Search = require('../src/search');
 var editors = require('../src/editors');
 var sortColumn = require('../src/sort_column');
-var cells = require('../src/cells');
+//var cells = require('../src/cells');
 
 var ColumnFilters = require('./column_filters.js');
 var FieldWrapper = require('./field_wrapper.js');
 var SectionWrapper = require('./section_wrapper.js');
-var dummyusers = require('./data/dummyusers.js');
-var categoriesandsub = require('./data/categoriesandsub.js');
-var categoriesandsub1 = categoriesandsub;
-var categoriesandsub2 = categoriesandsub;
-var columns = require('./data/columnsschema.js');
+//var dummyusers = require('./data/dummyusers.js');
+//var categoriesandsub = require('./data/categoriesandsub.js');
+//var categoriesandsub1 = categoriesandsub;
+//var categoriesandsub2 = categoriesandsub;
+//var columns = require('./data/columnsschema.js');
+var columnstoedit = require('./data/columnedit.js')
 var userpermissions = require('./data/userpermissions.js');
-var validations = require('./data/validations.js');
-var highlight = require('../src/formatters/highlight');
+//var validations = require('./data/validations.js');
+//var highlight = require('../src/formatters/highlight');
+var scrolling = require('./scrolling.js');
+var sockets = require('./sockets.js');
 
 module.exports = React.createClass({
     displayName: 'FullTable',
     getInitialState: function(){
-//    var countryValues = countries.map((c) => c.value);
-    var categoryValues = categoriesandsub.map((c) => c.value);
+        var self = this;
 
-    var properties = augmentWithTitles({
-            name: {
-                type: 'string'
-            },
-            sortnumber: {
-                type: 'number'
-            },
-            instore: {
-//                enum: countryValues,
-        //                enumNames: countries.map((c) => c.name),
-            },
-            doubleexposure: {
-                enum: categoryValues
-            },
-            doubleexposuresubcategory: {
-                enum: categoryValues
-            }
-
-    });
-//var data = generateData({
-//    amount: 100,
-//    fieldGenerators: getFieldGenerators(countryValues),
-//    properties: properties,
-//});
-
-//        var users = dummyusers;
+        scrolling();
+//      var users = dummyusers;
         var users = [
             {"name":"Jonathan Garza","email":"jgarza3@columbia.edu","type":"buyer","locked":false},
             {"name":"Jayne Smyth","email":"test@columbia.edu","type":"admin","locked":false}
         ]
         window.user = users[Math.floor(Math.random()*users.length)];
-//        window.user = {"name":"Jonathan Garza","email":"jgarza3@columbia.edu","type":"buyer","locked":false};
-        var data = [];
-
-        var self = this;
+        window.statedata = [];
+        sockets();
         var query = window.location.search.split('?')[1];
-//        console.log(allobj);
-//
-
-//        _.each(rowdata, function(row, j) {
-//            var allobj = _.zipObject(_.map(columns, 'property'), _.range(columns.length).map(function () { return '' }));
-//            rowdata[j] = _.extend(allobj,row);
-//        })
-//        var data =  rowdata;
-//        self.setState({
-//            data:data
-//        });
-
-        window.socket = io.connect();
-//        var clients = io.sockets.ada();
-//        console.log(clients, 'clients');
         var queryyes = query ? '/'+query : '';
+
         var getdata = function() {
             $.ajax({
                 type: "GET",
                 url: '/api/rows' + queryyes,
                 success: function (data1) {
+//                    console.log(window.coledit, 'in get data')
                     var allrows = _.map(data1, 'entries');
+                    var columns = window.coledit;
                     window.data = data1;
                     var arr = [];
                     _.each(allrows, function (row, i) {
@@ -111,16 +74,13 @@ module.exports = React.createClass({
                                 all[cell.columnName] = parseInt(cell.data);
                             }
                             all.rowIndex = parseInt(cell.rowIndex);
-//                        all._id = cell._id;
                             _.extend(allobj, all)
                         });
                         arr.push(allobj);
                     });
-//                data = query ? _.filter(_.sortBy(arr, 'rowIndex'), function(d) { return d.category == query}) : _.sortBy(arr, 'rowIndex');
-                    data = _.sortBy(arr, 'rowIndex');
+                    window.statedata = _.sortBy(arr, 'rowIndex');
                     self.setState({
                         data: _.sortBy(arr, 'rowIndex')
-//                    data:query ? _.filter(_.sortBy(arr, 'rowIndex'), function(d) { return d.category == query}) : _.sortBy(arr, 'rowIndex')
                     });
 
                 },
@@ -129,148 +89,26 @@ module.exports = React.createClass({
                 }
             })
         }
-        var self = this;
-        getdata();
-        self.interval = setInterval(function() {
+        $.when(columnstoedit(self)).done(function( ) {
+            getdata()
+        });
+
+
+        window.datainterval = setInterval(function() {
             getdata();
         }, 30000);
-        self.interval;
+//        self.interval;
+
+
+window.hiding = [];
 
 
 
-        var lastScrollTop = 0;
-        var lastScrollLeft = 0;
 
-
-        var scrollFunc = function() {
-            var st = $(window).scrollTop();
-            var sl = $(window).scrollLeft();
-            $('[data-property=id]').css(
-                {
-                    'margin-top': -$(window).scrollTop(),
-                    'margin-left': '-1px'
-                }
-            );
-            $('.fixedHead').css(
-                {
-                    'margin-left': -$(window).scrollLeft()-13,
-                }
-            );
-            if ($('thead')[0].getBoundingClientRect().top < 0) {
-                $('.fixedHead').css({'display':'block'})
-            } else {
-                $('.fixedHead').css({'display':'none' })
-            }
-            _.each($('.fixedHead'), function (fh, i) {
-                var wid = i == 0 ? 5 : 6;
-                $(fh).css({'width': $(fh).parent().width()+wid, 'height': $(fh).parent().height(), 'visibility':'visible'});
-            });
-
-            if (st > lastScrollTop){
-                $('article.pure-u-1 .controls:first-child').css({'position':'relative','top': '0'})
-                // downscroll code
-            } else if ( st < lastScrollTop ){
-                $('article.pure-u-1 .controls:first-child').css({'position':'relative','top': '0'})
-
-            } else if (st == lastScrollTop) {
-                if ($('h1')[0].getBoundingClientRect().right < 0 && $('thead')[0].getBoundingClientRect().top > 0) {
-                    $('article.pure-u-1 .controls:first-child').css({'position': 'fixed', 'top': '0'})
-                } else {
-                    $('article.pure-u-1 .controls:first-child').css({'position':'relative','top': '0'})
-                }
-                //side scroll
-                if (sl > lastScrollLeft) {
-                } else {
-                }
-            }
-            lastScrollTop = st;
-            lastScrollLeft = sl;
-
-        }
-
-
-//fixed headers and rows
-$(window).on('scroll', scrollFunc);
-
-window.socket.emit('add user', window.user);
-
-function addParticipantsMessage (data) {
-    var message = '';
-    if (data.numUsers === 1) {
-        message += "there's 1 participant";
-    } else {
-        message += "there are " + data.numUsers + " participants";
-    }
-    console.log(message, data);
-    window.allusers = data;
-}
-var connected = false;
-
-window.socket.on('login', function (data) {
-    connected = true;
-    addParticipantsMessage(data);
-});
-
-window.socket.on('user joined', function(data) {
-   console.log(data, 'user joined');
-    window.allusers = data.currentUsers;
-
-});
-var editable = cells.edit.bind(this, 'editedCell', (value, celldata, rowIndex, property) => {
-//    var self = this;
-
-    console.log('editable ', value, rowIndex, property);
-    var val = value.hasOwnProperty('row') ? value.val : value;
-//        getdata();
-    _.each(window.data, function(data, i) {
-        if (typeof data.entries != 'undefined') {
-            var t = _.find(data.entries, function(d){ return d.columnName == property && d.rowIndex == rowIndex+1});
-            if (t != undefined) {
-//              var cellid = t._id
-//                var parentrowid = _.find(data, function(d) { return d.entries})
-                var params = [{"_id":t._id, "data": val}];
-                $.ajax({
-                    'type': "PUT",
-                    'url': '/api/cells/',
-                    'data': JSON.stringify(params),
-                    'contentType': "application/json",
-                    'success': function() {
-                        console.log('done');
-
-                        window.socket.emit('my other event', { val: val, row: window.row-1 });
-                        getdata();
-                    }
-                })
-            }
-        }
-    })
-
-    var idx = findIndex(this.state.data, {
-        id: celldata[rowIndex].id,
-    });
-    var row = value.hasOwnProperty('row') ? value.row : rowIndex;
-//    var val = value.hasOwnProperty('row') ? value.val : value;
-    this.state.data[row][property] = val;
-    this.setState({
-        data: query ? _.filter(_.sortBy(data, 'rowIndex'), function(d) { return d.category == query}) : data
-    });
-});
-
-var formatters = {
-        country: (country) => find(countries, 'value', country).name,
-    };
-
-var highlighter = (column) => highlight((value) => {
-    return Search.matches(column, value, this.state.search.query);
-});
-
-//var self = this;
 return {
-
-
     editedCell: null,
-    data: data,
-    formatters: formatters,
+    data: statedata,
+    formatters: null,
     search: {
         column: '',
         query: ''
@@ -291,505 +129,16 @@ return {
         className: cx(['header'])
     },
     sortingColumn: null, // reference to sorting column
-
-
-columns: [
-    {
-        property: 'id',
-        header: 'row id',
-        cell: [(v) => ({
-            value: v,
-            props: {
-
-            }
-        })],
-    columnorder: '0'
-},
-    {
-        property: 'sortnumber',
-        header: 'Sort Number',
-        cell: [editable({
-            editor: editors.input(),
-        })],
-        columnorder: '0'
+    columns:  _.filter(window.coledit, function(col) { return !_.includes(localStorage.getItem('hidecol'), col.property) }),
+    modal: {
+        title: 'title',
+        content: 'content',
     },
-{
-    property: 'name',
-        header: 'Name',
-    cell: [editable({
-    editor: editors.input()}), highlighter('name')],
-    columnorder: '0'
-},
-//{
-//    property: 'country',
-//        header: 'Country',
-//    search: formatters.country,
-//    cell: [editable({
-//    editor: editors.checkbox(countries),
-//}), formatters.country, highlighter('country')],
-//    columnorder: '1'
-//},
-{
-    property: 'category',
-        header: 'Category',
-    cell: [ highlighter('category')],
-        columnorder: '0'
-},
-{
-    property: 'subcategories',
-        header: 'Subcategories',
-    cell: [editable({
-    editor: editors.checkbox(categoriesandsub2, 'category', self)
-}), highlighter('subcategories')],
-    columnorder: '0'
-},
-{
-    property: 'notesoncategory',
-    header: 'Notes on Category',
-    cell: [editable({
-    editor: editors.input(),
-})],
-    columnorder: '0'
-},
-{
-    property: 'doubleexposure',
-    header: 'Double Exposure',
-    cell: [editable({
-        editor: editors.checkbox(categoriesandsub)
-    }), highlighter('doubleexposure')],
-    columnorder: '0'
-},
-{
-    property: 'doubleexposuresubcategory',
-    header: 'Double Exposure Subcategory',
-    cell: [editable({
-        editor: editors.checkbox(categoriesandsub1, 'doubleexposure', self)
-    }), highlighter('doubleexposuresubcategory')],
-    columnorder: '0'
-},
-{
-    property: 'pricingcategory',
-    header: 'Pricing Category',
-    cell: [editable({
-    editor: editors.input()
-}), highlighter('name')],
-    columnorder: '0'
-},
-{
-    property: 'instorespecial',
-    header: 'In Store Special',
-    cell: [editable({
-    editor: editors.input(),
-})],
-    columnorder: '0'
-},
-{
-    property: 'storeregularprice',
-    header: 'Store Reg Price (range)',
-    cell: [editable({
-        editor: editors.input(_.filter(validations, function(v) { return v.name == 'currency'})),
-    }), highlighter('storeregularprice')],
-    columnorder: '0'
-},
-{
-    property: 'storespecialprice',
-        header: 'Store Special Price (range)',
-    cell: [editable({
-        editor: editors.input(_.filter(validations, function(v) { return v.name == 'currency'})),
-    }), highlighter('name')],
-    columnorder: '0'
-},
-{
-    property: 'mcomspecial',
-    header: 'MCOM Special',
-    cell: [editable({
-    editor: editors.input(),
-})],
-    columnorder: '0'
-},
-{
-    property: 'pricinginfo',
-    header: 'Additional Pricing Info',
-    cell: [editable({
-        editor: editors.dropdown([{name:'Only At Macys', value:'Only At Macys'},{name:'Not Applicable', value:'Not Applicable'},{name:'Custom', value:'Custom'}]),
-    }), highlighter('pricinginfo')],
-    columnorder: '0'
-},
-{
-    property: 'mcomregprice',
-    header: 'MCOM Reg Price (range)',
-    cell: [editable({
-    editor: editors.input(_.filter(validations, function(v) { return v.name == 'currency'})),
-})],
-    columnorder: '0'
-},
-{
-    property: 'mcomspecialprice',
-        header: 'MCOM Special Price (range)',
-    cell: [editable({
-    editor: editors.input(_.filter(validations, function(v) { return v.name == 'currency'})),
-}), highlighter('name')],
-    columnorder: '0'
-},
-{
-    property: 'pricingcomments',
-    header: 'Pricing Comments',
-    cell: [editable({
-        editor: editors.dropdown([{name:'Not Congruent', value:'Not Congruent'},{name:'Congruent', value:'Congruent'},{name:'All Sizes', value:'All Sizes'},{name:'TV Offer', value:'TV Offer'},{name:'GWP', value:'GWP'},{name:'40% Off', value:'40% Off'},{name:'30% Off', value:'30% Off'},{name:'50% Off', value:'50% Off'},{name:'Custom', value:'Custom'}]),
-    }), highlighter('pricingcomments')],
-    columnorder: '0'
-},
-{
-    property: 'markettointernational',
-        header: 'Market to International',
-    cell: [editable({
-        editor: editors.dropdown([{name:'true', value:'true'},{name:'false', value:'false'}]),
-    })],
-    columnorder: '0'
-},
-{
-    property: 'projectedunits',
-        header: 'Projected Units',
-    cell: [editable({
-        editor: editors.input(_.filter(validations, function(v) { return v.name == 'numerical'})),
-    })],
-    columnorder: '0'
-},
-{
-    property: 'projectedsales',
-        header: 'MCOM Projected Sales',
-    cell: [editable({
-        editor: editors.rangeinput('sortnumber'),
-    })],
-    columnorder: '0'
-},
-{
-    property: 'salesfor2015',
-    header: 'Sales For 2015',
-    cell: [editable({
-        editor: editors.input(_.filter(validations, function(v) { return v.name == 'currency'})),
-    }), highlighter('name')],
-    columnorder: '0'
-},
-{
-    property: 'imageid',
-        header: 'Image Id',
-    cell: [editable({
-        editor: editors.input(_.filter(validations, function(v) { return v.name == 'numerical'})),
-    }), highlighter('imageid')],
-    columnorder: '0'
-},
-{
-    property: 'arimageid',
-    header: 'AR Image Id',
-    cell: [
-        editable({
-            editor: editors.input(_.filter(validations, function(v) { return v.name == 'numerical'})),
-        }),
-        highlighter('arimageid')],
-    columnorder: '0'
-},
-{
-    property: 'singleormultiple',
-    header: 'Single or Multiple',
-    cell: [editable({
-        editor: editors.dropdown([{name: 'Single', value: 'Single'},{name: 'Multiple', value: 'Multiple'}]),
-        }), highlighter('singleormultiple')],
-    columnorder: '0'
-},
-{
-    property: 'featureproductid',
-        header: 'Feature Product Ids',
-    cell: [
-        editable({
-            editor: editors.input(_.filter(validations, function(v) { return v.name == 'multinumerical'})),
-        }),
-        highlighter('featureproductid')],
-    columnorder: '0'
-},
-{
-    property: 'savedsetid',
-        header: 'Saved Set Ids',
-    cell: [editable({
-        editor: editors.input(_.filter(validations, function(v) { return v.name == 'numerical'})),
-    })],
-    columnorder: '0'
-},
-{
-    property: 'tileimage',
-    header: 'Tile Image',
-    cell: [
-        editable({
-            editor: editors.input(_.filter(validations, function(v) { return v.name == 'numerical'})),
-        }),
-        highlighter('tileimage'),
-        ],
-    columnorder: '0'
-},
-{
-    property: 'tilecopy1',
-        header: 'Tile Copy Line 1',
-    cell: [editable({
-    editor: editors.input(),
-})],
-    columnorder: '0'
-},
-{
-    property: 'tilecopy2',
-        header: 'Tile Copy Line 2',
-    cell: [editable({
-    editor: editors.input(),
-})],
-    columnorder: '0'
-},
-{
-    property: 'tilecopy3',
-        header: 'Tile Copy Line 3',
-    cell: [editable({
-    editor: editors.input(),
-}), highlighter('name')],
-    columnorder: '0'
-},
-{
-    property: 'tilecopy4',
-        header: 'Tile Copy Line 4',
-    cell: [editable({
-    editor: editors.input(),
-}), highlighter('name')],
-    columnorder: '0'
-},
-{
-    property: 'plenti',
-    header: 'Plenti Watermark',
-    cell: [editable({
-        editor: editors.dropdown([{name:'true', value:'true'},{name:'false', value:'false'}]),
-    })],
-    columnorder: '0'
-},
-{
-    property: 'bffavorites',
-        header: 'Black Friday Favorites',
-    cell: [editable({
-        editor: editors.dropdown([{name:'true', value:'true'},{name:'false', value:'false'}]),
-    })],
-    columnorder: '0'
-},
-{
-    property: 'goingfast',
-        header: 'Going Fast',
-    cell: [editable({
-        editor: editors.dropdown([{name:'true', value:'true'},{name:'false', value:'false'}]),
-    })],
-    columnorder: '0'
-},
-{
-    property: 'alsoinpetites',
-        header: 'Also in Petites',
-    cell: [editable({
-        editor: editors.dropdown([{name:'true', value:'true'},{name:'false', value:'false'}]),
-    })],
-    columnorder: '0'
-},
-{
-    property: 'petitessavedset',
-        header: 'Petites Saved Set',
-    cell: [editable({
-        editor: editors.input(_.filter(validations, function(v) { return v.name == 'numerical'})),
-    })],
-    columnorder: '0'
-},
-{
-    property: 'needsavedset',
-    header: 'Need Saved Set?',
-    cell: [editable({
-        editor: editors.dropdown([{name:'true', value:'true'},{name:'false', value:'false'}]),
-    })],
-    columnorder: '0'
-},
-{
-    property: 'linktype',
-    header: 'Link Type',
-    cell: [editable({
-        editor: editors.dropdown([{name:'url (u)', value:'url (u)'},{name:'category (c)', value:'category (c)'},{name:'product (p)', value:'product (p)'}]),
-    })],
-    columnorder: '0'
-},
-{
-    property: 'livedate',
-    header: 'Live Date',
-    cell: [editable({
-        editor: editors.input(),
-    })],
-    columnorder: '0'
-},
-{
-    property: 'categoryid',
-        header: 'Category Id linking',
-    cell: [editable({
-        editor: editors.input(_.filter(validations, function(v) { return v.name == 'numerical'})),
-    })],
-    columnorder: '0'
-},
-{
-    property: 'productid',
-    header: 'Product Id linking',
-    cell: [editable({
-        editor: editors.input(_.filter(validations, function(v) { return v.name == 'numerical'})),
-    })],
-    columnorder: '0'
-},
-{
-    property: 'url',
-        header: 'Url linking',
-    cell: [editable({
-    editor: editors.input(),
-})],
-    columnorder: '0'
-},
-{
-    property: 'petiteslinktype',
-    header: 'Petites Link Type',
-    cell: [editable({
-        editor: editors.dropdown([{name:'url (u)', value:'url (u)'},{name:'category (c)', value:'category (c)'},{name:'product (p)', value:'product (p)'}]),
-    })],
-    columnorder: '0'
-},
-{
-    property: 'petitescategoryid',
-    header: 'Petites Category Linking',
-    cell: [editable({
-        editor: editors.input(_.filter(validations, function(v) { return v.name == 'numerical'})),
-    }), highlighter('petitescategoryid')],
-    columnorder: '0'
-},
-{
-    property: 'petitesproductid',
-    header: 'Petites Product Linking',
-    cell: [editable({
-        editor: editors.input(_.filter(validations, function(v) { return v.name == 'numerical'})),
-    }), highlighter('petitesproductid')],
-    columnorder: '0'
-},
-{
-    property: 'petitesurl',
-    header: 'Petites Url Linking',
-    cell: [editable({
-    editor: editors.input(),
-}), highlighter('name')],
-    columnorder: '0'
-},
-{
-    property: 'omniprojectedsales',
-    header: 'Omni Projected Sales',
-    cell: [editable({
-        editor: editors.input(_.filter(validations, function(v) { return v.name == 'currency'})),
-    })],
-    columnorder: '0'
-},
-{
-    property: 'extraomniprojectedsales',
-    header: 'Extra Omni Projected Sales',
-    cell: [editable({
-        editor: editors.input(_.filter(validations, function(v) { return v.name == 'currency'})),
-    })],
-    columnorder: '0'
-},
-{
-    property: 'killedrow',
-    header: 'Killed Row',
-    cell: [editable({
-        editor: editors.dropdown([{name:'true', value:'true'},{name:'false', value:'false'}]),
-    })],
-    columnorder: '0'
-},
-//{
-//    cell: function(value, celldata, rowIndex) {
-//        var idx = findIndex(this.state.data, {
-//            id: celldata[rowIndex].id,
-//        });
-//
-//        var edit = () => {
-//            var schema = {
-//                type: 'object',
-//                properties: properties,
-//            };
-//
-//            var onSubmit = (editData, editValue) => {
-//                this.refs.modal.hide();
-//
-//                if(editValue === 'Cancel') {
-//                    return;
-//                }
-//
-//                this.state.data[idx] = editData;
-//
-//                this.setState({
-//                    data: this.state.data
-//                });
-//            };
-//
-//            var getButtons = (submit) => {
-//                return (
-//                    <span>
-//                        <input type='submit'
-//                        className='pure-button pure-button-primary ok-button'
-//                        key='ok' value='OK'
-//                        onClick={submit} />
-//                        <input type='submit'
-//                        className='pure-button cancel-button'
-//                        key='cancel' value='Cancel'
-//                        onClick={submit} />
-//                    </span>
-//                    );
-//            };
-//
-//            this.setState({
-//                modal: {
-//                    title: 'Edit',
-//                    content: <Form
-//                    className='pure-form pure-form-aligned'
-//                    fieldWrapper={FieldWrapper}
-//                    sectionWrapper={SectionWrapper}
-//                    buttons={getButtons}
-//                    schema={schema}
-//                    validate={validate}
-//                    values={this.state.data[idx]}
-//                    onSubmit={onSubmit}/>
-//                }
-//            });
-//
-//            this.refs.modal.show();
-//        };
-//
-//        var remove = () => {
-//            // this could go through flux etc.
-//            this.state.data.splice(idx, 1);
-//
-//            this.setState({
-//                data: this.state.data
-//            });
-//        };
-//
-//        return {
-//            value: (
-//                <span>
-//                    <span className='edit' onClick={edit.bind(this)} style={{cursor: 'pointer'}}>
-//                    &#8665;
-//                    </span>
-//                </span>
-//                )
-//        };
-//    }.bind(this),
-//}
-],
-modal: {
-    title: 'title',
-    content: 'content',
-},
-pagination: {
-    page: 1,
+    pagination: {
+        page: 1,
         perPage: 50
-}
+    },
+    hiddencolumns: []
 };
 },
 
@@ -813,7 +162,10 @@ columnFilters() {
 },
 
 componentDidMount() {
+
     var self = this;
+    var columns = _.sortBy(this.state.columns, 'columnorder');
+
     var query = window.location.search.split('?')[1];
     var queryyes = query ? '/'+query : ''
     var getdata = function() {
@@ -854,53 +206,40 @@ componentDidMount() {
             }
         })
     };
-    var egetdata = function(data1) {
 
-        var filteredrows = _.filter(JSON.parse(data1), function(e){ return e.entries[_.findIndex(e.entries, function(eb){ return eb.columnName == 'category' } )].data == query })
-        console.log(filteredrows)
-        var allrows = _.map(filteredrows, 'entries');
-        var arr = [];
-        _.each(allrows, function (row, i) {
-            //fill in empty subcategories
-            var allobj = _.zipObject(_.map(columns, 'property'), _.range(columns.length).map(function () {
-                return ''
-            }));
-            _.each(row, function (cell, j) {
-                var all = {};
-                if (cell.columnName != 'sortnumber' && cell.columnName != 'id') {
-                    all[cell.columnName] = cell.data;
-                } else {
-                    all[cell.columnName] = parseInt(cell.data);
-                }
-                all.rowIndex = parseInt(cell.rowIndex);
-                _.extend(allobj, all)
-            });
-            arr.push(allobj);
-        });
-        self.setState({
-            data:_.sortBy(arr, 'rowIndex')
-        });
-        self.interval;
-    };
+//    var egetdata = function(data1) {
+//        var filteredrows = _.filter(JSON.parse(data1), function(e){ return e.entries[_.findIndex(e.entries, function(eb){ return eb.columnName == 'category' } )].data == query })
+//        console.log(filteredrows)
+//        var allrows = _.map(filteredrows, 'entries');
+//        var arr = [];
+//        _.each(allrows, function (row, i) {
+//            //fill in empty subcategories
+//            var allobj = _.zipObject(_.map(columns, 'property'), _.range(columns.length).map(function () {
+//                return ''
+//            }));
+//            _.each(row, function (cell, j) {
+//                var all = {};
+//                if (cell.columnName != 'sortnumber' && cell.columnName != 'id') {
+//                    all[cell.columnName] = cell.data;
+//                } else {
+//                    all[cell.columnName] = parseInt(cell.data);
+//                }
+//                all.rowIndex = parseInt(cell.rowIndex);
+//                _.extend(allobj, all)
+//            });
+//            arr.push(allobj);
+//        });
+//        self.setState({
+//            data:_.sortBy(arr, 'rowIndex')
+//        });
+//        window.datainterval;
+//    };
 
     window.socket.on('new data', function(data) {
 //        clearInterval(self.interval);
 //        egetdata(data);
             getdata()
     });
-
-    window.socket.on('other user editing', function(data) {
-        var user = data.user.name;
-        var cell = data.cell.editedCell;
-        var cellrow = data.cell;
-        var fob = data.fob;
-        $('.activeOtherCell').removeClass('activeOtherCell');
-        $('').replaceAll('.userspan')
-//        console.log(cellrow, 'testtest');
-        if (fob == query) {
-            $('[data-cell="'+cellrow+'"]').addClass('activeOtherCell').append('<span class="userspan">' + user.split(' ')[0] + ' ' + user.split(' ')[1][0] + '</span>');
-        }
-    })
 
 
 },
@@ -919,6 +258,7 @@ render() {
             col.cell = [];
         }
     })
+
     var pagination = this.state.pagination;
 
     var data = this.state.data;
@@ -940,14 +280,13 @@ render() {
     );
 
 
-
     return (
         <div>
             <div className='controls'>
                 <div className='per-page-container'>
                 Per page <input type='text' defaultValue={pagination.perPage} onChange={this.onPerPage}></input>
                 </div>
-                <div><button onClick={this.hideCols}>Hide Columns</button></div>
+                <div className="buttonscontainer"><button onClick={this.hideCols}>Hide Columns</button></div>
                 <div className='search-container'>
                 Search <Search columns={columns} data={this.state.data} onChange={this.onSearch} />
                 </div>
@@ -1050,42 +389,99 @@ onPerPage(e) {
     });
 },
 hideCols() {
-    console.log('testing button', this.refs.modal)
+    var columns = _.filter(window.coledit, function(col) { return col.property != 'id'});
     var cols = [];
-    var hiding = [];
 
-    var hidecol = (e) => {
-        var hide = e.target.value;
-
-        if (e.target.checked) {
-            hiding.push(hide);
-        } else {
-            hiding = _.without(hiding, [hide])
-        }
-        this.setState({
-//            columns: _.without(columns, hiding)
-        })
-//        console.log(this, columntohide)
-    }
+    var hiddencolumns = localStorage.getItem('hidecol');
 
     _.each(columns, function(c,i){
-        cols.push(<div className="showhidecol"> {c.property} <input type="checkbox" value={c.property} onChange={hidecol}/> </div>)
+        var hiddencolumns = localStorage.getItem('hidecol') ;
+        var propchecked = _.includes(hiddencolumns, c.property);
+        if (propchecked) {
+            cols.push(<div className="showhidecol"><label for={'name-'+c.property}>{c.property}</label><input type="checkbox" value={c.property} checked id={'name-'+c.property} /> </div>)
+        } else if (c.property == 'id') {
+        }else {
+            cols.push(<div className="showhidecol"><label for={'name-'+c.property}>{c.property}</label><input type="checkbox" id={'name-'+c.property} value={c.property} /></div>)
+        }
     })
 
-
     var onSubmit = (e) => {
-//        this.refs.modal.hide();
-        console.log(this, e);
-//        console.log(this.state.modal.content.props.children)
+        var self = this;
+        _.each($('#hideCols').find('.showhidecol'), function (input, i) {
+            if ($(input).find('input:checked').length > 0 ) {
+                window.hiding.push($(input).find('input').val());
+            } else {
+                window.hiding = _.union(_.without(window.hiding, $(input).find('input').val()))
+            }
+        })
+        this.refs.modal.hide();
+        localStorage.setItem('hidecol', window.hiding)
+        this.setState({
+            columns: _.filter(window.coledit, function(col) { return !_.includes(localStorage.getItem('hidecol'), col.property) || col.property == 'id'})
+        })
     };
-    this.setState({
-        modal: {
-            title: 'Columns to Hide',
-            content: <div>{cols}
-                    <button onClick={onSubmit}>Ok</button>
-                    </div>
+    var formChange = (e) => {
+        if (e.target.value == 'all') {
+            if (e.target.checked) {
+                _.each($('#hideCols').find('.showhidecol').find('input'), function (input, i) {
+                    $(input).prop('checked', true);
+                })
+            } else {
+                _.each($('#hideCols').find('.showhidecol').find('input'), function (input, i) {
+                    $(input).prop('checked', false);
+                })
+            }
+        } else {
+            console.log('in form change');
+            var hide = e.target.value;
+            var hiddencolumns = localStorage.getItem('hidecol');
+
+            if (e.target.checked) {
+//                $(e.target).removeProp('checked');
+                window.hiding = _.uniq(window.hiding.push(hide));
+                localStorage.setItem('hidecol',window.hiding)
+                cols = [];
+               _.each(columns, function(c,i) {
+                    var propchecked = _.includes(window.hiding, c.property);
+                   if (propchecked) {
+                       cols.push(<div className="showhidecol"><label for={'name-'+c.property}>{c.property}</label><input type="checkbox" value={c.property} checked id={'name-'+c.property} /> </div>)
+                   } else if (c.property == 'id') {
+                   }else {
+                       cols.push(<div className="showhidecol"><label for={'name-'+c.property}>{c.property}</label><input type="checkbox" id={'name-'+c.property} value={c.property} /></div>)
+                   }
+                });
+                colstate();
+            } else {
+                window.hiding = _.uniq(_.without(window.hiding, hide));
+                localStorage.setItem('hidecol',window.hiding)
+                cols = [];
+                _.each(columns, function(c,i) {
+                    var propchecked = _.includes(window.hiding, c.property);
+                    if (propchecked) {
+                        cols.push(<div className="showhidecol"><label for={'name-'+c.property}>{c.property}</label><input type="checkbox" value={c.property} checked id={'name-'+c.property} /> </div>)
+                    } else if (c.property == 'id') {
+                    }else {
+                        cols.push(<div className="showhidecol"><label for={'name-'+c.property}>{c.property}</label><input type="checkbox" id={'name-'+c.property} value={c.property} /></div>)
+                    }
+                });
+                colstate();
+            }
         }
-    });
+
+    }
+    var colstate = () => {
+        this.setState({
+            modal: {
+                title: 'Columns to Hide',
+                content: <div id="hideCols" onChange={formChange}>
+                    <div><input type="checkbox" value="all"/>hide all <button onClick={onSubmit}>Ok</button></div>
+                    {cols}
+                </div>
+            }
+        });
+    }
+    colstate();
+
 
     this.refs.modal.show();
 }
@@ -1110,13 +506,6 @@ function paginate(data, o) {
         data: data.slice(startPage * perPage, startPage * perPage + perPage),
         page: startPage
     };
-}
-
-function augmentWithTitles(o) {
-    for (var property in o) {
-        o[property].title = titleCase(property);
-    }
-    return o;
 }
 
 
