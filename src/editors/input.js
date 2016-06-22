@@ -23,9 +23,7 @@ module.exports = (attrs) => {
 
         render() {
 
-
-
-            console.log('input', attrs, this);
+//            console.log('input', attrs, this);
             return (
                 <input
                     value={this.state.value}
@@ -55,30 +53,32 @@ module.exports = (attrs) => {
 
         keyUp(e) {
             if(e.keyCode === 13) {
-                this.done(e);
+                $(e.target).blur();
+//                e.preventDefault();
+//                this.done(e);
             }
         },
 
         done(e) {
+        var self = this;
+
+//        var once =  _.once(function() {
             function identical(array) {
-                for(var i = 0; i < array.length - 1; i++) {
-                    if(array[i] !== array[i+1] && !array[i]) {
+                for (var i = 0; i < array.length - 1; i++) {
+                    if (array[i] !== array[i + 1] && !array[i]) {
                         return false;
                     }
                 }
                 return true;
             }
-            console.log('in done', e.target.value)
-            var self = this;
+
             if (typeof attrs[0] !== 'undefined') {
                 var r = new RegExp(attrs[0].value);
-
                 if (typeof attrs[0].multidelimeter !== 'undefined') {
                     console.log('! multi val')
-
                     var vals = e.target.value.split(attrs[0].multidelimeter);
                     var valid = [];
-                    _.each(vals, function(val, i){
+                    _.each(vals, function (val, i) {
                         if (val != '') {
                             valid.push(r.test(val));
                         } else {
@@ -86,12 +86,16 @@ module.exports = (attrs) => {
                         }
                     });
 
-//                    console.log(identical(valid), valid);
                     if (identical(valid) && valid[0]) {
                         self.props.onValue(ReactDOM.findDOMNode(self).value)
-//                        self.props.onValue(self.getDOMNode().value);
+//                        myWindow.close();
                     } else {
                         alert(attrs[0].error);
+//                        if (myWindow) {
+//                            myWindow.close();
+//                        }
+//                                var myWindow = window.open("", "MsgWindow", "width=200,height=100");
+//                                myWindow.document.write("<p>"+attrs[0].error+"</p>");
                     }
 
                 } else {
@@ -99,22 +103,31 @@ module.exports = (attrs) => {
                     var test = r.test(e.target.value);
                     if (test) {
                         self.props.onValue(ReactDOM.findDOMNode(self).value)
-//                        self.props.onValue(self.getDOMNode().value);
                     } else {
                         if (typeof attrs[0].error != 'undefined') {
                             alert(attrs[0].error);
+//                                if (myWindow) {
+//                                    myWindow.close();
+//                                }
+//                                var myWindow = window.open("", "MsgWindow", "width=200,height=100");
+//                                myWindow.document.write("<p>"+attrs[0].error+"</p>");
                         } else {
-                            alert('not valid');
+//                                if (myWindow) {
+//                                    myWindow.close();
+//                                }
+//                                var myWindow = window.open("", "MsgWindow", "width=200,height=100");
+//                                myWindow.document.write("<p>not valid</p>");
+                            alert('Not Valid!');
                         }
                     }
                 }
 
             } else {
                 console.log('! no validation')
-
                 self.props.onValue(ReactDOM.findDOMNode(self).value)
-//                self.props.onValue(self.getDOMNode().value);
             }
+//        })
+//        once();
 
         },
     });

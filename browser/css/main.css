@@ -101,6 +101,9 @@ table {
 .demonstration tfoot {
     background: #fafafa;
 }
+.demonstration .header {
+    padding-right: 25px;
+}
 
 .controls {
     overflow: auto;
@@ -214,12 +217,11 @@ table {
     background: inherit;
     margin-left: -14px;
     width: inherit;
-    padding: 6px 10px;
+    padding: 6px 16px 6px 10px;
     visibility: hidden;
     border-right: 1px solid #ccc;
-    /*opacity: 0.7;*/
     top:0;
-    transition: all 0.1s;
+    transition: width 0.5s;
 }
 article.pure-u-1 {
     margin-top: 0;
@@ -327,4 +329,55 @@ table .sort-desc:after, .sort-desc .fixedHead:after {
     position: absolute;
     top:0;
     left: 20px;
+}
+.info {
+   /*width: inherit;*/
+   overflow: visible;
+   margin: 3px 0;
+   position: absolute;
+   bottom:5px;
+   width: 14px;
+   height:14px;
+   right: 8px;
+}
+.info i {
+    display: none;
+}
+.info-icon {
+    width: 14px;
+    height: 14px;
+    line-height: 14px;
+    border-radius: 100px;
+    border: 1px solid #999;
+    background: #ffffd4;
+    color: #666;
+    text-align: center;
+    font-style: italic;
+    font-family: "Georgia", serif;
+    font-size: 11px;
+    display: block;
+}
+.info:hover i {
+    display: inline-block;
+    position: absolute;
+    padding: 5px;
+    background: #fff;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    text-align: center;
+    z-index: 110;
+    width: 100px;
+    font-weight: normal;
+    left:-100px;
+    font-style: normal;
+    color: #888;
+}
+/*.info:last-of-type:hover i {*/
+/*}*/
+.fixedHead:hover {
+    z-index: 98;
+}
+[data-property="imageid"] .search-result,
+[data-property="tileimage"] .search-result {
+    pointer-events: none;
 }

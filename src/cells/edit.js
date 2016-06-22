@@ -18,13 +18,9 @@ module.exports = function(editProperty, onValue, o) {
                     value: value,
                     onValue: (v) => {
                         var state = {};
-
                         state[editProperty] = null;
-
                         context.setState(state);
-
                         var datrow = $('.'+editedCell).attr('data-cell')
-//                        console.log('if editedCell', editedCell, datrow)
                         onValue(v, data, rowIndex, property, datrow);
                     }
                 }),
