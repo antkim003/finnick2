@@ -25,14 +25,11 @@ module.exports = () =>
         } else {
             $('.fixedHead').css({'display': 'none' })
         }
-//        setInterval(function() {
             _.each($('.fixedHead'), function (fh, i) {
                 var wid = i == 0 ? 11 : 12;
                 $(fh).css({'width': $(fh).parent().width() + wid, 'height': $(fh).parent().height(), 'visibility': 'visible'});
 //            $(fh).css({ 'width': '1000%', 'height': $(fh).parent().height(), 'visibility': 'visible'});
-
             });
-//        }, 3000);
 
 
         if (st > lastScrollTop) {

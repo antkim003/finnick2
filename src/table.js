@@ -61,6 +61,7 @@ module.exports = React.createClass({
 
                             cell = isFunction(cell) ? [cell] : cell;
 
+                            var tet = '';
                             content = reduce(cell, (v, fn) => {
                                 if(React.isValidElement(v.value)) {
                                     return v;
@@ -68,6 +69,11 @@ module.exports = React.createClass({
 
 
                                 var val = fn(v.value, data, i, property);
+                                tet += v.value;
+//                                tet += data.activeEdit;
+                                tet += i;
+                                tet += v;
+//                                console.log(v)
 
                                 if(!isPlainObject(val) || isUndefined(val.value)) {
                                     // formatter shortcut
@@ -85,7 +91,7 @@ module.exports = React.createClass({
 
                             var rowid = parseInt(row.id-1)
 
-                            return <td data-property={property} data-edit={column.cell.length == 0 ? 'noedit' : 'editor'} data-cell={rowid+'-'+property} className={'cell-'+j+' '+(row[rowKey] || i)+'-'+property} key={j + '-cell'} {...content.props} >{content.value}</td>;
+                            return <td data-property={property} data-edit={column.cell.length == 0 ? 'noedit' : 'editor'} data-cell={rowid+'-'+property} data-active={content.props.activeEdit} className={'cell-'+j+' '+(row[rowKey] || i)+'-'+property+ ' '} key={j + '-cell'} {...content.props} >{content.value}</td>;
                         }
                     )}</tr>)}
                 </tbody>

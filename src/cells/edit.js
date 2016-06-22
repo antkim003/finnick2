@@ -19,11 +19,15 @@ module.exports = function(editProperty, onValue, o) {
                     onValue: (v) => {
                         var state = {};
                         state[editProperty] = null;
+                        state['activeEdit'] = null;
                         context.setState(state);
                         var datrow = $('.'+editedCell).attr('data-cell')
                         onValue(v, data, rowIndex, property, datrow);
                     }
                 }),
+                props: {
+                    activeEdit: true
+                }
             };
         }
 
@@ -31,13 +35,11 @@ module.exports = function(editProperty, onValue, o) {
             return {
                 value: value,
                 props: {
-                    onClick: () => {
+                    onClick: (e, d) => {
                         var state = {};
                         state[editProperty] = idx;
                         context.setState(state);
                         window.user = _.extend(window.user, state);
-                        $('.activeCell').removeClass('activeCell')
-                        $('.'+state.editedCell).addClass('activeCell');
                         window.socket.emit('user editing', {user: window.user, cell: $('.'+state.editedCell).attr('data-cell'), fob: window.location.search.split('?')[1]})
                     },
                 }

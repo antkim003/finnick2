@@ -136,7 +136,7 @@ return {
     },
     pagination: {
         page: 1,
-        perPage: 50
+        perPage: 24
     },
     hiddencolumns: []
 };
