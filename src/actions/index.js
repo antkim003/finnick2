@@ -7,7 +7,8 @@ import {
   FETCH_MESSAGE,
   FETCH_USERS,
   FETCH_SESSION,
-  FETCH_COLUMNS
+  FETCH_COLUMNS,
+  FETCH_COLLECTIONS
 } from './type';
 
 export function loginUser( { email, password }) {
@@ -39,23 +40,15 @@ export function logoutUser() {
       });
   }
 }
-// export function fetchSession() {
-//   return function(dispatch) {
-//     axios.get('/session')
-//       .then( response => {
-//         console.log('response came back!', response.data);
-//         dispatch({
-//           type: FETCH_SESSION,
-//           payload: response
-//         });
-//       })
-//       .catch( response => {
-//         dispatch({ type: UNAUTH_USER });
-//         dispatch(authError(response.data));
-//       });
-//   };
-//
-// };
+
+export function fetchCollections() {
+  const request = axios.get('api/categories');
+  console.log('fetchCollections request', request);
+  return {
+    type: FETCH_COLLECTIONS,
+    payload: request
+  };
+};
 
 export function fetchSession() {
   const request = axios.get('/api/members/session');

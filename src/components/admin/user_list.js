@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import * as actions from '../../actions';
 import orderBy from 'lodash/orderBy';
+import Popup from './popup';
 
 class UserList extends Component {
   constructor(props) {
@@ -34,10 +35,16 @@ class UserList extends Component {
           "cell" : () => {}
         }
       ],
-      users: this.props.users
-    }
+      users: this.props.users,
+      popupData: {},
+      clickTarget: null,
+      clickX: null,
+      clickY: null,
+      popupState: 'closed'
+    };
+    this.clickCell = this.clickCell.bind(this);
+    this.renderCell = this.renderCell.bind(this);
   }
-
 
   componentWillMount() {
     this.props.fetchUsers();
@@ -95,9 +102,20 @@ class UserList extends Component {
     return arr;
   }
 
+  clickCell(event) {
+    console.log('this is the click cell event', event);
+    this.setState({
+      clickTarget: event.currentTarget,
+      clickX: event.clientX,
+      clickY: event.clientY,
+      popupState: 'open'
+    });
+  }
+
   renderCell(row, i) {
+    var self = this;
     return this.state.columns.map(function(column,z) {
-      return (<td key={i + '-' + z + '-cell'} className={'cell-' + i + '-' + z} data-property={row[column.property]}>
+      return (<td onClick={self.clickCell} key={i + '-' + z + '-cell'} className={'cell-' + i + '-' + z} data-property={row[column.property]}>
         {row[column.property]}
       </td>);
     });
@@ -117,6 +135,13 @@ class UserList extends Component {
             {this.renderRow(this.state.users)}
           </tbody>
         </table>
+        <div>
+          <Popup clickTarget={this.state.clickTarget}
+                clickX={this.state.clickX}
+                clickY={this.state.clickY}
+                popupState={this.state.popupState}
+                />
+        </div>
       </div>
     );
   }

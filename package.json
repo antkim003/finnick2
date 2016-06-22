@@ -20,7 +20,7 @@
   },
   "homepage": "",
   "scripts": {
-    "start": "nodemon --watch server -e js,html server/start.js",
+    "start": "nodemon --ignore browser/ --ignore src/ --watch server -e js server/start.js",
     "build": "rimraf dist && cross-env NODE_ENV=production webpack --config ./webpack.production.config.js --progress --profile --colors",
     "build-stage": "rimraf dist && cross-env NODE_ENV=development webpack --config ./webpack.config.js --progress --profile --colors",
     "eslint": "eslint .",
