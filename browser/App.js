@@ -19,12 +19,12 @@ module.exports = React.createClass({
     componentDidMount: function() {
     },
     render() {
-
+//    <header className='pure-u-1'>
+//        <h1>Finnick 2.0</h1>
+//    </header>
         return (
             <div className='pure-g'>
-                <header className='pure-u-1'>
-                    <h1>Finnick 2.0</h1>
-                </header>
+
                 <article className='pure-u-1'>
                     <section className='demonstration'>
                         <FullTable />
