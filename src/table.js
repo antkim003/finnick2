@@ -52,7 +52,12 @@ module.exports = React.createClass({
             <table {...props}>
                 {isFunction(columnNames) ? columnNames(columns) : <thead><ColumnNames config={columnNames} columns={columns} /></thead>}
                 <tbody>
-                    {data.map((row, i) => <tr data-id={_.sortBy(window.data, 'index')[i]._id} key={(row[rowKey] || i) + '-row'} {...rowProps(row, i)}>{
+                    {data.map((row, i) => <tr
+                    data-id={_.sortBy(window.data, 'index')[i]._id}
+                    key={(row[rowKey] || i) + '-row'}
+                    data-killed={row['killedrow']}
+
+                    {...rowProps(row, i)}>{
                         columns.map((column, j) => {
                             var property = column.property;
                             var value = row[property];

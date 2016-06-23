@@ -406,3 +406,10 @@ table .sort-desc:after, .sort-desc .fixedHead:after {
 .controlpaghide {
     display: none;
 }
+[data-killed='true']{
+    opacity: 0.5;
+    text-decoration: line-through;
+}
+[data-killed='true'] td:not([data-property="killedrow"]){
+    pointer-events:none;
+}

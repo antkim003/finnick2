@@ -42,7 +42,7 @@ module.exports = React.createClass({
         scrolling();
 //      var users = dummyusers;
         var users = [
-            {"name":"Jonathan Garza","email":"jgarza3@columbia.edu","type":"buyer","locked":false},
+            {"name":"Jonathan Garza","email":"jgarza3@columbia.edu","type":"admin","locked":false},
             {"name":"Jayne Smyth","email":"test@columbia.edu","type":"admin","locked":false}
         ]
         window.user = users[Math.floor(Math.random()*users.length)];

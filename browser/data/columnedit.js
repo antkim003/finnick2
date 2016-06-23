@@ -70,10 +70,11 @@ module.exports = (app) => {
                 });
 
                 app.state.data[idx][property] = val;
+//                console.log(app.state.data[idx])
                 app.setState({
                     data: query ? _.filter(_.sortBy(statedata, 'rowIndex'), function(d) { return d.category == query}) : statedata
                 });
-                var total = [];
+//                var total = [];
                         if (_id != undefined) {
                             var params = [{"_id":_id, "data": val}];
                             $.ajax({
