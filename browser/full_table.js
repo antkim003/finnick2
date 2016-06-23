@@ -291,7 +291,10 @@ render() {
         <div>
             <div className="user-info">
                 Hi, {window.user.name}. You are a/n {window.user.type}. {window.user.locked ? 'Your account is locked.' : ''}
-                <div>Choose your FOB <select className="fob-drop" value={window.location.search.split('?')[1]} onChange={this.changeFOB}>{fobs}</select></div>
+                <div className="fob">Choose your FOB <select className="fob-drop" value={window.location.search.split('?')[1]} onChange={this.changeFOB}>{fobs}</select>
+                    <button onClick={this.hideCols}>Hide Columns</button>
+
+                </div>
             </div>
             <div className='controls'>
                 <div className='per-page-container'>
@@ -299,7 +302,6 @@ render() {
                 </div>
                 <div className="rowstoshow">Rows <input type="text" onChange={this.rowsToShow} placeholder="10-15"/></div>
 
-                <div className="buttonscontainer"><button onClick={this.hideCols}>Hide Columns</button></div>
                 <div className='search-container'>
                 Search <Search columns={columns} data={this.state.data} onChange={this.onSearch} />
                 </div>
