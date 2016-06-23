@@ -52,7 +52,7 @@ module.exports = React.createClass({
             <table {...props}>
                 {isFunction(columnNames) ? columnNames(columns) : <thead><ColumnNames config={columnNames} columns={columns} /></thead>}
                 <tbody>
-                    {data.map((row, i) => <tr data-id={window.data[i]._id} key={(row[rowKey] || i) + '-row'} {...rowProps(row, i)}>{
+                    {data.map((row, i) => <tr data-id={_.sortBy(window.data, 'index')[i]._id} key={(row[rowKey] || i) + '-row'} {...rowProps(row, i)}>{
                         columns.map((column, j) => {
                             var property = column.property;
                             var value = row[property];
@@ -90,7 +90,7 @@ module.exports = React.createClass({
                             var values = {};
 
                             var rowid = parseInt(row.id-1);
-                            var entryId = _.find(window.data[i].entries, function(entry){
+                            var entryId = _.find(_.sortBy(window.data[row.id], 'index').entries, function(entry){
                                         if( entry.columnName == property) {
                                             return entry;
                                         }
