@@ -399,3 +399,10 @@ table .sort-desc:after, .sort-desc .fixedHead:after {
     left:2px;
     pointer-events: none;
 }
+.rowstoshow {
+    float: left;
+    margin: 1em;
+}
+.controlpaghide {
+    display: none;
+}

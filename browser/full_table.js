@@ -193,7 +193,6 @@ componentDidMount() {
                             all[cell.columnName] = parseInt(cell.data);
                         }
                         all.rowIndex = parseInt(cell.rowIndex);
-//                        all._id = cell._id;
                         _.extend(allobj, all)
                     });
                     arr.push(allobj);
@@ -289,6 +288,8 @@ render() {
                 <div className='per-page-container'>
                 Per page <input type='text' defaultValue={pagination.perPage} onChange={this.onPerPage}></input>
                 </div>
+                <div className="rowstoshow">Rows <input type="text" onChange={this.rowsToShow} placeholder="10-15"/></div>
+
                 <div className="buttonscontainer"><button onClick={this.hideCols}>Hide Columns</button></div>
                 <div className='search-container'>
                 Search <Search columns={columns} data={this.state.data} onChange={this.onSearch} />
@@ -336,7 +337,7 @@ render() {
             >
 
             </Table>
-            <div className='controls'>
+            <div className={this.state.pagination.hide == true ? "controls controlpaghide" : 'controls controlpagshow'}>
                 <div className='pagination'>
                     <Paginator.Context className="pagify-pagination"
                     segments={segmentize({
@@ -369,6 +370,26 @@ render() {
             <SkyLight ref='modal' title={this.state.modal.title}>{this.state.modal.content}</SkyLight>
         </div>
         );
+},
+
+rowsToShow(e) {
+
+    var self = this;
+    var pagination = self.state.pagination || {};
+    if (e.target.value != '') {
+        pagination.hide = true;
+        pagination.perPage = e.target.value.split('-')[1] - e.target.value.split('-')[0] + 1;
+        pagination.page = (parseFloat(e.target.value.split('-')[0] - 1) / parseFloat(pagination.perPage)) + 1;
+    } else {
+        pagination.hide = false;
+        var page = $('.per-page-container').find('input').val();
+        pagination.page = 1;
+        pagination.perPage = page;
+    }
+    self.setState({
+        pagination: pagination
+    });
+
 },
 
 onSelect(page) {
