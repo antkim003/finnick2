@@ -31,13 +31,13 @@ describe('Rows Route', function () {
       rowIndex: 123,
       columnIndex: '0',
       columnName: 'women',
-      data: "this is a test",
-      fob: 'women'
+      data: "this is a test"
     }).then(function(cell) {
       _cell = cell;
       return Row.create( {
         entries: [_cell],
-        index: 123
+        index: 123,
+        fob: 'women'
       });
     }).then(function(row) {
       _row = row;
@@ -59,7 +59,6 @@ describe('Rows Route', function () {
       agent.get('/api/rows/women').expect(200).end(function(err,response) {
         if(err) return done(err);
         expect(response.body).to.be.an('array');
-        console.log('heres the response', response.body.entries);
         expect(response.body[0].entries[0].columnName).to.equal('women');
         done();
       })
@@ -85,6 +84,7 @@ describe('Rows Route', function () {
     });
 
     it('GET /api/rows returns 200', function (done) {
+      this.timeout(5000);
       loggedInAgent.get('/api/rows').expect(200).end(function (err, response) {
         if (err) return done(err);
         expect(response.body).to.be.an('array');

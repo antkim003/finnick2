@@ -14,7 +14,7 @@ var schema = new mongoose.Schema({
         type: String
     },
     collections: {
-        type: String
+        type: Array
     },
     locked: {
         type: Boolean
