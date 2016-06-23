@@ -28,6 +28,33 @@ router.put('/', function(req,res,next) {
             return cell;
         })
     }).then(function(everything) {
-        res.json(everything);  
+        res.json(everything);
     })
+});
+
+router.post('/', function(req,res,next) {
+   // always come in as an array of cells
+   var cells = req.body;
+   var fob = req.body[0].fob;
+   var index = req.body[0].row.split('-')[0];
+
+   var _cell;
+   return Promise.map(cells, function(cell) {
+       var obj = {};
+       obj['data'] = cell.data;
+       obj['columnName'] = cell.row.split('-')[1];
+       obj['rowIndex'] = cell.row.split('-')[0];
+
+       return Cell.create(obj)
+        .then(function(cell) {
+            _cell = cell;
+            return Row.findOne({index: parseInt(cell.index)})
+        })
+        .then(function(row) {
+            row.entries.push(_cell);
+            return row.save();
+        })
+   }).then(function(everything) {
+       res.json(everything);
+   })
 });
