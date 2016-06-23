@@ -287,13 +287,17 @@ render() {
         fobs.push(<option value={col}>{col}</option>)
     });
 
+    var boost = [];
+    if (window.user.type == 'admin') {
+        boost.push(<button onClick="">Boost Modal</button>);
+    }
     return (
         <div>
             <div className="user-info">
                 Hi, {window.user.name}. You are a/n {window.user.type}. {window.user.locked ? 'Your account is locked.' : ''}
-                <div className="fob">Choose your FOB <select className="fob-drop" value={window.location.search.split('?')[1]} onChange={this.changeFOB}>{fobs}</select>
+                <div className="fob">Choose FOB <select className="fob-drop" value={window.location.search.split('?')[1]} onChange={this.changeFOB}>{fobs}</select>
                     <button onClick={this.hideCols}>Hide Columns</button>
-
+                    {boost}
                 </div>
             </div>
             <div className='controls'>

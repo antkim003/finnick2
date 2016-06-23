@@ -440,4 +440,8 @@ table .sort-desc:after, .sort-desc .fixedHead:after {
 }
 .fob button {
     color: #333;
+    margin-left: 0.3em;
+}
+.column-letters  {
+    background: #c2c2c2;
 }

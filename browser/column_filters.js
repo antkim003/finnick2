@@ -32,7 +32,7 @@ module.exports = React.createClass({
         const columns = this.props.columns;
 
         return(
-            <tr>
+            <tr className="column-letters">
             {columns.map((column, i) => {
                 return (
                     <td key={i + '-custom-header'}>
