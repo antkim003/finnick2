@@ -42,7 +42,7 @@ module.exports = React.createClass({
         scrolling();
 //      var users = dummyusers;
         var users = [
-            {"name":"Jonathan Garza","email":"jgarza3@columbia.edu","type":"admin","locked":false},
+            {"name":"Jonathan Garza","email":"jgarza3@columbia.edu","type":"admin","locked":true},
             {"name":"Jayne Smyth","email":"test@columbia.edu","type":"admin","locked":false}
         ]
         window.user = users[Math.floor(Math.random()*users.length)];
@@ -281,9 +281,18 @@ render() {
             isNaN(pagination.perPage) ? 1 : pagination.perPage, 1)
     );
 
+    var fobs = [];
+    var collections = window.user.buyercollections ? window.user.buyercollections : ['women', 'men', 'for_the_home'] ;
+    _.each(collections, function(col, i) {
+        fobs.push(<option value={col}>{col}</option>)
+    });
 
     return (
         <div>
+            <div className="user-info">
+                Hi, {window.user.name}. You are a/n {window.user.type}. {window.user.locked ? 'Your account is locked.' : ''}
+                <div>Choose your FOB <select className="fob-drop" value={window.location.search.split('?')[1]} onChange={this.changeFOB}>{fobs}</select></div>
+            </div>
             <div className='controls'>
                 <div className='per-page-container'>
                 Per page <input type='text' defaultValue={pagination.perPage} onChange={this.onPerPage}></input>
@@ -372,6 +381,9 @@ render() {
         );
 },
 
+changeFOB(e) {
+   window.location.search = e.target.value;
+},
 rowsToShow(e) {
 
     var self = this;

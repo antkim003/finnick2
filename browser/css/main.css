@@ -413,3 +413,13 @@ table .sort-desc:after, .sort-desc .fixedHead:after {
 [data-killed='true'] td:not([data-property="killedrow"]){
     pointer-events:none;
 }
+.user-info {
+    padding: 0.3em 1em;
+    color: #666;
+    /*font-size: 14px;*/
+    font-weight: bold;
+    line-height: 1.5em;
+}
+.fob-drop {
+    margin: 0 0.5em;
+}
