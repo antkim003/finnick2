@@ -49,7 +49,7 @@ module.exports = React.createClass({
         window.statedata = [];
         sockets();
         var query = window.location.search.split('?')[1];
-        var queryyes = query ? '/'+query : '';
+        var queryyes = query ? '/'+query : '/women';
 
         var getdata = function() {
             $.ajax({
@@ -136,7 +136,7 @@ return {
     },
     pagination: {
         page: 1,
-        perPage: 50
+        perPage: 24
     },
     hiddencolumns: []
 };
@@ -167,7 +167,7 @@ componentDidMount() {
     var columns = _.sortBy(this.state.columns, 'columnorder');
 
     var query = window.location.search.split('?')[1];
-    var queryyes = query ? '/'+query : ''
+    var queryyes = query ? '/'+query : '/women'
     var getdata = function() {
         var data = [];
         $.ajax({
