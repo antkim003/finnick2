@@ -48,6 +48,9 @@ module.exports = React.createClass({
         window.user = users[Math.floor(Math.random()*users.length)];
         window.statedata = [];
         sockets();
+        if (window.location.search == '') {
+            window.location.search = '?women'
+        }
         var query = window.location.search.split('?')[1];
         var queryyes = query ? '/'+query : '/women';
 

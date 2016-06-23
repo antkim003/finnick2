@@ -20,23 +20,19 @@ module.exports = (app) => {
     var data = [];
 
 
-    app.editable = cells.edit.bind(app, 'editedCell', (value, celldata, rowIndex, property, datrow) => {
+    app.editable = cells.edit.bind(app, 'editedCell', (value, celldata, rowIndex, property, datrow, _id) => {
 //    var self = this;
         clearInterval(window.datainterval);
 
-        console.log('editable ', value, rowIndex, property, datrow);
+//        console.log('editable ', value, rowIndex, property, datrow, _id);
         var val = value.hasOwnProperty('row') ? value.val[0] : value;
         var rowid = parseInt(datrow.split('-')[0])+1;
-//        if (typeof val.toLowerCase() != 'undefined') {
             if ( val.toLowerCase() == 'custom' ) {
                 var customsave = (e) => {
                     val = e.target.previousSibling.value;
                     app.refs.modal.hide();
-                    _.each(window.data, function(data, i) {
-                        if (typeof data.entries != 'undefined') {
-                            var t = _.find(data.entries, function(d){ return d.columnName == property && d.rowIndex == rowid});
-                            if (t != undefined) {
-                                var params = [{"_id":t._id, "data": val}];
+                            if (_id != undefined) {
+                                var params = [{"_id":_id, "data": val}];
                                 $.ajax({
                                     'type': "PUT",
                                     'url': '/api/cells/',
@@ -49,16 +45,16 @@ module.exports = (app) => {
                                         var idx = findIndex(app.state.data, {
                                             id: celldata[rowIndex].id,
                                         });
-
                                         app.state.data[idx][property] = val;
                                         app.setState({
                                             data: query ? _.filter(_.sortBy(statedata, 'rowIndex'), function(d) { return d.category == query}) : statedata
                                         });
                                     }
                                 })
+                            } else {
+
                             }
-                        }
-                    })
+
                 }
                 app.setState(
                     {
@@ -68,59 +64,47 @@ module.exports = (app) => {
                         }
                     });
                 app.refs.modal.show();
-            }
-//        }
-         else {
-            var idx = findIndex(app.state.data, {
-                id: celldata[rowIndex].id,
-            });
+            } else {
+                var idx = findIndex(app.state.data, {
+                    id: celldata[rowIndex].id,
+                });
 
-            app.state.data[idx][property] = val;
-            app.setState({
-                data: query ? _.filter(_.sortBy(statedata, 'rowIndex'), function(d) { return d.category == query}) : statedata
-            });
-            _.each(window.data, function(data, i) {
-                if (typeof data.entries != 'undefined') {
-                    var t = _.find(data.entries, function(d){ return d.columnName == property && d.rowIndex == rowid});
-                    if (t != undefined) {
-                        var params = [{"_id":t._id, "data": val}];
-                        $.ajax({
-                            'type': "PUT",
-                            'url': '/api/cells/',
-                            'data': JSON.stringify(params),
-                            'contentType': "application/json",
-                            'success': function() {
-                                console.log('done');
-                                window.socket.emit('my other event', { val: val, row: window.row-1 });
-                                window.datainterval;
+                app.state.data[idx][property] = val;
+                app.setState({
+                    data: query ? _.filter(_.sortBy(statedata, 'rowIndex'), function(d) { return d.category == query}) : statedata
+                });
+                var total = [];
+                        if (_id != undefined) {
+                            var params = [{"_id":_id, "data": val}];
+                            $.ajax({
+                                'type': "PUT",
+                                'url': '/api/cells/',
+                                'data': JSON.stringify(params),
+                                'contentType': "application/json",
+                                'success': function() {
+                                    console.log('done');
+                                    window.socket.emit('my other event', { val: val, row: window.row-1 });
+                                    window.datainterval;
 
-                            }
-                        })
-                    }
+                                }
+                            })
+                        } else {
+                                console.log('this cell doesnt exist, create a new one, norml')
+                                var params = [{"data": val, 'fob': query, "row": datrow}];
+                                $.ajax({
+                                    'type': "POST",
+                                    'url': '/api/cells/',
+                                    'data': JSON.stringify(params),
+                                    'contentType': "application/json",
+                                    'success': function() {
+                                        console.log('done');
+                                        window.socket.emit('my other event', { val: val, row: window.row-1 });
+                                        window.datainterval;
+
+                                    }
+                                })
+                        }
                 }
-            })
-        }
-
-//        _.each(window.data, function(data, i) {
-//            if (typeof data.entries != 'undefined') {
-//                var t = _.find(data.entries, function(d){ return d.columnName == property && d.rowIndex == rowid});
-//                if (t != undefined) {
-//                    var params = [{"_id":t._id, "data": val}];
-//                    $.ajax({
-//                        'type': "PUT",
-//                        'url': '/api/cells/',
-//                        'data': JSON.stringify(params),
-//                        'contentType': "application/json",
-//                        'success': function() {
-//                            console.log('done');
-//                            window.socket.emit('my other event', { val: val, row: window.row-1 });
-//                            window.datainterval;
-//
-//                        }
-//                    })
-//                }
-//            }
-//        })
 
 
         var row = value.hasOwnProperty('row') ? value.row : rowIndex;
