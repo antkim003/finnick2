@@ -110,12 +110,14 @@ class UserList extends Component {
 
   choiceChange(event) {
     let userId = event.currentTarget.parentElement.getAttribute('data-user-id');
-    let payload = {'locked': event.currentTarget.value};
+    let property = event.currentTarget.parentElement.getAttribute('data-property');
+    let payload = {};
+    payload[property] = event.currentTarget.value;
     this.props.updateUser(userId, payload);
     $(event.currentTarget).removeClass('__clicked');
   }
 
-  renderCheckbox(target) {
+  renderCheckbox(target, property) {
     return (
       <select className="form-control input-sm lockedCheckbox" onChange={this.choiceChange} value={target}>
         <option value="true">true</option>
@@ -141,7 +143,7 @@ class UserList extends Component {
       }
       return (<td onClick={self.clickCell} key={i + '-' + z + '-cell'} className={'cell-' + i + '-' + z + ' ' + column.property} data-property={column.property}  data-user-id={row._id}>
         <div className="targetProperty">{targetProperty}</div>
-        {column.property === "locked" || column.property === "lead"? self.renderCheckbox(targetProperty) : ''}
+        {column.property === "locked" || column.property === "lead"? self.renderCheckbox(targetProperty, column.property) : ''}
       </td>);
     });
   }
