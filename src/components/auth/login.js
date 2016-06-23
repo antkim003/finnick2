@@ -4,8 +4,6 @@ import { connect } from 'react-redux';
 import { browserHistory } from 'react-router';
 import * as actions from '../../actions';
 
-import NavBar from '../../containers/navbar'
-
 class Login extends Component {
   handleFormSubmit({ email, password }) {
     this.props.loginUser({ email, password });
@@ -28,7 +26,6 @@ class Login extends Component {
     const { handleSubmit, fields: { email, password}} = this.props;
     return (
       <div>
-        <NavBar></NavBar>
 
         <div className="panel panel-default container">
           <h2>Login</h2>

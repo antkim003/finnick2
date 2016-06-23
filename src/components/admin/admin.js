@@ -4,7 +4,6 @@ import { connect } from 'react-redux';
 import UserList from './user_list';
 import * as actions from '../../actions';
 
-import NavBar from '../../containers/navbar'
 
 
 class Admin extends Component {
@@ -21,7 +20,6 @@ class Admin extends Component {
   render() {
       return (
           <div>
-              <NavBar></NavBar>
               <div className="container">
                 <h1>WELCOME {this.renderUser(this.props.session)}! this is the admin view</h1>
                 <UserList />

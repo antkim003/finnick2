@@ -12,58 +12,37 @@ class UserList extends Component {
       columns: [
         {
           "property": "email",
-          "header": "Email",
-          "sort": "",
-          "cell" : () => {}
+          "header": "Email"
         },
         {
           "property": "collections",
-          "header": "Collections",
-          "sort": "",
-          "cell" : () => {}
+          "header": "Collections"
         },
         {
           "property": "locked",
-          "header": "Locked?",
-          "sort": "",
-          "cell" : () => {}
+          "header": "Locked?"
         },
         {
           "property": "createdAt",
-          "header": "User since",
-          "sort": "",
-          "cell" : () => {}
+          "header": "User since"
         }
       ],
-      users: this.props.users,
       popupData: {},
       clickTarget: null,
       clickX: null,
       clickY: null,
-      popupState: 'closed'
+      popupState: 'closed',
+      userId: ""
     };
     this.clickCell = this.clickCell.bind(this);
     this.renderCell = this.renderCell.bind(this);
+    this.closePopup = this.closePopup.bind(this);
+    this.renderCheckbox = this.renderCheckbox.bind(this);
+    this.choiceChange = this.choiceChange.bind(this);
   }
 
   componentWillMount() {
     this.props.fetchUsers();
-  }
-
-  componentWillUpdate(nextProps, nextState) {
-    // render props as a post action
-    if (this.props.users != nextProps.users) {
-      nextProps.users.forEach(function(user) {
-        if (user.collections) {
-          user.collections = user.collections.join(', ');
-          user.locked = user.locked.toString();
-          let date = new Date(user.createdAt);
-          user.createdAt = `${date.getMonth()}/${date.getDate()}/${date.getFullYear()}`;
-          console.log('user.locked = ', user);
-        }
-      });
-      this.setState({'users': nextProps.users})
-    }
   }
 
   sortColumnClick(column) {
@@ -77,15 +56,15 @@ class UserList extends Component {
       column.sort = 'asc'
       sort = 'asc'
     }
-    this.setState({users: _.orderBy(this.state.users, [attribute] , [sort])});
+    this.setState({users: _.orderBy(this.props.users, [attribute] , [sort])});
   }
 
   renderColumnHeader(columns) {
     let arr = columns.map((column, i) => {
       return (
-        <td onClick={this.sortColumnClick.bind(this,column)} data-property={column.property} key={i} className={"header " + column.sort }>
+        <th onClick={this.sortColumnClick.bind(this,column)} data-property={column.property} key={i} className={"header " + column.sort }>
           <div>{column.header}</div>
-        </td>
+        </th>
       )
     });
     return arr;
@@ -103,22 +82,67 @@ class UserList extends Component {
   }
 
   clickCell(event) {
-    console.log('this is the click cell event', event);
-    this.setState({
-      clickTarget: event.currentTarget,
-      clickX: event.clientX,
-      clickY: event.clientY,
-      popupState: 'open'
-    });
+    if (!event.currentTarget) {
+      return;
+    }
+
+    if (event.currentTarget.getAttribute('data-property') === "collections") {
+
+      this.setState({
+        clickTarget: event.currentTarget,
+        clickX: event.clientX,
+        clickY: event.clientY,
+        popupState: 'open',
+        userId: event.currentTarget.getAttribute('data-user-id')
+      });
+      console.log('user set state: ', this.state.userId, event.currentTarget.getAttribute('data-user-id'));
+    }
+    if (event.currentTarget.getAttribute('data-property') === "locked" && !event.currentTarget.classList.contains('clicked')) {
+      $('.locked').removeClass('clicked');
+      event.currentTarget.className += ' clicked';
+    }
+  }
+
+  choiceChange(event) {
+    let userId = event.currentTarget.parentElement.getAttribute('data-user-id');
+    let payload = {'locked': event.currentTarget.value};
+    this.props.updateUser(userId, payload);
+    $(event.currentTarget).removeClass('clicked');
+  }
+
+  renderCheckbox(target) {
+    return (
+      <select className="form-control input-sm lockedCheckbox" onChange={this.choiceChange} value={target}>
+        <option value="true">true</option>
+        <option value="false">false</option>
+      </select>
+    )
   }
 
   renderCell(row, i) {
     var self = this;
+    if (row.length === 0) return;
     return this.state.columns.map(function(column,z) {
-      return (<td onClick={self.clickCell} key={i + '-' + z + '-cell'} className={'cell-' + i + '-' + z} data-property={row[column.property]}>
-        {row[column.property]}
+      let targetProperty = row[column.property];
+      if (Array.isArray(targetProperty)) {
+        targetProperty = targetProperty.join(', ');
+      }
+      if (typeof targetProperty === "boolean") {
+        targetProperty = targetProperty.toString();
+      }
+      if (column.property === "createdAt") {
+        let date = new Date(targetProperty);
+        targetProperty = `${date.getMonth()}/${date.getDate()}/${date.getFullYear()}`;
+      }
+      return (<td onClick={self.clickCell} key={i + '-' + z + '-cell'} className={'cell-' + i + '-' + z + ' ' + column.property} data-property={column.property}  data-user-id={row._id}>
+        <div className="targetProperty">{targetProperty}</div>
+        {column.property === "locked" ? self.renderCheckbox(targetProperty) : ''}
       </td>);
     });
+  }
+
+  closePopup() {
+    this.setState({ popupState: "closed" });
   }
 
   render() {
@@ -132,7 +156,7 @@ class UserList extends Component {
           </thead>
 
           <tbody>
-            {this.renderRow(this.state.users)}
+            {this.renderRow(this.props.users)}
           </tbody>
         </table>
         <div>
@@ -140,6 +164,8 @@ class UserList extends Component {
                 clickX={this.state.clickX}
                 clickY={this.state.clickY}
                 popupState={this.state.popupState}
+                userId = {this.state.userId}
+                closePopup = {this.closePopup}
                 />
         </div>
       </div>

@@ -1,3 +1,13 @@
 .popup.closed {
   display: none;
 }
+
+.UserList .clicked .lockedCheckbox {
+  display: block;
+}
+.UserList .clicked .targetProperty {
+  display: none;
+}
+.UserList .lockedCheckbox {
+  display: none;
+}

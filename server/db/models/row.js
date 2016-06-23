@@ -12,6 +12,9 @@ var schema = new mongoose.Schema({
     },
     fob: {
         type: String
+    },
+    locked: {
+        type: Boolean
     }
 },
 {

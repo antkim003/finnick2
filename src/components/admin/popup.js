@@ -8,56 +8,101 @@ class Popup extends React.Component {
     super(props);
     this.renderInput = this.renderInput.bind(this);
     this.renderCollections = this.renderCollections.bind(this);
+    this.handleClick = this.handleClick.bind(this);
+    this.submitForm = this.submitForm.bind(this);
+    this.state = {
+      collections: []
+    };
   }
   componentWillMount() {
     this.props.fetchCollections();
   }
+  componentWillUpdate(nextProps, nextState) {
+    let self = this;
+    if (nextProps.userId != "" && nextProps.userId != this.props.userId) {
+      self.state.collections = [];
+      this.props.collections.forEach(function(collection) {
+        if (self.refs[collection]) {
+            $(self.refs[collection]).prop('checked', false)
+        }
+      });
+      console.log('whats the next props? ', nextProps.userId);
+      this.props.fetchUser(nextProps).then(function(response) {
+        response.payload.data.collections.forEach(function(collection) {
+          $(self.refs[collection]).prop('checked', true)
+          self.state.collections.push(collection);
+        })
+      });
+
+    }
+  }
   renderCollections() {
-    console.log('heres the collections ', this.props.collections);
-    return this.props.collections.map(function(collection) {
+    let self = this;
+    return this.props.collections.map(function(collection, idx) {
       return(
-        <div key={collection}>
-          {collection}
+        <div key={idx} className="form-group">
+          <div className="checkbox">
+           <label>
+             <input type="checkbox" type='checkbox' name={collection} key={idx}
+               value={collection} ref={collection} /> {collection}
+           </label>
+          </div>
         </div>
       )
     });
   }
-  renderLocked() {
-    return(
-      <div>
-        THIS IS THE LOCKED OPTIONS
-      </div>
-    )
+  handleClick(e) {
+    let current = e.currentTarget;
+    if (e.currentTarget.getAttribute('checked')) {
+      e.currentTarget.setAttribute('checked', true)
+    } else {
+      e.currentTarget.setAttribute('checked', false)
+    }
   }
-  findValuesOfChecked() {
-
+  submitForm() {
+    let array = [];
+    let payload = {};
+    for (var key in this.refs) {
+      if ($(this.refs[key]).is(':checked')) {
+         array.push(this.refs[key].value);
+      }
+    }
+    payload.collections = array;
+    var userId = this.props.userId
+    this.props.updateUser(userId, payload);
+    this.props.closePopup();
   }
-  renderInput(clickTarget) {
+  renderInput() {
     if (!this.props.clickTarget) {
       return;
     }
-    console.log('whats the attribute?', this.props.clickTarget.className[this.props.clickTarget.className.length-1]);
-    if (this.props.clickTarget.className[this.props.clickTarget.className.length-1] === "1") {
-      return this.renderCollections();
-    }
-    if (this.props.clickTarget.className[this.props.clickTarget.className.length-1] === "2") {
-      return this.renderLocked();
-    }
+      return (
+        <form onSubmit={this.submitForm}>
+          {this.renderCollections()}
+          <div className="btn btn-primary" type="submit" onClick={this.submitForm}>Save</div>
+        </form>
+      )
   }
   render () {
     let style = {
       left: this.props.clickX,
       top: this.props.clickY,
-      position: 'absolute'
+      position: 'absolute',
+      backgroundColor: 'white',
+      padding: 20,
+      border: "2px solid black"
     };
 
     return(
       <div className={"popup " + this.props.popupState} style={style}>
-        <div className="row">
-          <div className="col-lg-6">
-            {this.renderInput()}
-          </div>
+        <div className="panel panel-default">
+        <div className="panel-heading">
+          <div className="panel-title"><strong>Collections</strong></div>
         </div>
+        <div className="panel-body">
+          {this.renderInput()}
+        </div>
+      </div>
 
       </div>
     )
@@ -66,7 +111,8 @@ class Popup extends React.Component {
 
 function mapStateToProps(state) {
   return {
-      collections: state.collections
+      collections: state.collections,
+      user: state.user
   }
 }
 

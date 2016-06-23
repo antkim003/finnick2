@@ -6,9 +6,11 @@ import {
   AUTH_ERROR,
   FETCH_MESSAGE,
   FETCH_USERS,
+  FETCH_USER,
   FETCH_SESSION,
   FETCH_COLUMNS,
-  FETCH_COLLECTIONS
+  FETCH_COLLECTIONS,
+  UPDATE_USER
 } from './type';
 
 export function loginUser( { email, password }) {
@@ -55,6 +57,29 @@ export function fetchSession() {
 
   return {
     type: FETCH_SESSION,
+    payload: request
+  };
+};
+
+export function updateUser( userId, data ) {
+  return function(dispatch) {
+    axios.put('/api/users/' + userId, data)
+      .then(response => {
+        console.log('it posted', response.data);
+        dispatch({ type: UPDATE_USER, payload: response })
+        dispatch(fetchUsers());
+      })
+      .catch(error => {
+        console.log('there was an error', error);
+      });
+  };
+};
+
+export function fetchUser( {userId}) {
+  const request = axios.get('/api/users/' + userId);
+
+  return {
+    type: FETCH_USER,
     payload: request
   };
 };
