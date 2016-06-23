@@ -304,7 +304,7 @@ render() {
                 <div className='per-page-container'>
                 Per page <input type='text' defaultValue={pagination.perPage} onChange={this.onPerPage}></input>
                 </div>
-                <div className="rowstoshow">Rows <input type="text" onChange={this.rowsToShow} placeholder="10-15"/></div>
+                <div className="rowstoshow">Rows <input type="text" placeholder="10-15"/><button onClick={this.rowsToShow} >Ok</button></div>
 
                 <div className='search-container'>
                 Search <Search columns={columns} data={this.state.data} onChange={this.onSearch} />
@@ -391,13 +391,13 @@ changeFOB(e) {
    window.location.search = e.target.value;
 },
 rowsToShow(e) {
-
     var self = this;
     var pagination = self.state.pagination || {};
-    if (e.target.value != '') {
+    if (e.target.previousSibling.value != '') {
         pagination.hide = true;
-        pagination.perPage = e.target.value.split('-')[1] - e.target.value.split('-')[0] + 1;
-        pagination.page = (parseFloat(e.target.value.split('-')[0] - 1) / parseFloat(pagination.perPage)) + 1;
+        pagination.perPage = e.target.previousSibling.value.split('-')[1] - e.target.previousSibling.value.split('-')[0] + 1;
+        pagination.page = (parseFloat(e.target.previousSibling.value.split('-')[0] - 1) / parseFloat(pagination.perPage)) + 1.01;
+//        console.log(pagination)
     } else {
         pagination.hide = false;
         var page = $('.per-page-container').find('input').val();
