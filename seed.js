@@ -48,7 +48,7 @@ var seedRowData = function() {
             return Row.create({
                 entries: createdrow,
                 index: createdrow[0].rowIndex,
-                fob: ['for_the_home', 'men', 'women'][getRandomInt(0,2)]
+                fob: createdrow[0].category
             });
         });
     }).then(function(everything) {

@@ -33,3 +33,36 @@ router.get('/:category', function(req,res,next) {
 router.post('/boost', function(req,res,next) {
 
 });
+
+router.post('/', function(req,res,next) {
+   // always come in as an array of cells
+   var cells = req.body;
+   var fob = req.body[0].fob;
+   var index = req.body[0].row.split('-')[0];
+
+   return Promise.map(cells, function(cell) {
+       var obj = {};
+       obj['data'] = cell.data;
+       obj['columnName'] = cell.row.split('-')[1];
+       obj['rowIndex'] = cell.row.split('-')[0];
+       var _cell;
+       return Cell.create(obj)
+        .then(function(cell) {
+            _cell = cell;
+            return Row.findOne({index: cell.index})
+        })
+        .then(function(row) {
+            row.entries.push(_cell);
+            return row.save();
+        })
+        .catch(console.error)
+           return Row.update({ "index":cell.rowIndex, "fob":fob}, {$push: {entries: cell._id}}).then(
+               function(innercell) {
+                   return cell;
+               }
+           )
+       })
+   }).then(function(everything) {
+       res.json(everything);
+   })
+});
