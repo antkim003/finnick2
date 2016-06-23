@@ -19,12 +19,16 @@ class UserList extends Component {
           "header": "Collections"
         },
         {
-          "property": "locked",
-          "header": "Locked?"
+          "property": "type",
+          "header": "User Type"
         },
         {
-          "property": "createdAt",
-          "header": "User since"
+          "property": "lead",
+          "header": "Lead"
+        },
+        {
+          "property": "locked",
+          "header": "Locked?"
         }
       ],
       popupData: {},
@@ -97,9 +101,10 @@ class UserList extends Component {
       });
       console.log('user set state: ', this.state.userId, event.currentTarget.getAttribute('data-user-id'));
     }
-    if (event.currentTarget.getAttribute('data-property') === "locked" && !event.currentTarget.classList.contains('clicked')) {
-      $('.locked').removeClass('clicked');
-      event.currentTarget.className += ' clicked';
+    if (event.currentTarget.getAttribute('data-property') === "locked" || event.currentTarget.getAttribute('data-property') && !event.currentTarget.classList.contains('__clicked')) {
+      this.closePopup();
+      $('.__clicked').removeClass('__clicked');
+      event.currentTarget.className += ' __clicked';
     }
   }
 
@@ -107,7 +112,7 @@ class UserList extends Component {
     let userId = event.currentTarget.parentElement.getAttribute('data-user-id');
     let payload = {'locked': event.currentTarget.value};
     this.props.updateUser(userId, payload);
-    $(event.currentTarget).removeClass('clicked');
+    $(event.currentTarget).removeClass('__clicked');
   }
 
   renderCheckbox(target) {
@@ -136,7 +141,7 @@ class UserList extends Component {
       }
       return (<td onClick={self.clickCell} key={i + '-' + z + '-cell'} className={'cell-' + i + '-' + z + ' ' + column.property} data-property={column.property}  data-user-id={row._id}>
         <div className="targetProperty">{targetProperty}</div>
-        {column.property === "locked" ? self.renderCheckbox(targetProperty) : ''}
+        {column.property === "locked" || column.property === "lead"? self.renderCheckbox(targetProperty) : ''}
       </td>);
     });
   }

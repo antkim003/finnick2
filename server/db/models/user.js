@@ -18,6 +18,13 @@ var schema = new mongoose.Schema({
     },
     locked: {
         type: Boolean
+    },
+    type: {
+        type: String
+    },
+    lead: {
+        type: Boolean,
+        default: false
     }
 },{
     timestamps: true
