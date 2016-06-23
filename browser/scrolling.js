@@ -22,10 +22,15 @@ module.exports = () =>
         );
         if ($('thead')[0].getBoundingClientRect().top < 0) {
             $('.fixedHead').css({'display': 'block'})
+
             $('.navbar').css({'display': 'none' })
         } else {
             $('.fixedHead').css({'display': 'none' })
-            $('.navbar').css({'display': 'block' })
+            if ($('thead')[0].getBoundingClientRect().top > 110) {
+                $('.navbar').css({'display': 'block' })
+            }else {
+                $('.navbar').css({'display': 'none' })
+            }
 
         }
             _.each($('.fixedHead'), function (fh, i) {
