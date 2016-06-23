@@ -4,6 +4,7 @@ module.exports = router;
 var _ = require('lodash');
 var Cell = require('mongoose').model('Cell');
 var Promise = require('bluebird');
+var Row = require('mongoose').model('Row');
 
 var ensureAuthenticated = function (req, res, next) {
     if (req.isAuthenticated()) {
@@ -37,18 +38,17 @@ router.post('/', function(req,res,next) {
    var cells = req.body;
    var fob = req.body[0].fob;
    var index = req.body[0].row.split('-')[0];
-
    var _cell;
    return Promise.map(cells, function(cell) {
        var obj = {};
        obj['data'] = cell.data;
        obj['columnName'] = cell.row.split('-')[1];
-       obj['rowIndex'] = cell.row.split('-')[0];
+       obj['rowIndex'] = parseInt(cell.row.split('-')[0])+1;
 
        return Cell.create(obj)
         .then(function(cell) {
             _cell = cell;
-            return Row.findOne({index: parseInt(cell.index)})
+            return Row.findOne({index: parseInt(obj.rowIndex), fob: fob})
         })
         .then(function(row) {
             row.entries.push(_cell);
