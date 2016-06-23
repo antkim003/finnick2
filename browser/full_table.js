@@ -42,12 +42,15 @@ module.exports = React.createClass({
         scrolling();
 //      var users = dummyusers;
         var users = [
-            {"name":"Jonathan Garza","email":"jgarza3@columbia.edu","type":"buyer","locked":false},
+            {"name":"Jonathan Garza","email":"jgarza3@columbia.edu","type":"admin","locked":true},
             {"name":"Jayne Smyth","email":"test@columbia.edu","type":"admin","locked":false}
         ]
         window.user = users[Math.floor(Math.random()*users.length)];
         window.statedata = [];
         sockets();
+        if (window.location.search == '') {
+            window.location.search = '?women'
+        }
         var query = window.location.search.split('?')[1];
         var queryyes = query ? '/'+query : '/women';
 
@@ -190,7 +193,6 @@ componentDidMount() {
                             all[cell.columnName] = parseInt(cell.data);
                         }
                         all.rowIndex = parseInt(cell.rowIndex);
-//                        all._id = cell._id;
                         _.extend(allobj, all)
                     });
                     arr.push(allobj);
@@ -279,13 +281,24 @@ render() {
             isNaN(pagination.perPage) ? 1 : pagination.perPage, 1)
     );
 
+    var fobs = [];
+    var collections = window.user.buyercollections ? window.user.buyercollections : ['women', 'men', 'for_the_home'] ;
+    _.each(collections, function(col, i) {
+        fobs.push(<option value={col}>{col}</option>)
+    });
 
     return (
         <div>
+            <div className="user-info">
+                Hi, {window.user.name}. You are a/n {window.user.type}. {window.user.locked ? 'Your account is locked.' : ''}
+                <div>Choose your FOB <select className="fob-drop" value={window.location.search.split('?')[1]} onChange={this.changeFOB}>{fobs}</select></div>
+            </div>
             <div className='controls'>
                 <div className='per-page-container'>
                 Per page <input type='text' defaultValue={pagination.perPage} onChange={this.onPerPage}></input>
                 </div>
+                <div className="rowstoshow">Rows <input type="text" onChange={this.rowsToShow} placeholder="10-15"/></div>
+
                 <div className="buttonscontainer"><button onClick={this.hideCols}>Hide Columns</button></div>
                 <div className='search-container'>
                 Search <Search columns={columns} data={this.state.data} onChange={this.onSearch} />
@@ -333,7 +346,7 @@ render() {
             >
 
             </Table>
-            <div className='controls'>
+            <div className={this.state.pagination.hide == true ? "controls controlpaghide" : 'controls controlpagshow'}>
                 <div className='pagination'>
                     <Paginator.Context className="pagify-pagination"
                     segments={segmentize({
@@ -366,6 +379,29 @@ render() {
             <SkyLight ref='modal' title={this.state.modal.title}>{this.state.modal.content}</SkyLight>
         </div>
         );
+},
+
+changeFOB(e) {
+   window.location.search = e.target.value;
+},
+rowsToShow(e) {
+
+    var self = this;
+    var pagination = self.state.pagination || {};
+    if (e.target.value != '') {
+        pagination.hide = true;
+        pagination.perPage = e.target.value.split('-')[1] - e.target.value.split('-')[0] + 1;
+        pagination.page = (parseFloat(e.target.value.split('-')[0] - 1) / parseFloat(pagination.perPage)) + 1;
+    } else {
+        pagination.hide = false;
+        var page = $('.per-page-container').find('input').val();
+        pagination.page = 1;
+        pagination.perPage = page;
+    }
+    self.setState({
+        pagination: pagination
+    });
+
 },
 
 onSelect(page) {

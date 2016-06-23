@@ -27,7 +27,7 @@ module.exports = React.createClass({
                     className += ' ' + column.headerClass;
                     var info = [];
                     if (column.info) {
-                        info.push(<div className="info"><span className='info-icon'>i</span><i>{column.info}</i></div>)
+                        info.push(<div className="info" key={i+'-info'}><span className='info-icon'>i</span><i>{column.info}</i></div>)
                     }
                     return (
                         <th

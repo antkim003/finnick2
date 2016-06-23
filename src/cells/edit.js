@@ -21,8 +21,9 @@ module.exports = function(editProperty, onValue, o) {
                         state[editProperty] = null;
                         state['activeEdit'] = null;
                         context.setState(state);
-                        var datrow = $('.'+editedCell).attr('data-cell')
-                        onValue(v, data, rowIndex, property, datrow);
+                        var datrow = $('.'+editedCell).attr('data-cell');
+                        var _id = $('.'+editedCell).attr('data-id');
+                        onValue(v, data, rowIndex, property, datrow, _id);
                     }
                 }),
                 props: {

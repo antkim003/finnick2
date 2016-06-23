@@ -24,7 +24,7 @@ module.exports = (options, cat, dat, fields={}) => {
             const edit = (e) =>
             {
                 e.preventDefault();
-                console.log(e.target.form, document.querySelectorAll('form'), window.row-1);
+//                console.log(e.target.form, document.querySelectorAll('form'), window.row-1);
                 var checkboxes = e.target.form.querySelectorAll('input');
                 var checkboxesChecked = [];
                 for (var i=0; i<checkboxes.length; i++) {
