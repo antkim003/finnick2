@@ -10,4 +10,5 @@ module.exports = function (app) {
 
     app.use(favicon(app.getValue('faviconPath')));
     app.use(express.static(distPath));
+    app.use(express.static(path.join(root,'node_modules')));
 };

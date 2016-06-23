@@ -32,7 +32,7 @@ describe('columns/index Route', function () {
       });
     });
 
-  });   
+  });
   describe('Authenticated request', function () {
 
     var loggedInAgent;
@@ -52,6 +52,7 @@ describe('columns/index Route', function () {
     });
 
     it('GET /api/columns/index returns 200', function (done) {
+      this.timeout(5000);
       loggedInAgent.get('/api/columns/index').expect(200).end(function (err, response) {
         if (err) return done(err);
         expect(response.body).to.be.an('array');

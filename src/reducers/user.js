@@ -1,0 +1,14 @@
+import {
+  FETCH_USER,
+  UPDATE_USER
+} from '../actions/type';
+
+export default function(state = {}, action) {
+  switch (action.type) {
+    case FETCH_USER:
+      return [...state, ...action.payload.data];
+    case UPDATE_USER:
+      return [...state, ...action.payload.data];
+  }
+  return state;
+}

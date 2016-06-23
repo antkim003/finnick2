@@ -1,8 +1,14 @@
 'use strict';
 var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
+var jwt = require('jwt-simple');
 var mongoose = require('mongoose');
 var User = mongoose.model('User');
+
+function tokenForUser(user) {
+  var timestamp = new Date().getTime();
+  return jwt.encode({ sub: user.id, iat: timestamp }, 'secret');
+}
 
 module.exports = function (app) {
 
@@ -42,7 +48,8 @@ module.exports = function (app) {
                 if (loginErr) return next(loginErr);
                 // We respond with a response object that has user with _id and email.
                 res.status(200).send({
-                    user: user.sanitize()
+                    user: user.sanitize(),
+                    token: tokenForUser(user)
                 });
             });
 

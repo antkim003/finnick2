@@ -9,11 +9,9 @@ module.exports = React.createClass({
         config: React.PropTypes.object,
         columns: React.PropTypes.array
     },
-
     render() {
         const config = this.props.config;
         const columns = this.props.columns;
-
         return(
             <tr>
                 {columns.map((column, i) => {
@@ -23,7 +21,6 @@ module.exports = React.createClass({
                         return result;
                     }, {});
                     var {className, ...props} = columnHeader;
-
                     // sort column - XXX: tidy up somehow, maybe
                     // there should be access to header specific classes?
                     className = className || '';
