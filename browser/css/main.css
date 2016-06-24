@@ -320,7 +320,7 @@ table .sort-desc:after, .sort-desc .fixedHead:after {
     float:left;
     padding: 15px 0;
 }
-[data-property] input {
+[data-property]:not([type=checkbox]) input {
     width: 90%;
 }
 .skylight-wrapper h2 {
