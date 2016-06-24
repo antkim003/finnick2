@@ -27,44 +27,47 @@ module.exports = (app) => {
 //        console.log('editable ', value, rowIndex, property, datrow, _id);
         var val = value.hasOwnProperty('row') ? value.val[0] : value;
         var rowid = parseInt(datrow.split('-')[0])+1;
-            if ( val.toLowerCase() == 'custom' && val != '') {
-                var customsave = (e) => {
-                    val = e.target.previousSibling.value;
-                    app.refs.modal.hide();
-                            if (_id != undefined) {
-                                var params = [{"_id":_id, "data": val}];
-                                $.ajax({
-                                    'type': "PUT",
-                                    'url': '/api/cells/',
-                                    'data': JSON.stringify(params),
-                                    'contentType': "application/json",
-                                    'success': function() {
-                                        console.log('done');
-                                        window.socket.emit('my other event', { val: val, row: window.row-1 });
-                                        window.datainterval;
-                                        var idx = findIndex(app.state.data, {
-                                            id: celldata[rowIndex].id,
-                                        });
-                                        app.state.data[idx][property] = val;
-                                        app.setState({
-                                            data: query ? _.filter(_.sortBy(statedata, 'rowIndex'), function(d) { return d.category == query}) : statedata
-                                        });
-                                    }
-                                })
-                            } else {
+            if ( val != undefined ) {
+                if ( val.toLowerCase() == 'custom' ) {
+                    var customsave = (e) => {
+                        val = e.target.previousSibling.value;
+                        app.refs.modal.hide();
+                        if (_id != undefined) {
+                            var params = [{"_id":_id, "data": val}];
+                            $.ajax({
+                                'type': "PUT",
+                                'url': '/api/cells/',
+                                'data': JSON.stringify(params),
+                                'contentType': "application/json",
+                                'success': function() {
+                                    console.log('done');
+                                    window.socket.emit('my other event', { val: val, row: window.row-1 });
+                                    window.datainterval;
+                                    var idx = findIndex(app.state.data, {
+                                        id: celldata[rowIndex].id,
+                                    });
+                                    app.state.data[idx][property] = val;
+                                    app.setState({
+                                        data: query ? _.filter(_.sortBy(statedata, 'rowIndex'), function(d) { return d.category == query}) : statedata
+                                    });
+                                }
+                            })
+                        } else {
 
-                            }
-
-                }
-                app.setState(
-                    {
-                        modal: {
-                            title: 'Custom '+property,
-                            content: <div><input/><button onClick={customsave}>Save Custom</button></div>
                         }
-                    });
-                app.refs.modal.show();
-            } else {
+
+                    }
+                    app.setState(
+                        {
+                            modal: {
+                                title: 'Custom '+property,
+                                content: <div><input/><button onClick={customsave}>Save Custom</button></div>
+                            }
+                        });
+                    app.refs.modal.show();
+                }
+            }
+             else {
 
 //                var total = [];
 //                console.log(pid, 'testing', pid == undefined)
