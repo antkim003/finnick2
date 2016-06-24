@@ -75,6 +75,8 @@ class UserList extends Component {
   }
 
   renderRow(data) {
+    var _data = data;
+    console.log('data: ', data);
     let arr = data.map((row,i) => {
       return (
           <tr className={i + "-row " + (i % 2 === 1 ? 'odd-row' : 'even-row') } key={i + '-key'}>
@@ -91,7 +93,6 @@ class UserList extends Component {
     }
 
     if (event.currentTarget.getAttribute('data-property') === "collections") {
-
       this.setState({
         clickTarget: event.currentTarget,
         clickX: event.clientX,
@@ -101,7 +102,7 @@ class UserList extends Component {
       });
       console.log('user set state: ', this.state.userId, event.currentTarget.getAttribute('data-user-id'));
     }
-    if (event.currentTarget.getAttribute('data-property') === "locked" || event.currentTarget.getAttribute('data-property') && !event.currentTarget.classList.contains('__clicked')) {
+    if (event.currentTarget.getAttribute('data-property') === "locked" || event.currentTarget.getAttribute('data-property') === "lead" && !event.currentTarget.classList.contains('__clicked')) {
       this.closePopup();
       $('.__clicked').removeClass('__clicked');
       event.currentTarget.className += ' __clicked';
@@ -136,10 +137,7 @@ class UserList extends Component {
       }
       if (typeof targetProperty === "boolean") {
         targetProperty = targetProperty.toString();
-      }
-      if (column.property === "createdAt") {
-        let date = new Date(targetProperty);
-        targetProperty = `${date.getMonth()}/${date.getDate()}/${date.getFullYear()}`;
+
       }
       return (<td onClick={self.clickCell} key={i + '-' + z + '-cell'} className={'cell-' + i + '-' + z + ' ' + column.property} data-property={column.property}  data-user-id={row._id}>
         <div className="targetProperty">{targetProperty}</div>
