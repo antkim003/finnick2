@@ -85,25 +85,21 @@ class Popup extends React.Component {
   }
   render () {
     let style = {
-      left: this.props.clickX,
-      top: this.props.clickY,
+      left: this.props.clickX-70,
+      top: this.props.clickY-100,
       position: 'absolute',
       backgroundColor: 'white',
-      padding: 20,
       border: "2px solid black"
     };
 
     return(
-      <div className={"popup " + this.props.popupState} style={style}>
-        <div className="panel panel-default">
+      <div className={"panel panel-default popup " + this.props.popupState} style={style}>
         <div className="panel-heading">
           <div className="panel-title"><strong>Collections</strong></div>
         </div>
         <div className="panel-body">
           {this.renderInput()}
         </div>
-      </div>
-
       </div>
     )
   }
