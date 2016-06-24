@@ -42,7 +42,7 @@ module.exports = React.createClass({
         scrolling();
 //      var users = dummyusers;
         var users = [
-            {"name":"Jonathan Garza","email":"jgarza3@columbia.edu","type":"admin","locked":true},
+            {"name":"Jonathan Garza","email":"jgarza3@columbia.edu","type":"admin","locked":false},
             {"name":"Jayne Smyth","email":"test@columbia.edu","type":"admin","locked":false}
         ]
         window.user = users[Math.floor(Math.random()*users.length)];
@@ -289,7 +289,9 @@ render() {
 
     var boost = [];
     if (window.user.type == 'admin') {
-        boost.push(<button onClick="">Boost Modal</button>);
+        boost.push(<button onClick={this.rowsOneValue}>#Rows all one Value</button>);
+//        boost.push(<button onClick="">Boost Modal</button>);
+
     }
     return (
         <div>
@@ -386,7 +388,35 @@ render() {
         </div>
         );
 },
+rowsOneValue() {
+//    console.log(this);
+    var saverows = function(e) {
+        console.log(e.target, $('#same-rows-value'));
+        var value = $('#same-rows-value').val();
+        var column = $('#same-rows-value').val();
+        var rows1 = $('#same-rows1').val();
+        var rows2 = $('#same-rows2').val();
+        var arr = [];
+        for (i = rows1; i < rows2; i++) {
+            arr.push()
+        }
 
+    }
+    this.setState(
+        {
+            modal: {
+                title: 'set a number of rows to the same value',
+                content: <div>
+                    <div>Rows <input placeholder="2" id="same-rows1"/> - <input placeholder="2" id="same-rows2"/></div>
+                    <div>Column <select id="same-rows-column"/></div>
+                    <div>Value <input placeholder="value to set to all rows designated" id="same-rows-value"/></div>
+                    <button onClick={saverows}>Save Value to Rows</button>
+                </div>
+            }
+        });
+    this.refs.modal.show();
+
+},
 changeFOB(e) {
    window.location.search = e.target.value;
 },
