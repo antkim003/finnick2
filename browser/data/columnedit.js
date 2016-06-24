@@ -20,14 +20,14 @@ module.exports = (app) => {
     var data = [];
 
 
-    app.editable = cells.edit.bind(app, 'editedCell', (value, celldata, rowIndex, property, datrow, _id) => {
+    app.editable = cells.edit.bind(app, 'editedCell', (value, celldata, rowIndex, property, datrow, _id, pid) => {
 //    var self = this;
         clearInterval(window.datainterval);
 
 //        console.log('editable ', value, rowIndex, property, datrow, _id);
         var val = value.hasOwnProperty('row') ? value.val[0] : value;
         var rowid = parseInt(datrow.split('-')[0])+1;
-            if ( val.toLowerCase() == 'custom' ) {
+            if ( val.toLowerCase() == 'custom' && val != '') {
                 var customsave = (e) => {
                     val = e.target.previousSibling.value;
                     app.refs.modal.hide();
@@ -65,16 +65,9 @@ module.exports = (app) => {
                     });
                 app.refs.modal.show();
             } else {
-                var idx = findIndex(app.state.data, {
-                    id: celldata[rowIndex].id,
-                });
 
-                app.state.data[idx][property] = val;
-//                console.log(app.state.data[idx])
-                app.setState({
-                    data: query ? _.filter(_.sortBy(statedata, 'rowIndex'), function(d) { return d.category == query}) : statedata
-                });
 //                var total = [];
+//                console.log(pid, 'testing', pid == undefined)
                         if (_id != undefined) {
                             var params = [{"_id":_id, "data": val}];
                             $.ajax({
@@ -97,14 +90,23 @@ module.exports = (app) => {
                                     'url': '/api/cells/',
                                     'data': JSON.stringify(params),
                                     'contentType': "application/json",
-                                    'success': function() {
-                                        console.log('done');
+                                    'success': function(data) {
                                         window.socket.emit('my other event', { val: val, row: window.row-1 });
                                         window.datainterval;
-
+                                        $('.'+datrow).attr('data-id', data[0]._id);
                                     }
                                 })
                         }
+
+                    var idx = findIndex(app.state.data, {
+                        id: celldata[rowIndex].id,
+                    });
+
+                    app.state.data[idx][property] = val;
+    //                console.log(app.state.data[idx])
+                    app.setState({
+                        data: query ? _.filter(_.sortBy(statedata, 'rowIndex'), function(d) { return d.category == query}) : statedata
+                    });
                 }
 
 

@@ -95,7 +95,7 @@ module.exports = React.createClass({
                             var values = {};
 
                             var rowid = parseInt(row.id-1);
-                            var entryId = _.find(_.sortBy(window.data[row.id], 'index').entries, function(entry){
+                            var entryId = _.find(_.sortBy(window.data, 'index')[rowid].entries, function(entry){
                                         if( entry.columnName == property) {
                                             return entry;
                                         }
@@ -106,7 +106,7 @@ module.exports = React.createClass({
                                 entryId = null;
                             }
 
-                            return <td data-id={entryId} data-property={property} data-edit={column.cell.length == 0 ? 'noedit' : 'editor'} data-cell={rowid+'-'+property} data-active={content.props.activeEdit} className={'cell-'+j+' '+(row[rowKey] || i)+'-'+property+ ' '} key={j + '-cell'} {...content.props} >{content.value}</td>;
+                            return <td data-id={entryId} data-parent-id={_.sortBy(window.data, 'index')[i]._id} data-property={property} data-edit={column.cell.length == 0 ? 'noedit' : 'editor'} data-cell={rowid+'-'+property} data-active={content.props.activeEdit} className={'cell-'+j+' '+(row[rowKey] || i)+'-'+property+ ' '} key={j + '-cell'} {...content.props} >{content.value}</td>;
                         }
                     )}</tr>)}
                 </tbody>

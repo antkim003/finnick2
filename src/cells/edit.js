@@ -23,7 +23,10 @@ module.exports = function(editProperty, onValue, o) {
                         context.setState(state);
                         var datrow = $('.'+editedCell).attr('data-cell');
                         var _id = $('.'+editedCell).attr('data-id');
-                        onValue(v, data, rowIndex, property, datrow, _id);
+                        var _pid = $('.'+editedCell).attr('data-parent-id');
+
+//                        console.log( $('.'+editedCell), 'editedCell');
+                        onValue(v, data, rowIndex, property, datrow, _id, _pid);
                     }
                 }),
                 props: {
