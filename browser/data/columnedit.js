@@ -27,8 +27,8 @@ module.exports = (app) => {
 //        console.log('editable ', value, rowIndex, property, datrow, _id);
         var val = value.hasOwnProperty('row') ? value.val[0] : value;
         var rowid = parseInt(datrow.split('-')[0])+1;
-            if ( val != undefined ) {
-                if ( val.toLowerCase() == 'custom' ) {
+//            if ( val != undefined ) {
+                if ( typeof val != 'undefined' && val.toLowerCase() == 'custom' ) {
                     var customsave = (e) => {
                         val = e.target.previousSibling.value;
                         app.refs.modal.hide();
@@ -66,7 +66,7 @@ module.exports = (app) => {
                         });
                     app.refs.modal.show();
                 }
-            }
+//            }
              else {
 
 //                var total = [];
