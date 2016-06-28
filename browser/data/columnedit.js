@@ -24,11 +24,11 @@ module.exports = (app) => {
 //    var self = this;
         clearInterval(window.datainterval);
 
-//        console.log('editable ', value, rowIndex, property, datrow, _id);
-        var val = value.hasOwnProperty('row') ? value.val[0] : value;
+        console.log('editable ', value, rowIndex, property, datrow, _id);
+        var val = value.hasOwnProperty('row') ? value.val : value;
         var rowid = parseInt(datrow.split('-')[0])+1;
 //            if ( val != undefined ) {
-                if ( typeof val != 'undefined' && val.toLowerCase() == 'custom' ) {
+                if ( typeof val != 'undefined' && val[0].toLowerCase() == 'custom' ) {
                     var customsave = (e) => {
                         val = e.target.previousSibling.value;
                         app.refs.modal.hide();
