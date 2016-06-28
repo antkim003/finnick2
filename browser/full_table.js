@@ -381,6 +381,33 @@ render() {
         </div>
         );
 },
+
+leadSheetHelper() {
+    var self = this;
+    this.refs.modal.show();
+    var fob = window.location.search.split('?')[1];
+    var ds = [];
+    var dataforlead =  () => {
+        _.each(self.state.data, function(d, i){
+            var evenorodd = i%2 == 0 ?'leadsheet-odd':'leadsheet-even';
+            ds.push( <li className={evenorodd}><b className={"leadsheet-id"}>{fob + ' row ' +d.id}</b>:
+                <div className="leadsheet-c"> <b>AR:</b> {d.arimageid} <br/> <b>IN-STORE:</b>{d.instorespecial} <br/>  <b>MCOM:</b>{d.mcomspecial}</div>
+            </li>)
+        })
+    }
+    dataforlead();
+    this.setState(
+        {
+            modal: {
+                title: 'Photography Lead Sheet',
+                content: <div>
+                    AR ID, INSTORE Description, MCOM Description
+                    <ul id="leadsheet">{ds}</ul>
+                </div>
+            }
+        }
+    )
+},
 rowsOneValue() {
     var self = this;
     var columns = _.filter(window.coledit, function(col) { return col.property != 'id'});
