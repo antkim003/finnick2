@@ -25,8 +25,8 @@
     "build-stage": "rimraf dist && cross-env NODE_ENV=development webpack --config ./webpack.config.js --progress --profile --colors",
     "eslint": "eslint .",
     "test-frontend:watch": "mocha --compilers js:babel-core/register --require ./tests/browser/test_helper.js 'tests/browser/**/*.js' --watch",
-    "test-server": "node node_modules/.bin/mocha --compilers js:babel-register --recursive tests/server/* || true",
-    "test-routes": "mocha --compilers js:babel-register tests/server/routes || true",
+    "test-server": "node node_modules/.bin/mocha --compilers js:babel-register --recursive tests/server/**/*.js || true",
+    "test-routes": "mocha --compilers js:babel-register tests/server/routes/* || true",
     "jscs": "jscs ."
   },
   "dependencies": {
