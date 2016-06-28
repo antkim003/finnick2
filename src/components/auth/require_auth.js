@@ -11,13 +11,14 @@ export default function(ComposedComponent) {
     componentWillMount() {
       console.log('it came into require auth', this.props.authenticated);
       if (!this.props.authenticated) {
-        this.context.router.push('/landing');
+        this.context.router.push('/');
       }
     }
 
     componentWillUpdate(nextProps) {
+      console.log('nextProps Authentication: ', nextProps.authenticated);
       if (!nextProps.authenticated) {
-        this.context.router.push('/landing');
+        this.context.router.push('/');
       }
     }
 

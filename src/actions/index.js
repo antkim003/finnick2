@@ -53,12 +53,23 @@ export function fetchCollections() {
 };
 
 export function fetchSession() {
-  const request = axios.get('/api/members/session');
-
-  return {
-    type: FETCH_SESSION,
-    payload: request
-  };
+  return function(dispatch) {
+    axios.get('/api/members/session')
+      .then( response => {
+        dispatch({ type: AUTH_USER });
+        localStorage.removeItem('token',response.data.token);
+      })
+      .catch( response => {
+        dispatch({ type: UNAUTH_USER });
+        localStorage.removeItem('token');
+      })
+  }
+  // const request =
+  //
+  // return {
+  //   type: FETCH_SESSION,
+  //   payload: request
+  // };
 };
 
 export function updateUser( userId, data ) {

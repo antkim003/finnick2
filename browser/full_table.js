@@ -25,6 +25,7 @@ var userpermissions = require('./data/userpermissions.js');
 
 var scrolling = require('./scrolling.js');
 var sockets = require('./sockets.js');
+import { browserHistory } from 'react-router';
 
 module.exports = React.createClass({
     displayName: 'FullTable',
@@ -41,7 +42,8 @@ module.exports = React.createClass({
         window.statedata = [];
         sockets();
         if (window.location.search == '') {
-            window.location.search = '?women'
+            browserHistory.push( window.location.pathname + '?women');
+            // window.location.search = '?women'
         }
         var query = window.location.search.split('?')[1];
         var queryyes = query ? '/'+query : '/women';
