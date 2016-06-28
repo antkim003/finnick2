@@ -281,11 +281,11 @@ render() {
         fobs.push(<option value={col}>{col}</option>)
     });
 
-    var boost = [];
+    var buttons = [];
     if (window.user.type == 'admin') {
-        boost.push(<button onClick={this.rowsOneValue}>#Rows all one Value</button>);
+        buttons.push(<button onClick={this.rowsOneValue}>#Rows all one Value</button>);
 //        boost.push(<button onClick="">Boost Modal</button>);
-        boost.push(<button onClick={this.leadSheetHelper}>Lead Sheet Helper</button>)
+        buttons.push(<button onClick={this.leadSheetHelper}>Lead Sheet Helper</button>)
     }
 
     return (
@@ -294,7 +294,8 @@ render() {
                 Hi, {window.user.name}. You are a/n {window.user.type}. {window.user.locked ? 'Your account is locked.' : ''}
                 <div className="fob">Choose FOB <select className="fob-drop" value={window.location.search.split('?')[1]} onChange={this.changeFOB}>{fobs}</select>
                     <button onClick={this.hideCols}>Hide Columns</button>
-                    {boost}
+                    <button onClick={this.helpModal}>HELP!</button>
+                    {buttons}
                 </div>
             </div>
             <div className='controls'>
@@ -383,7 +384,24 @@ render() {
         </div>
         );
 },
-
+helpModal() {
+    var self = this;
+    this.refs.modal.show();
+    this.setState(
+        {
+            modal: {
+                title: 'Help',
+                content: <div>
+                    <ul>
+                        <li>Grey VS Orange headers <br/>
+                            Grey = uneditable columns; green = editable columns
+                            </li>
+                    </ul>
+                </div>
+            }
+        }
+    )
+},
 leadSheetHelper() {
     var self = this;
     this.refs.modal.show();
