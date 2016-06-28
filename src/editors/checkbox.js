@@ -34,6 +34,7 @@ module.exports = (options, cat, dat, fields={}) => {
                     }
                 }
 //                window.socket.emit('my other event', { val: checkboxesChecked, row: window.row-1 });
+                console.log(checkboxesChecked, '');
                 this.props.onValue({ val: checkboxesChecked, row: window.row-1 });
             }
 

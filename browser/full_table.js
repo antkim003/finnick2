@@ -1,7 +1,7 @@
 'use strict';
 
 var React = require('react');
-//var Form = require('plexus-form');
+var Form = require('plexus-form');
 //var validate = require('plexus-validate');
 var SkyLight = require('react-skylight').default;
 //var generators = require('annogenerate');
@@ -17,20 +17,12 @@ var ColumnNames = require('../src/column_names');
 var Search = require('../src/search');
 var editors = require('../src/editors');
 var sortColumn = require('../src/sort_column');
-//var cells = require('../src/cells');
-
 var ColumnFilters = require('./column_filters.js');
 var FieldWrapper = require('./field_wrapper.js');
 var SectionWrapper = require('./section_wrapper.js');
-//var dummyusers = require('./data/dummyusers.js');
-//var categoriesandsub = require('./data/categoriesandsub.js');
-//var categoriesandsub1 = categoriesandsub;
-//var categoriesandsub2 = categoriesandsub;
-//var columns = require('./data/columnsschema.js');
 var columnstoedit = require('./data/columnedit.js')
 var userpermissions = require('./data/userpermissions.js');
-//var validations = require('./data/validations.js');
-//var highlight = require('../src/formatters/highlight');
+
 var scrolling = require('./scrolling.js');
 var sockets = require('./sockets.js');
 import { browserHistory } from 'react-router';
@@ -293,8 +285,9 @@ render() {
     if (window.user.type == 'admin') {
         boost.push(<button onClick={this.rowsOneValue}>#Rows all one Value</button>);
 //        boost.push(<button onClick="">Boost Modal</button>);
-
+        boost.push(<button onClick={this.leadSheetHelper}>Lead Sheet Helper</button>)
     }
+
     return (
         <div>
             <div className="user-info">
@@ -391,27 +384,74 @@ render() {
         );
 },
 rowsOneValue() {
-//    console.log(this);
+    var self = this;
+    var columns = _.filter(window.coledit, function(col) { return col.property != 'id'});
+
+    var fob = window.location.search.split('?')[1];
     var saverows = function(e) {
-        console.log(e.target, $('#same-rows-value'));
         var value = $('#same-rows-value').val();
-        var column = $('#same-rows-value').val();
+        var column = $('#same-rows-column').val();
         var rows1 = $('#same-rows1').val();
         var rows2 = $('#same-rows2').val();
         var arr = [];
-        for (i = rows1; i < rows2; i++) {
-            arr.push()
+        for (var i = parseInt(rows1); i <= rows2; i++) {
+            arr.push(i);
         }
+        var setrow = _.filter(window.data, function(d){
+            return  d.index >= rows1 && d.index <= rows2;
+        });
+        var cellsincol = [];
+        var cells = _.each(setrow, function(row,i){
+            _.each(row.entries, function(c,i){
+                if (c.columnName == column){
+                    cellsincol.push(c)
+                }
+            })
+        });
+        var datacells = [];
+        _.each(cellsincol, function(cell, i) {
+            datacells.push({"_id": cell._id, "data": value});
+        })
+        var query = window.location.search.split('?')[1];
+        $.ajax({
+            type: 'PUT',
+            url: 'api/cells/',
+            data: JSON.stringify(datacells),
+            contentType: "application/json",
+            success: function() {
+                console.log('done');
+                window.socket.emit('my other event', { val: value, row: window.row-1 });
+                window.datainterval;
+                _.each(cellsincol, function(cell, i) {
+                    self.state.data[cell.rowIndex-1][column] = value;
+                    self.setState({
+                        data: query ? _.filter(_.sortBy(statedata, 'rowIndex'), function(d) { return d.category == query}) : statedata
+                    });
+                })
+                self.refs.modal.hide();
+            }
+
+        })
+//
 
     }
+
     this.setState(
         {
             modal: {
                 title: 'set a number of rows to the same value',
                 content: <div>
                     <div>Rows <input placeholder="2" id="same-rows1"/> - <input placeholder="2" id="same-rows2"/></div>
-                    <div>Column <select id="same-rows-column"/></div>
-                    <div>Value <input placeholder="value to set to all rows designated" id="same-rows-value"/></div>
+                    <div>Column
+                        <select id="same-rows-column">
+                            {columns.map((option) =>
+//                                option.property
+                                <option key={option.property + '-option'} value={option.property}>{option.header}</option>
+                            )}
+                        </select>
+                        </div>
+                    <div>Value <input placeholder="value to set to all rows designated" id="same-rows-value"/>
+                    </div>
                     <button onClick={saverows}>Save Value to Rows</button>
                 </div>
             }

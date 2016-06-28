@@ -24,7 +24,6 @@ module.exports = function(editProperty, onValue, o) {
                         var datrow = $('.'+editedCell).attr('data-cell');
                         var _id = $('.'+editedCell).attr('data-id');
                         var _pid = $('.'+editedCell).attr('data-parent-id');
-
 //                        console.log( $('.'+editedCell), 'editedCell');
                         onValue(v, data, rowIndex, property, datrow, _id, _pid);
                     }

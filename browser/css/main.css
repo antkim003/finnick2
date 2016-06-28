@@ -445,3 +445,8 @@ table .sort-desc:after, .sort-desc .fixedHead:after {
 .column-letters  {
     background: #c2c2c2;
 }
+@media screen and (max-width: 760px) {
+    .navbar-nav, .nav {
+        display: none !important;
+    }
+}
