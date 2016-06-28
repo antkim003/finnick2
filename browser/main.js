@@ -19,9 +19,11 @@ const createStoreWithMiddleware = applyMiddleware(ReduxPromise, ReduxThunk)(crea
 const store = createStoreWithMiddleware(reducers);
 
 const token = localStorage.getItem('token');
-
+// token = JSON.parse(token);
 if(token) {
   store.dispatch({ type: AUTH_USER });
+  store.dispatch(fetchSession());
+} else {
   store.dispatch(fetchSession());
 }
 
@@ -35,9 +37,9 @@ ReactDOM.render(
   <Provider store={store}>
     <Router history={browserHistory}>
       <Route path="/" component={Wrapper}>
-        <IndexRoute component={App} />
+        <IndexRoute component={Landing} />
         <Route path="admin" component={RequireAuth(Admin)}/>
-        <Route path="landing" component={Landing} />
+        <Route path="finnick" component={RequireAuth(App)} />
         <Route path="login" component={Login}/>
         <Route path="logout" component={Logout}/>
       </Route>

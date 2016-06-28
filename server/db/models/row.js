@@ -14,7 +14,8 @@ var schema = new mongoose.Schema({
         type: String
     },
     locked: {
-        type: Boolean
+        type: Boolean,
+        default: false
     }
 },
 {

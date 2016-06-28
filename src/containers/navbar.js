@@ -36,10 +36,10 @@ class NavBar extends Component {
         </div>
         <ul className="nav navbar-nav navbar-right">
           <li className="nav-item">
-            <Link className="nav-link" to="/">Finnick</Link>
+            <Link className="nav-link" to="/">Home</Link>
           </li>
           <li className="nav-item">
-            <Link className="nav-link" to="/landing">Landing</Link>
+            <Link className="nav-link" to="/finnick">Finnick</Link>
           </li>
           {this.renderLinks()}
         </ul>
