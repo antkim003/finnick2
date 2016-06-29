@@ -67,7 +67,7 @@ describe('users routes /api/users', function () {
       .expect(200)
       .end(function(err,response) {
         if (err) done(err);
-        expect(response.body).to.exist;
+        expect(response.body).to.equal('destroyed');
         done();
       });
   });

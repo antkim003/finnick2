@@ -72,30 +72,74 @@ var seedUsers = function () {
             email: 'testing@fsa.com',
             password: 'password',
             collections: ["women","for_the_home"],
-            locked: false
+            locked: false,
+            lead: true
         },
         {
-            name: "obama",
-            email: 'obama@gmail.com',
-            password: 'potus',
-            collections: ["women", "for_the_home"],
-            locked: false
+            name: "admin",
+            email: 'admin@gmail.com',
+            password: 'test',
+            locked: false,
+            lead: true,
+            type: "admin"
         },
-        {"name":"Denise Black",
+        {
+            "name":"photography",
             password: 'test',
-            "email":"dblack0@bluehost.com","type":"photography","locked":false},
-        {"name":"Timothy Grant",
+            "email":"photography@gmail.com",
+            "type":"photography",
+            collections: ["women", "for_the_home"],
+            "locked":false
+        },
+        {
+            "name":"sitemerch",
             password: 'test',
-            "email":"tgrant1@about.me","type":"site_merch","collections":["women"],"locked":false},
-        {"name":"Lawrence Cole",
+            "email":"sitemerch@gmail.com",
+            "type":"site_merch",
+            "collections":["women"],
+            "locked":false
+        },
+        {
+            "name":"nocollections_sitemerch",
             password: 'test',
-            "email":"lcole2@fda.gov","type":"site_merch", "lead": true,"locked":false},
-        {"name":"Jonathan Garza",
+            "email":"nocollections_sitemerch@gmail.com",
+            "type":"site_merch",
+            "locked":false
+        },
+        {
+            "name":"buyer",
             password: 'test',
-            "email":"jgarza3@columbia.edu","type":"buyer", "lead": true,"locked":false},
-        {"name":"Rose Gutierrez",
+            "email":"buyer@gmail.com",
+            "type":"buyer",
+            "lead": true,
+            "locked":false,
+            collections: ["women", "for_the_home"]
+        },
+        {
+            "name":"Marketing",
             password: 'test',
-            "email":"rgutierrez4@aboutads.info","type":"copy", "lead": true,"collections":["men"],"locked":true},
+            "email":"marketing@gmail.com",
+            collections: ["women"],
+            "type":"marketing", "lead": true,"locked":false
+        },
+        {
+            "name":"copy",
+            password: 'test',
+            "email":"copy@gmail.com",
+            "type":"copy",
+            "lead": true,
+            "collections":["men"],
+            "locked":false
+        },
+        {
+            "name":"copylocked",
+            password: 'test',
+            "email":"copylocked@gmail.com",
+            "type":"copy",
+            "lead": true,
+            "collections":["men"],
+            "locked":true
+        },
         {"name":"Lillian Willis",
             password: 'test',
             "email":"lwillis5@latimes.com","type":"copy","locked":true},
