@@ -486,3 +486,11 @@ table .sort-desc:after, .sort-desc .fixedHead:after {
 input[type="checkbox"] {
     max-width: 20px !important; ;
 }
+.fixedError {
+    position: fixed;
+    background: rgba(255,255,255,0.8);
+    color: #ff0000;
+    padding: 1em 1em 1em 10em;
+    z-index: 1000;
+    top: 0;
+}
