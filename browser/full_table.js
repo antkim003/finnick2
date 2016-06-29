@@ -221,7 +221,7 @@ render() {
         })[0] ? _.filter(userpermissions, function(users) {
             return users.type == user.type
         })[0].permission : [];
-        if ((!_.includes(thisuserspermissions, col.property) && user.type != 'admin') || user.locked) {
+        if ((!_.includes(thisuserspermissions, col.property) && user.type != 'admin') || user.locked || user.collections.length == 0) {
             col.cell = [];
         }
     })
@@ -247,6 +247,7 @@ render() {
     );
 
     var fobs = [];
+//    var defaultcollections = window.user.type =='admin' ? ['women', 'men', 'for_the_home'] : ''
     var collections = window.user.collections.length > 0 ? window.user.collections : ['women', 'men', 'for_the_home'] ;
     _.each(collections, function(col, i) {
         fobs.push(<option key={col+'-'+i} value={col}>{col}</option>)
@@ -268,7 +269,7 @@ render() {
     return (
         <div>
             <div className="user-info">
-                Hi, {window.user.name}. You are a/n {window.user.type} user. {window.user.locked ? 'Your account is locked.' : ''}
+                Hi, {window.user.name}. You are a/n {window.user.type} user. {window.user.locked ? 'Your account is locked.' : ''} {window.user.collections.length == 0 ? 'Unfortunately, you have no collections/FOBs to edit, but you can view them.' : ''}
                 <div className="fob">Choose FOB <select className="fob-drop" key="fob" value={window.location.search.split('?')[1]} onChange={this.changeFOB}>{fobs}</select>
                     <button onClick={this.hideCols}>Hide Columns</button>
                     <button onClick={this.helpModal}>HELP!</button>
