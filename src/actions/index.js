@@ -57,7 +57,7 @@ export function fetchSession() {
     axios.get('/api/members/session')
       .then( response => {
         dispatch({ type: AUTH_USER });
-        localStorage.removeItem('token',response.data.token);
+        localStorage.setItem('token',response.data.token);
       })
       .catch( response => {
         dispatch({ type: UNAUTH_USER });

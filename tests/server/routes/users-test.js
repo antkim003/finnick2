@@ -48,6 +48,16 @@ describe('users routes /api/users', function () {
       });
   });
 
+  it('GET /types ', function(done) {
+    agent.get('/api/users/types')
+      .expect(200)
+      .end(function(err, response) {
+        if(err) done(err);
+        expect(response.body).to.be.an("array");
+        done()
+      });
+  });
+
   it('PUT /:userid', function(done) {
     agent.put('/api/users/' + _user._id)
       .send({

@@ -8,7 +8,7 @@ var mongoose = require('mongoose');
 var Permission = mongoose.model('Permission');
 
 describe('Permission Model', function () {
-  this.timeout(4000);
+  this.timeout(8000);
   beforeEach('Establish DB connection', function (done) {
       if (mongoose.connection.db) return done();
       mongoose.connect(dbURI, done);
@@ -23,8 +23,8 @@ describe('Permission Model', function () {
       console.log('permission here');
       expect(Permission).to.be.a('function');
       done();
-    });  
+    });
   });
 
-  
+
 });

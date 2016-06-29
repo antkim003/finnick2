@@ -19,7 +19,6 @@ const createStoreWithMiddleware = applyMiddleware(ReduxPromise, ReduxThunk)(crea
 const store = createStoreWithMiddleware(reducers);
 
 const token = localStorage.getItem('token');
-// token = JSON.parse(token);
 if(token) {
   store.dispatch({ type: AUTH_USER });
   store.dispatch(fetchSession());

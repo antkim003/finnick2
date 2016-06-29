@@ -25,5 +25,5 @@ router.get('/', function(req,res,next) {
         let uniqueCategories = _.uniq(categories);
         console.log('heres the unique categories', uniqueCategories);
         res.json({categories: uniqueCategories});
-    });
+    },next);
 });

@@ -21,6 +21,18 @@ router.get('/:userId', function(req, res, next) {
         }, next);
 });
 
+router.get('/types', function(req, res, next) {
+    User.find({})
+        .then(function(users) {
+            let types = users.map(function(user) {
+                return user.type;
+            });
+            let uniqueTypes = _.without(_.uniq(types));
+            console.log('here are the unique types: ', uniqueTypes);
+            res.json({types: uniqueTypes})
+        }, next);
+})
+
 router.post('/', function(req, res, next) {
     User.create(req.body)
         .then(function(user) {

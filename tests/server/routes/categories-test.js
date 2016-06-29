@@ -41,7 +41,7 @@ describe('categories Route', function () {
       .expect(200)
       .end(function(err, resp){
         if (err) return done(err)
-        console.log('apicategories data', resp);
+        console.log('apicategories data', resp.body);
         expect(resp.data.categories[0]).to.eql('women');
         done();
       });
