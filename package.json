@@ -48,6 +48,7 @@
     "passport": "^0.3.2",
     "passport-local": "^1.0.0",
     "react": "^0.14.3",
+    "react-bootstrap": "^0.29.5",
     "react-dom": "^0.14.3",
     "react-redux": "^4.4.5",
     "react-router": "^2.4.1",
@@ -55,7 +56,8 @@
     "redux-form": "^5.2.5",
     "redux-promise": "^0.5.3",
     "redux-thunk": "^2.1.0",
-    "serve-favicon": "^2.3.0"
+    "serve-favicon": "^2.3.0",
+    "socket.io": "^1.4.6"
   },
   "devDependencies": {
     "annogenerate": "^0.8.1",
@@ -127,7 +129,6 @@
     "segmentize": "^0.4.1",
     "sinon": "^1.16.1",
     "sinon-chai": "^2.8.0",
-    "socket.io": "^1.4.6",
     "stage": "^0.9.0",
     "stats-webpack-plugin": "^0.2.1",
     "style-loader": "^0.12.4",

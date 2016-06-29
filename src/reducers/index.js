@@ -6,6 +6,7 @@ import userReducer from './user';
 import columnsReducer from './columns';
 import sessionReducer from './session';
 import collectionsReducer from './collections_reducer';
+import usertypesReducer from './usertypes.js'
 
 const rootReducer = combineReducers({
   form,
@@ -14,7 +15,8 @@ const rootReducer = combineReducers({
   users: usersReducer,
   columns: columnsReducer,
   auth: authReducer,
-  collections: collectionsReducer
+  collections: collectionsReducer,
+  types: usertypesReducer
 });
 
 export default rootReducer;

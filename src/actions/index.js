@@ -7,10 +7,12 @@ import {
   FETCH_MESSAGE,
   FETCH_USERS,
   FETCH_USER,
+  ADD_USER,
   FETCH_SESSION,
   FETCH_COLUMNS,
   FETCH_COLLECTIONS,
-  UPDATE_USER
+  UPDATE_USER,
+  FETCH_TYPES
 } from './type';
 
 export function loginUser( { email, password }) {
@@ -69,6 +71,7 @@ export function fetchSession() {
       .then( response => {
         dispatch({ type: AUTH_USER });
         localStorage.setItem('token',response.data.token);
+        dispatch({ type: FETCH_SESSION, payload: response });
       })
       .catch( response => {
         dispatch({ type: UNAUTH_USER });
@@ -76,12 +79,21 @@ export function fetchSession() {
         localStorage.removeItem('user');
 })
   }
-  // const request =
-  //
-  // return {
-  //   type: FETCH_SESSION,
-  //   payload: request
-  // };
+};
+
+export function addUser( data ) {
+  return function(dispatch) {
+    axios.post('/api/users/', data)
+      .then(response => {
+        console.log('post user', response.data);
+        dispatch({ type: ADD_USER, payload: response });
+        dispatch(fetchUsers());
+        return { type: FETCH_USERS }
+      })
+      .catch(error => {
+        console.error('there wasn an error: ', error);
+      })
+  }
 };
 
 export function updateUser( userId, data ) {
@@ -112,6 +124,15 @@ export function fetchUsers() {
 
   return {
     type: FETCH_USERS,
+    payload: request
+  };
+};
+
+export function fetchTypes() {
+  const request = axios.get('/api/users/types');
+
+  return {
+    type: FETCH_TYPES,
     payload: request
   };
 };

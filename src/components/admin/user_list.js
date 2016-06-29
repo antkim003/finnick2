@@ -92,12 +92,13 @@ class UserList extends Component {
       return;
     }
 
-    if (event.currentTarget.getAttribute('data-property') === "collections") {
+    if (event.currentTarget.getAttribute('data-property') === "collections" || event.currentTarget.getAttribute('data-property') === "type" ) {
       this.setState({
         clickTarget: event.currentTarget,
         clickX: event.clientX,
         clickY: event.clientY,
         popupState: 'open',
+        property: event.currentTarget.getAttribute('data-property'),
         userId: event.currentTarget.getAttribute('data-user-id')
       });
       console.log('user set state: ', this.state.userId, event.currentTarget.getAttribute('data-user-id'));
@@ -171,6 +172,7 @@ class UserList extends Component {
                 popupState={this.state.popupState}
                 userId = {this.state.userId}
                 closePopup = {this.closePopup}
+                property = {this.state.property}
                 />
         </div>
       </div>

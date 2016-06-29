@@ -7,7 +7,7 @@ class Popup extends React.Component {
   constructor(props) {
     super(props);
     this.renderInput = this.renderInput.bind(this);
-    this.renderCollections = this.renderCollections.bind(this);
+    this.renderCheckboxes = this.renderCheckboxes.bind(this);
     this.handleClick = this.handleClick.bind(this);
     this.submitForm = this.submitForm.bind(this);
     this.state = {
@@ -15,7 +15,7 @@ class Popup extends React.Component {
     };
   }
   componentWillMount() {
-    this.props.fetchCollections();
+    this.props.fetchCollections().then(this.props.fetchTypes())
   }
   componentWillUpdate(nextProps, nextState) {
     let self = this;
@@ -36,9 +36,9 @@ class Popup extends React.Component {
 
     }
   }
-  renderCollections() {
+  renderCheckboxes(property) {
     let self = this;
-    return this.props.collections.map(function(collection, idx) {
+    return this.props[property].map(function(collection, idx) {
       return(
         <div key={idx} className="form-group">
           <div className="checkbox">
@@ -50,6 +50,7 @@ class Popup extends React.Component {
         </div>
       )
     });
+
   }
   handleClick(e) {
     let current = e.currentTarget;
@@ -76,9 +77,10 @@ class Popup extends React.Component {
     if (!this.props.clickTarget) {
       return;
     }
+
       return (
         <form onSubmit={this.submitForm}>
-          {this.renderCollections()}
+          {this.renderCheckboxes(this.props.property)}
           <div className="btn btn-primary" type="submit" onClick={this.submitForm}>Save</div>
         </form>
       )
@@ -106,9 +108,11 @@ class Popup extends React.Component {
 }
 
 function mapStateToProps(state) {
+  console.log('map state to props in popup: ', state);
   return {
       collections: state.collections,
-      user: state.user
+      user: state.user,
+      type: state.types
   }
 }
 
