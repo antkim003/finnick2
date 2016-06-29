@@ -298,8 +298,8 @@ render() {
                 },
                 onMouseEnter: (e) => {
                     if ((e.target.getAttribute('data-property') == 'tileimage') || (e.target.getAttribute('data-property') == 'imageid')) {
-                        var parts = e.target.innerText.split('').reverse().join('') || '';
-                        parts = parts.match(/[\s\S]{1,2}/g) || []
+                        var parts = $(e.target).text().split('').reverse().join('') || '';
+                        parts = parts.match(/[\s\S]{1,2}/g) || [];
                         var withslash = '';
                         if (parts.length > 0) {
                             if (parts.length == 4) {
@@ -314,7 +314,7 @@ render() {
                                 withslash = parts.join('/').split('').reverse().join('');
                             }
                         }
-                        var url = 'https://stars.macys.com/preview/'+withslash+'/final/'+e.target.innerText+'-214x261.jpg';
+                        var url = 'https://stars.macys.com/preview/'+withslash+'/final/'+$(e.target).text()+'-214x261.jpg';
                         $(e.target).append('<img class="imagehover" src="'+url+'" onerror="this.onerror=null;this.src=\'https://stars.macys.com/UI/Common/Graphics/Main/product-image-not-available.jpeg\';"/>')
                     }
                 },
