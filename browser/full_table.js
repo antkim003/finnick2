@@ -221,7 +221,10 @@ render() {
         })[0] ? _.filter(userpermissions, function(users) {
             return users.type == user.type
         })[0].permission : [];
-        if ((!_.includes(thisuserspermissions, col.property) && user.type != 'admin') || user.locked || user.collections.length == 0) {
+        if ((!_.includes(thisuserspermissions, col.property) && user.type != 'admin')
+            || user.locked
+            || user.collections.length == 0
+            || !_.includes(user.collections, window.location.search.split('?')[1]) ) {
             col.cell = [];
         }
     })
