@@ -20,19 +20,21 @@ module.exports = () =>
                 'margin-left': -$(window).scrollLeft() - 13,
             }
         );
-        if ($('thead')[0].getBoundingClientRect().top < 0) {
-            $('.fixedHead').css({'display': 'block'})
-
-            $('.navbar').css({'display': 'none' })
-        } else {
-            $('.fixedHead').css({'display': 'none' })
-            if ($('thead')[0].getBoundingClientRect().top > 110) {
-                $('.navbar').css({'display': 'block' })
-            }else {
+        if ( $('.demonstration').size() > 0) {
+            if ($('thead')[0].getBoundingClientRect().top < 0) {
+                $('.fixedHead').css({'display': 'block'})
                 $('.navbar').css({'display': 'none' })
-            }
+            } else {
+                $('.fixedHead').css({'display': 'none' })
+                if ($('thead')[0].getBoundingClientRect().top > 110 ) {
+                    $('.navbar').css({'display': 'block' })
+                }else {
+                    $('.navbar').css({'display': 'none' })
+                }
 
+            }
         }
+
             _.each($('.fixedHead'), function (fh, i) {
                 var wid = i == 0 ? 38 : 39;
                 $(fh).css({'width': $(fh).parent().width() + wid, 'height': $(fh).parent().height()+10, 'visibility': 'visible'});
