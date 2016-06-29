@@ -19,7 +19,7 @@ class Login extends Component {
   }
   componentWillMount() {
     if (this.props.authenticated) {
-      browserHistory.push('/admin');
+      browserHistory.push('/');
     }
   }
   render() {

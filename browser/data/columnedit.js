@@ -28,7 +28,7 @@ module.exports = (app) => {
         var val = value.hasOwnProperty('row') ? value.val : value;
         var rowid = parseInt(datrow.split('-')[0])+1;
 //            if ( val != undefined ) {
-                if ( typeof val != 'undefined' && val[0].toLowerCase() == 'custom' ) {
+                if ( typeof val != 'undefined' && value.toLowerCase() == 'custom' ) {
                     var customsave = (e) => {
                         val = e.target.previousSibling.value;
                         app.refs.modal.hide();
