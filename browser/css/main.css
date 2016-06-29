@@ -264,16 +264,21 @@ article.pure-u-1 .controls:first-child {
 }
 .pure-table-striped tr:nth-child(2n-1) td {
     /*z-index: -1;*/
+    background-color: rgba(0,0,0,0.10);
 }
 .userspan {
     position: absolute;
-    display: inline-block;
     top: 0px;
     right: 0px;
     background: #ff694d;
     color: #fff;
     padding: 3px;
+    display: none;
 }
+.activeOtherCell .userspan {
+    display: inline-block;
+}
+
 button {
     z-index: 1000;
 }
@@ -437,6 +442,7 @@ table .sort-desc:after, .sort-desc .fixedHead:after {
 }
 .fob-drop {
     margin: 0 0.5em;
+    color: #333;
 }
 .fob button {
     color: #333;
@@ -449,4 +455,32 @@ table .sort-desc:after, .sort-desc .fixedHead:after {
     .navbar-nav, .nav {
         display: none !important;
     }
+}
+#leadsheet {
+    max-height: 400px;
+    overflow: scroll;
+}
+#leadsheet {
+    margin:0;
+    padding:0;
+}
+#leadsheet li {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+.leadsheet-even {
+    background: #eee;
+
+}
+.leadsheet-id {
+    text-transform: uppercase;
+    text-decoration: underline;
+    color: #2a7ac2;
+}
+.leadsheet-c {
+    margin-left: 1em;
+}
+input[type="checkbox"] {
+    max-width: 20px !important; ;
 }

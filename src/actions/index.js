@@ -21,6 +21,16 @@ export function loginUser( { email, password }) {
         dispatch({ type: AUTH_USER });
         dispatch(fetchSession());
         localStorage.setItem('token', response.data.token);
+      localStorage.setItem('all', JSON.stringify(response.data));
+      localStorage.setItem('user',  JSON.stringify({
+              name: response.data.user.name,
+              email: email,
+              type: response.data.user.type,
+              locked: response.data.user.locked,
+              collections: response.data.user.collections,
+              lead: response.data.user.lead
+          })
+        );
         browserHistory.push('/admin');
       })
       .catch(response => {
@@ -35,6 +45,7 @@ export function logoutUser() {
       .then(response => {
         dispatch({ type: UNAUTH_USER});
         localStorage.removeItem('token');
+        localStorage.removeItem('user');
         return { type: UNAUTH_USER };
       })
       .catch( response => {
@@ -62,7 +73,8 @@ export function fetchSession() {
       .catch( response => {
         dispatch({ type: UNAUTH_USER });
         localStorage.removeItem('token');
-      })
+        localStorage.removeItem('user');
+})
   }
   // const request =
   //

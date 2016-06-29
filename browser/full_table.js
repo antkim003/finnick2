@@ -31,27 +31,26 @@ module.exports = React.createClass({
     displayName: 'FullTable',
     getInitialState: function(){
         var self = this;
-
         scrolling();
-//      var users = dummyusers;
         var users = [
             {"name":"Jonathan Garza","email":"jgarza3@columbia.edu","type":"admin","locked":false},
             {"name":"Jayne Smyth","email":"test@columbia.edu","type":"admin","locked":false}
         ]
-        window.user = users[Math.floor(Math.random()*users.length)];
+        window.user = JSON.parse(localStorage.getItem('user'));
         window.statedata = [];
         sockets();
         if (window.location.search == '') {
             browserHistory.push( window.location.pathname + '?women');
-            // window.location.search = '?women'
         }
         var query = window.location.search.split('?')[1];
         var queryyes = query ? '/'+query : '/women';
 
-        var getdata = function() {
+
+        var getdata = function(q) {
+            var fob = q ? '/'+q : queryyes;
             $.ajax({
                 type: "GET",
-                url: '/api/rows' + queryyes,
+                url: '/api/rows' + fob,
                 success: function (data1) {
 //                    console.log(window.coledit, 'in get data')
                     var allrows = _.map(data1, 'entries');
@@ -91,15 +90,10 @@ module.exports = React.createClass({
         });
 
 
-        window.datainterval = setInterval(function() {
-            getdata();
-        }, 30000);
-//        self.interval;
+
 
 
 window.hiding = [];
-
-
 
 
 return {
@@ -164,12 +158,14 @@ componentDidMount() {
     var columns = _.sortBy(this.state.columns, 'columnorder');
 
     var query = window.location.search.split('?')[1];
-    var queryyes = query ? '/'+query : '/women'
-    var getdata = function() {
+    var queryyes = query ? '/'+query : '/women';
+
+    var getdata = function(query) {
+        var fob = query ? query : queryyes;
         var data = [];
         $.ajax({
             type: "GET",
-            url: '/api/rows' + queryyes,
+            url: '/api/rows' + fob,
             success: function (data1) {
                 var allrows = _.map(data1, 'entries');
                 window.data = data1;
@@ -203,39 +199,14 @@ componentDidMount() {
         })
     };
 
-//    var egetdata = function(data1) {
-//        var filteredrows = _.filter(JSON.parse(data1), function(e){ return e.entries[_.findIndex(e.entries, function(eb){ return eb.columnName == 'category' } )].data == query })
-//        console.log(filteredrows)
-//        var allrows = _.map(filteredrows, 'entries');
-//        var arr = [];
-//        _.each(allrows, function (row, i) {
-//            //fill in empty subcategories
-//            var allobj = _.zipObject(_.map(columns, 'property'), _.range(columns.length).map(function () {
-//                return ''
-//            }));
-//            _.each(row, function (cell, j) {
-//                var all = {};
-//                if (cell.columnName != 'sortnumber' && cell.columnName != 'id') {
-//                    all[cell.columnName] = cell.data;
-//                } else {
-//                    all[cell.columnName] = parseInt(cell.data);
-//                }
-//                all.rowIndex = parseInt(cell.rowIndex);
-//                _.extend(allobj, all)
-//            });
-//            arr.push(allobj);
-//        });
-//        self.setState({
-//            data:_.sortBy(arr, 'rowIndex')
-//        });
-//        window.datainterval;
-//    };
 
     window.socket.on('new data', function(data) {
-//        clearInterval(self.interval);
-//        egetdata(data);
-            getdata()
+        getdata()
     });
+    window.datainterval = setInterval(function() {
+        getdata()
+    }, 30000);
+
 
 
 },
@@ -276,23 +247,29 @@ render() {
     );
 
     var fobs = [];
-    var collections = window.user.buyercollections ? window.user.buyercollections : ['women', 'men', 'for_the_home'] ;
+    var collections = window.user.collections.length > 0 ? window.user.collections : ['women', 'men', 'for_the_home'] ;
     _.each(collections, function(col, i) {
-        fobs.push(<option value={col}>{col}</option>)
+        fobs.push(<option key={col+'-'+i} value={col}>{col}</option>)
     });
 
+
+//### permissions for "tools"
+//
     var buttons = [];
-    if (window.user.type == 'admin') {
-        buttons.push(<button onClick={this.rowsOneValue}>#Rows all one Value</button>);
-//        boost.push(<button onClick="">Boost Modal</button>);
-        buttons.push(<button onClick={this.leadSheetHelper}>Lead Sheet Helper</button>)
+    if (window.user.type == 'admin') { //admin only
+        buttons.push(<button key="button1" onClick={this.rowsOneValue}>Rows all one Value</button>);
     }
+    if (window.user.type == 'photography' || window.user.type == 'admin') { //photography
+        buttons.push(<button key="button2" onClick={this.leadSheetHelper}>Lead Sheet Helper</button>)
+    }
+
+
 
     return (
         <div>
             <div className="user-info">
-                Hi, {window.user.name}. You are a/n {window.user.type}. {window.user.locked ? 'Your account is locked.' : ''}
-                <div className="fob">Choose FOB <select className="fob-drop" value={window.location.search.split('?')[1]} onChange={this.changeFOB}>{fobs}</select>
+                Hi, {window.user.email}. You are a/n {window.user.type} user. {window.user.locked ? 'Your account is locked.' : ''}
+                <div className="fob">Choose FOB <select className="fob-drop" key="fob" value={window.location.search.split('?')[1]} onChange={this.changeFOB}>{fobs}</select>
                     <button onClick={this.hideCols}>Hide Columns</button>
                     <button onClick={this.helpModal}>HELP!</button>
                     {buttons}
@@ -393,9 +370,14 @@ helpModal() {
                 title: 'Help',
                 content: <div>
                     <ul>
-                        <li>Grey VS Orange headers <br/>
-                            Grey = uneditable columns; green = editable columns
-                            </li>
+                        <li>Grey VS Green headers <br/>
+                            Grey = NO-editing columns; Green (for GO!) = editable columns
+                        </li>
+                        <li>Hover over (i) for more Information on column
+                        </li>
+                        <li>Questions/Comments<br/>
+                            email elizabeth.chen@macys.com or anthony.kim@macys.com
+                        </li>
                     </ul>
                 </div>
             }
@@ -505,6 +487,7 @@ rowsOneValue() {
 
 },
 changeFOB(e) {
+//    browserHistory.push('/finnick?'+ e.target.value);
    window.location.search = e.target.value;
 },
 rowsToShow(e) {

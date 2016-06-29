@@ -6,17 +6,17 @@ class NavBar extends Component {
   renderLinks() {
     if (this.props.authenticated) {
       return (
-        [<li className="nav-item">
-          <Link className="nav-link" to="/admin">Admin</Link>
+        [<li className="nav-item" key="n1">
+          <Link className="nav-link" to="/admin" key="n1-1">Admin</Link>
         </li>,
-        <li className="nav-item">
-          <Link className="nav-link" to="/logout">Log Out</Link>
+        <li className="nav-item" key="n2">
+          <Link className="nav-link" to="/logout" key="n2-1">Log Out</Link>
         </li>]
       )
     } else {
       return (
-        <li className="nav-item">
-          <Link className="nav-link" to="/login">Sign In</Link>
+        <li className="nav-item" key="n3">
+          <Link className="nav-link" to="/login" key="n3-1">Sign In</Link>
         </li>
       )
     }
