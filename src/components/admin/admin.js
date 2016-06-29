@@ -2,9 +2,8 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
 import UserList from './user_list';
+import AdminControls from './admin_controls';
 import * as actions from '../../actions';
-
-
 
 class Admin extends Component {
   renderUser(session) {
@@ -22,6 +21,7 @@ class Admin extends Component {
           <div>
               <div className="container">
                 <h1>WELCOME {this.renderUser(this.props.session)}! this is the admin view</h1>
+                <AdminControls />
                 <UserList />
               </div>
           </div>

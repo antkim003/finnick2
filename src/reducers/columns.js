@@ -6,6 +6,7 @@ export default function(state = [], action) {
   switch (action.type) {
     case FETCH_COLUMNS:
       return [ ...state, ...action.payload.data ];
+    default:
+      return state
   }
-  return state;
 }
