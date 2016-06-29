@@ -29,7 +29,6 @@ module.exports = () =>
         if (typeof user != 'undefined') {
             first =  user.split(' ')[0];
         }
-//        var last =  typeof user.split(' ').length > 1 ? '' : '';
         var cell = data.cell.editedCell;
         var cellrow = data.cell;
         var fob = data.fob;

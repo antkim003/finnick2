@@ -166,9 +166,10 @@ table {
     background: rgba(113,198,113,0.18);
     content: ' ';
     z-index: -1;
+    line-height: 100%;
+    display: block;
 }
 [data-edit="noedit"],[data-edit="editor"] {
-    /*opacity: 0.8 !important;*/
     position: relative;
 }
 [data-edit="noedit"]:before {
@@ -180,6 +181,7 @@ table {
     background: rgba(255,255,255,0.1);
     content: ' ';
     z-index: 0;
+    display: block;
 }
 .header-editor {
     background: #baffc0;

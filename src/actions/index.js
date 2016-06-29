@@ -31,7 +31,7 @@ export function loginUser( { email, password }) {
               lead: response.data.user.lead
           })
         );
-        browserHistory.push('/admin');
+        browserHistory.push('/');
       })
       .catch(response => {
         dispatch(authError(response.data));

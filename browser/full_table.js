@@ -268,7 +268,7 @@ render() {
     return (
         <div>
             <div className="user-info">
-                Hi, {window.user.email}. You are a/n {window.user.type} user. {window.user.locked ? 'Your account is locked.' : ''}
+                Hi, {window.user.name}. You are a/n {window.user.type} user. {window.user.locked ? 'Your account is locked.' : ''}
                 <div className="fob">Choose FOB <select className="fob-drop" key="fob" value={window.location.search.split('?')[1]} onChange={this.changeFOB}>{fobs}</select>
                     <button onClick={this.hideCols}>Hide Columns</button>
                     <button onClick={this.helpModal}>HELP!</button>
@@ -540,10 +540,10 @@ hideCols() {
         var hiddencolumns = localStorage.getItem('hidecol') ;
         var propchecked = _.includes(hiddencolumns, c.property);
         if (propchecked) {
-            cols.push(<div className="showhidecol"><label for={'name-'+c.property}>{c.property}</label><input type="checkbox" value={c.property} checked id={'name-'+c.property} /> </div>)
+            cols.push(<div className="showhidecol"><label>{c.property}</label><input type="checkbox" value={c.property} checked id={'name-'+c.property} /> </div>)
         } else if (c.property == 'id') {
         }else {
-            cols.push(<div className="showhidecol"><label for={'name-'+c.property}>{c.property}</label><input type="checkbox" id={'name-'+c.property} value={c.property} /></div>)
+            cols.push(<div className="showhidecol"><label>{c.property}</label><input type="checkbox" id={'name-'+c.property} value={c.property} /></div>)
         }
     })
 
