@@ -273,7 +273,7 @@ render() {
         <div>
             <div className="user-info">
                 Hi, {window.user.name}. You are a/n {window.user.type} user. {window.user.locked ? 'Your account is locked.' : ''} {window.user.collections.length == 0 ? 'Unfortunately, you have no collections/FOBs to edit, but you can view them.' : ''}
-                {!_.includes(user.collections, window.location.search.split('?')[1]) ? <div className="fixedError">You are trying to access an FOB you don't have access to edit, showing read-only view. Click on HELP! for more options</div> : ''}
+                {window.user.type != 'marketing' && !_.includes(window.user.collections, window.location.search.split('?')[1]) ? <div className="fixedError">This is an FOB you don't have access to edit, showing read-only view.</div> : ''}
                 <div className="fob">Choose FOB <select className="fob-drop" key="fob" value={window.location.search.split('?')[1]} onChange={this.changeFOB}>{fobs}</select>
                     <button onClick={this.hideCols}>Hide Columns</button>
                     <button onClick={this.helpModal}>HELP!</button>
