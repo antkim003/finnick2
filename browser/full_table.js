@@ -210,9 +210,7 @@ componentDidMount() {
     });
     window.datainterval = setInterval(function() {
         getdata()
-    }, 30000);
-
-
+    }, 10000);
 
 },
 
@@ -544,7 +542,11 @@ onSelect(page) {
     var pages = Math.ceil(this.state.data.length / pagination.perPage);
 
     pagination.page = Math.min(Math.max(page, 1), pages);
-
+    var scrollX = window.scrollX+1
+    var scrollY = window.scrollY+1
+    if ($('.demonstration').size() > 0) {
+        window.scrollTo(scrollX,scrollY);
+    }
     this.setState({
         pagination: pagination
     });

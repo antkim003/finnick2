@@ -286,8 +286,13 @@ article.pure-u-1 .controls:first-child {
     padding: 3px;
     display: none;
 }
+
 .activeOtherCell .userspan {
     display: inline-block;
+    width: 20px;
+}
+.activeOtherCell .userspan:hover {
+    width: auto;
 }
 
 button {
