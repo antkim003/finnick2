@@ -462,13 +462,20 @@ rowsOneValue() {
                 console.log('done');
                 window.socket.emit('my other event', { val: value, row: window.row-1 });
                 window.datainterval;
+//                window.location.reload(true);
                 _.each(cellsincol, function(cell, i) {
                     self.state.data[cell.rowIndex-1][column] = value;
-                    self.setState({
-                        data: query ? _.filter(_.sortBy(statedata, 'rowIndex'), function(d) { return d.category == query}) : statedata
-                    });
+                    if (i == cellsincol.length-1) {
+                        setTimeout(function(){
+                            self.setState({
+                                data: query ? _.filter(_.sortBy(statedata, 'rowIndex'), function(d) { return d.category == query}) : statedata
+                            });
+                            self.refs.modal.hide();
+                        }, 1000)
+                    }
                 })
-                self.refs.modal.hide();
+
+//
             }
 
         })
