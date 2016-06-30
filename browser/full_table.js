@@ -222,9 +222,9 @@ render() {
             return users.type == user.type
         })[0].permission : [];
         if ((!_.includes(thisuserspermissions, col.property) && user.type != 'admin')
-            || user.locked
-            || user.collections.length == 0
-            || !_.includes(user.collections, window.location.search.split('?')[1]) ) {
+            || user.locked && user.type != 'admin'
+            || user.collections.length == 0 && user.type != 'admin'
+            || !_.includes(user.collections, window.location.search.split('?')[1]) && user.type != 'admin' ) {
             col.cell = [];
         }
     })
@@ -277,9 +277,10 @@ render() {
     return (
         <div>
             <div className="user-info">
-                Hi, {window.user.name}. You are a/n {window.user.type} user. {window.user.locked ? 'Your account is locked.' : ''} {window.user.collections.length == 0 ? 'Unfortunately, you have no collections/FOBs to edit, but you can view them.' : ''}
-                {window.user.type != 'marketing' && !_.includes(window.user.collections, window.location.search.split('?')[1]) ? <div className="fixedError">This is an FOB you don't have access to edit, showing read-only view.</div> : ''}
-                {thisuserspermissions ? 'Permission to edit columns '+thisuserspermissions.join(', ') : ''}
+                Hi, {window.user.name}. You are a/n {window.user.type} user. {window.user.locked ? 'Your account is locked.' : ''}
+                {window.user.type != 'admin' && window.user.collections.length == 0 ? 'Unfortunately, you have no collections/FOBs to edit, but you can view them.' : ''}
+                {window.user.type != 'admin' && window.user.type != 'marketing' && !_.includes(window.user.collections, window.location.search.split('?')[1]) ? <div className="fixedError">This is an FOB you don't have access to edit, showing read-only view.</div> : ''}
+                {thisuserspermissions ? 'Permission to edit columns: '+thisuserspermissions.join(', ') : ''}
 
                 <div className="fob">Choose FOB <select className="fob-drop" key="fob" value={window.location.search.split('?')[1]} onChange={this.changeFOB}>{fobs}</select>
                     <button onClick={this.hideCols}>Hide Columns</button>
