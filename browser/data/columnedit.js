@@ -6,6 +6,10 @@ var highlight = require('../../src/formatters/highlight');
 var categoriesandsub = require('./categoriesandsub.js');
 var categoriesandsub1 = categoriesandsub;
 var categoriesandsub2 = categoriesandsub;
+var categoriesandsub3 = categoriesandsub;
+var categoriesandsub4 = categoriesandsub;
+var categoriesandsub5 = categoriesandsub;
+var categoriesandsub6 = categoriesandsub;
 var validations = require('./validations.js');
 var findIndex = require('lodash/findIndex');
 var React = require('react');
@@ -50,6 +54,11 @@ module.exports = (app) => {
                                     app.setState({
                                         data: query ? _.filter(_.sortBy(statedata, 'rowIndex'), function(d) { return d.category == query}) : statedata
                                     });
+                                    var scrollX = window.scrollX+1
+                                    var scrollY = window.scrollY+1
+                                    if ($('.demonstration').size() > 0) {
+                                        window.scrollTo(scrollX,scrollY);
+                                    }
                                 }
                             })
                         } else {
@@ -82,7 +91,11 @@ module.exports = (app) => {
                                     console.log('done');
                                     window.socket.emit('my other event', { val: val, row: window.row-1 });
                                     window.datainterval;
-
+                                    var scrollX = window.scrollX+1
+                                    var scrollY = window.scrollY+1
+                                    if ($('.demonstration').size() > 0) {
+                                        window.scrollTo(scrollX,scrollY);
+                                    }
                                 }
                             })
                         } else {
@@ -97,6 +110,11 @@ module.exports = (app) => {
                                         window.socket.emit('my other event', { val: val, row: window.row-1 });
                                         window.datainterval;
                                         $('.'+datrow).attr('data-id', data[0]._id);
+                                        var scrollX = window.scrollX+1
+                                        var scrollY = window.scrollY+1
+                                        if ($('.demonstration').size() > 0) {
+                                            window.scrollTo(scrollX,scrollY);
+                                        }
                                     }
                                 })
                         }
@@ -190,8 +208,8 @@ window.coledit =     [
         header: 'Double Exposure 2',
     info: 'additional category/fob for product',
     cell: [app.editable({
-    editor: editors.checkbox(categoriesandsub)
-}), app.highlighter('doubleexposure')],
+    editor: editors.checkbox(categoriesandsub3)
+}), app.highlighter('doubleexposure2')],
     columnorder: 8
 },
 {
@@ -199,8 +217,8 @@ window.coledit =     [
         header: 'Double Exposure Subcategory 2',
     info: 'subcategories specific to double exposed category',
     cell: [app.editable({
-    editor: editors.checkbox(categoriesandsub1, 'doubleexposure', app)
-}), app.highlighter('doubleexposuresubcategory')],
+    editor: editors.checkbox(categoriesandsub, 'doubleexposure2', app)
+}), app.highlighter('doubleexposuresubcategory2')],
     columnorder: 9
 },
 {
@@ -209,7 +227,7 @@ window.coledit =     [
     info: 'additional category/fob for product',
     cell: [app.editable({
     editor: editors.checkbox(categoriesandsub)
-}), app.highlighter('doubleexposure')],
+}), app.highlighter('doubleexposure3')],
     columnorder: 10
 },
 {
@@ -217,8 +235,8 @@ window.coledit =     [
         header: 'Double Exposure Subcategory 3',
     info: 'subcategories specific to double exposed category',
     cell: [app.editable({
-    editor: editors.checkbox(categoriesandsub1, 'doubleexposure', app)
-}), app.highlighter('doubleexposuresubcategory')],
+    editor: editors.checkbox(categoriesandsub1, 'doubleexposure3', app)
+}), app.highlighter('doubleexposuresubcategory3')],
     columnorder: 11
 },
 {

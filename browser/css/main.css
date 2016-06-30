@@ -157,17 +157,26 @@ table {
     /*width: inherit;*/
     /*top: 0;*/
 }
-[data-edit="editor"]:before {
-    position: absolute;
-    top: 0;
-    right: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(113,198,113,0.18);
-    content: ' ';
-    z-index: -1;
-    line-height: 100%;
-    display: block;
+/*[data-edit="editor"]:before {*/
+    /*position: absolute;*/
+    /*top: 0;*/
+    /*right: 0;*/
+    /*width: 100%;*/
+    /*height: 100%;*/
+    /*background: rgba(113,198,113,0.18);*/
+    /*content: ' ';*/
+    /*z-index: -1;*/
+    /*line-height: 100%;*/
+    /*display: block;*/
+/*}*/
+.even-row [data-edit="editor"]:not([data-property="id"]) {
+    background-color: #dcf2e0 !important;
+
+}
+.odd-row [data-edit="editor"]:not([data-property="id"]) {
+    background-color: #fafffb !important;
+
+    /*background: rgba(113,198,113,0.18);*/
 }
 [data-edit="noedit"],[data-edit="editor"] {
     position: relative;

@@ -116,6 +116,11 @@ return {
                 column,
                 this.setState.bind(this)
             );
+            var scrollX = window.scrollX+1
+            var scrollY = window.scrollY+1
+            if ($('.demonstration').size() > 0) {
+                window.scrollTo(scrollX,scrollY);
+            }
         },
         className: cx(['header'])
     },
