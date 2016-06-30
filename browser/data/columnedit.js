@@ -592,6 +592,15 @@ window.coledit =     [
     editor: editors.dropdown([{name:'true', value:'true'},{name:'false', value:'false'}]),
     }), app.highlighter('killedrow')],
     columnorder: 52
+},
+{
+    property: 'lockedrow',
+        header: 'Locked Row',
+    info: 'no deleted rows, keeping here for data fidelity',
+    cell: [app.editable({
+    editor: editors.dropdown([{name:'true', value:'true'},{name:'false', value:'false'}]),
+}), app.highlighter('lockedrow')],
+    columnorder: 53
 }
 ]
 

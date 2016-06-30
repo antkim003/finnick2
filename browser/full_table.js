@@ -393,6 +393,10 @@ helpModal() {
                         </li>
                         <li>Hover over (i) for more Information on column
                         </li>
+                        <li>Light blue rows are locked, and can no longer be edited;
+                        </li>
+                        <li>Rows with strikethrough have been killed, and remain as reference.
+                        </li>
                         <li>Questions/Comments<br/>
                             email elizabeth.chen@macys.com or anthony.kim@macys.com
                         </li>

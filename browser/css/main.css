@@ -202,7 +202,7 @@ table {
     position: fixed;
     z-index: 95 !important;
     color: #000;
-    background: none !important;
+    background: rgba(255,255,255,0.5) !important;
     /*background: #000;*/
     width: 12px;
     font-weight: bold;
@@ -426,8 +426,24 @@ table .sort-desc:after, .sort-desc .fixedHead:after {
     opacity: 0.5;
     text-decoration: line-through;
 }
-[data-killed='true'] td:not([data-property="killedrow"]){
+[data-killed='true'] td:not([data-property="killedrow"]), [data-locked='true']  td:not([data-property="lockedrow"]){
     pointer-events:none;
+}
+
+[data-locked='true']{
+    font-weight: bold;
+}
+.demonstration [data-locked='true'] td:not([data-property="id"]) {
+    background-color: #caf0fa !important;
+}
+.demonstration [data-locked='true'] [data-property="id"]:after {
+    font-family: "Glyphicons Halflings";
+    content: '\e033';
+    display: inline-block;
+    position: absolute;
+    right:-1em;
+    top:0.25em;
+    /*padding: 0 0 0 0.3em;*/
 }
 .user-info {
     padding: 0.3em 1em;

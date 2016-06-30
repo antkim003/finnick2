@@ -56,6 +56,7 @@ module.exports = React.createClass({
                     data-id={_.sortBy(window.data, 'index')[i]._id}
                     key={(row[rowKey] || i) + '-row'}
                     data-killed={row['killedrow']}
+                    data-locked={row['lockedrow']}
 
                     {...rowProps(row, i)}>{
                         columns.map((column, j) => {
