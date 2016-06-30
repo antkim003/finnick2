@@ -265,10 +265,13 @@ render() {
     var buttons = [];
     if (window.user.type == 'admin') { //admin only
         buttons.push(<button key="button1" onClick={this.rowsOneValue}>Rows all one Value</button>);
+        buttons.push(<button key="button-move" onClick={this.moveRow}>Move Row to FOB</button>);
     }
     if (window.user.type == 'photography' || window.user.type == 'admin') { //photography
         buttons.push(<button key="button2" onClick={this.leadSheetHelper}>Lead Sheet Helper</button>)
     }
+    buttons.push(<button key="button-url" onClick={this.checkURL}>Check URLs</button>);
+
     var thisuserspermissions = _.filter(userpermissions, function(users) {
         return users.type == user.type
     })[0] ? _.filter(userpermissions, function(users) {
@@ -313,6 +316,7 @@ render() {
                     window.row = d.id;
                 },
                 onMouseEnter: (e) => {
+                    //check image
                     if ((e.target.getAttribute('data-property') == 'tileimage') || (e.target.getAttribute('data-property') == 'imageid')) {
                         var parts = $(e.target).text().split('').reverse().join('') || '';
                         parts = parts.match(/[\s\S]{1,2}/g) || [];
@@ -332,6 +336,11 @@ render() {
                         }
                         var url = 'https://stars.macys.com/preview/'+withslash+'/final/'+$(e.target).text()+'-214x261.jpg';
                         $(e.target).append('<img class="imagehover" src="'+url+'" onerror="this.onerror=null;this.src=\'https://stars.macys.com/UI/Common/Graphics/Main/product-image-not-available.jpeg\';"/>')
+                    }
+
+                    //check link
+                    if ((e.target.getAttribute('data-property') == 'url')) {
+
                     }
                 },
                 onMouseLeave: (e) => {
@@ -376,6 +385,88 @@ render() {
             <SkyLight ref='modal' title={this.state.modal.title}>{this.state.modal.content}</SkyLight>
         </div>
         );
+},
+
+checkURL() {
+    var self = this;
+    this.refs.modal.show();
+    var fob = window.location.search.split('?')[1];
+    var urls = [];
+    var errors = [];
+    _.each(self.state.data, function(d, i){
+        if (d.linktype == 'url (u)') {
+            urls[i] = d.url;
+        }
+        if (d.linktype == 'category (c)') {
+            urls[i] = d.categoryid;
+        }
+        if (d.linktype == 'product (p)') {
+            urls[i] = d.productid;
+        }
+
+        if ( i == self.state.data.length -1 ){
+            $.ajax({
+                url: '/api/rows/checkurl',
+                type: 'POST',
+                data: JSON.stringify(urls),
+                contentType: 'application/json',
+                success: function(data) {
+                    console.log('done')
+                    errors.push(data);
+                    self.setState({
+                        modal: {
+                            title: 'Check URLs in '+fob,
+                            content: <div>
+                                        These are bad:
+                                        <div className="errorUrls" dangerouslySetInnerHTML={{__html: errors}}>
+                                        </div>
+                                    </div>
+                        }
+                    })
+                }
+            })
+        }
+    });
+
+    this.setState(
+        {
+            modal: {
+                title: 'Check URLs',
+                content: <div>
+                    <ul>
+                        {errors}
+                    </ul>
+                </div>
+            }
+        }
+    )
+},
+moveRow() {
+    this.refs.modal.show();
+
+    this.setState(
+        {
+            modal: {
+                title: 'Move Row',
+                content: <div>
+                    <ul>
+                        <li>Grey VS Green headers <br/>
+                        Grey = NO-editing columns; Green (for GO!) = editable columns
+                        </li>
+                        <li>Hover over (i) for more Information on column
+                        </li>
+                        <li>Light blue rows are locked, and can no longer be edited;
+                        </li>
+                        <li>Rows with strikethrough have been killed, and remain as reference.
+                        </li>
+                        <li>Questions/Comments<br/>
+                        email elizabeth.chen@macys.com or anthony.kim@macys.com
+                        </li>
+                    </ul>
+                </div>
+            }
+        }
+    )
 },
 helpModal() {
     var self = this;

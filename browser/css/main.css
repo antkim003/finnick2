@@ -526,3 +526,7 @@ input[type="checkbox"] {
     font-size: 10px;
     /*margin: 0 0 0 10em;*/
 }
+.errorUrls {
+    max-height: 400px;
+    overflow: scroll;
+}
