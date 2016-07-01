@@ -398,10 +398,10 @@ checkURL() {
             urls[i] = d.url;
         }
         if (d.linktype == 'category (c)') {
-            urls[i] = d.categoryid;
+            urls[i] = "c-"+d.categoryid;
         }
         if (d.linktype == 'product (p)') {
-            urls[i] = d.productid;
+            urls[i] = "p-"+d.productid;
         }
 //        <div className="errorUrls" dangerouslySetInnerHTML={{__html: errors}}>
 
@@ -419,9 +419,14 @@ checkURL() {
                         str += Object.keys(d);
                         str += ': ';
                         if (Object.values(d) != 'ok') {
-                            str += '<span class="error-row">BAD</span> ';
+                            str += '<span class="error-row">BAD</span> <a href="';
+                            str += Object.values(d);
+                            str += '">'
+                            str += Object.values(d);
+                            str += "</a>"
+                        } else {
+                            str += Object.values(d);
                         }
-                        str += Object.values(d);
                         str += '<br/>';
 
                     });

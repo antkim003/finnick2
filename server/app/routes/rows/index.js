@@ -35,25 +35,44 @@ var promisifiedReq = function(row, i) {
     return new Promise(function (resolve, reject) {
         var t = [];
         var url = row;
-        if (_.isNaN(parseInt(row))){
+        if (row[0] == 'h'){
             url = row;
         } else {
-            url = 'http://www1.macys.com/shop/product/?ID='+row;
+            if (row.indexOf('c-') > -1) {
+                url = 'http://www1.macys.com/shop/?id='+row.split('c-')[1];
+            } else if (row.indexOf('p-') > -1) {
+                url = 'http://www1.macys.com/shop/product/?ID='+row.split('p-')[1];
+            } else {
+                url = row;
+            }
         }
-        http.get(url, function(res2) {
-            res2.on("data", function(chunk) {
-                t.push(chunk);
-            }).on('error', function(err){
-                resolve();
-            }).on('end', function(){
-                var bod = Buffer.concat(t).toString();
-                if (bod.indexOf('navailable') > -1 || bod.indexOf('Product - Not Available - Macy\'s') > -1) {
-                    resolve('{"'+[i+1]+'": "'+url+'"}')
-                } else {
-                    resolve('{"'+[i+1]+'": "ok"}');
-                }
-            })
-        });
+        if (url[0] == 'h') {
+            http.get(url, function(res2) {
+                res2.on("data", function(chunk) {
+                    t.push(chunk);
+                }).on('error', function(err){
+                    resolve();
+                }).on('end', function(){
+                    var bod = Buffer.concat(t).toString();
+                    if(i==1){
+//                        console.log(bod, 'test');
+                    }
+                    if (bod.indexOf('title') > -1) {
+                        if (bod.indexOf('Not Available') > -1) {
+                            resolve('{"'+[i+1]+'": "'+url+'"}')
+                        } else {
+                            resolve('{"'+[i+1]+'": "ok"}');
+                        }
+                    } else {
+                        // no body
+                        resolve('{"'+[i+1]+'": "'+url+'"}')
+                    }
+                })
+            });
+        } else {
+            resolve('{"'+[i+1]+'": "'+url+'"}')
+        }
+
     })
 }
 
