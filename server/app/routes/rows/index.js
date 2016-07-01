@@ -31,51 +31,41 @@ router.post('/boost', function(req,res,next) {
 
 });
 
+var promisifiedReq = function(row, i) {
+    return new Promise(function (resolve, reject) {
+        var t = [];
+        var url = row;
+        if (_.isNaN(parseInt(row))){
+            url = row;
+        } else {
+            url = 'http://www1.macys.com/shop/product/?ID='+row;
+        }
+        http.get(url, function(res2) {
+            res2.on("data", function(chunk) {
+                t.push(chunk);
+            }).on('error', function(err){
+                resolve();
+            }).on('end', function(){
+                var bod = Buffer.concat(t).toString();
+                if (bod.indexOf('navailable') > -1 || bod.indexOf('Product - Not Available - Macy\'s') > -1) {
+                    resolve('{"'+[i+1]+'": "'+url+'"}')
+                } else {
+                    resolve('{"'+[i+1]+'": "ok"}');
+                }
+            })
+        });
+    })
+}
+
 router.post('/checkurl', function(req,response,next){
     var body = req.body;
-    _.each(body, function(row, i) {
-        //url
-        if(_.isNaN(parseInt(row))) { // explicit url
-            var reqs = http.get(row, (res2) => {
-                    var t = [];
-                    res2.on("data", function(chunk) {
-                        t.push(chunk)//                        console.log("BODY: " + chunk);
-                    }).on('end', function(end) {
-                        t = Buffer.concat(t).toString();
-                        if (t.indexOf('navailable') > -1 || t.indexOf('Product - Not Available - Macy\'s') > -1) {
-                            response.write(i+1+': '+row+',  <br/>', function(err) {
-//                              setTimeout(function(){ res.end(); }, 5000)
-                            });
-                        }
-                    });
-                    res2.resume();
-                }).on('error', (e) => {
-                    console.log('Got error');
-                });
-        } else {
-            var reqs = http.get('http://www1.macys.com/shop/product/?ID='+row, (res2) => {
-                    var t = [];
-                    res2.on("data", function(chunk) {
-                        t.push(chunk)//                        console.log("BODY: " + chunk);
-                    }).on('end', function(end) {
-                        t = Buffer.concat(t).toString();
-                        if (t.indexOf('navailable') > -1 || t.indexOf('Product - Not Available - Macy\'s') > -1) {
-                            response.write(i+1+': '+row+', <br/> ', function(err) {
-//                                setTimeout(function(){ res.end(); }, 5000)
-                            });
-                        }
-                    });
-                    res2.resume();
-                }).on('error', (e) => {
-                    console.log('Got error');
-                });
-        } // end of url v c/p
-
-//if (i == body.length-1) {
-//    response.end();
-//}
-        setTimeout(function(){ response.end(); }, 9000);
-    }) // end of for loop
+    var all = [];
+    Promise.map(body, function (data, index) {
+        return promisifiedReq(data, index)
+    }).then(function(data1) {
+        response.write('['+data1+']');
+        response.end();
+    })
 
 
 })
