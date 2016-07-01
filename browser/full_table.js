@@ -398,11 +398,12 @@ checkURL() {
             urls[i] = d.url;
         }
         if (d.linktype == 'category (c)') {
-            urls[i] = d.categoryid;
+            urls[i] = "c-"+d.categoryid;
         }
         if (d.linktype == 'product (p)') {
-            urls[i] = d.productid;
+            urls[i] = "p-"+d.productid;
         }
+//        <div className="errorUrls" dangerouslySetInnerHTML={{__html: errors}}>
 
         if ( i == self.state.data.length -1 ){
             $.ajax({
@@ -411,13 +412,29 @@ checkURL() {
                 data: JSON.stringify(urls),
                 contentType: 'application/json',
                 success: function(data) {
-                    console.log('done')
-                    errors.push(data);
+                    var str = '';
+                    data = JSON.parse(data);
+                    _.each(data, function(d, i){
+                        str += 'ROW ';
+                        str += Object.keys(d);
+                        str += ': ';
+                        if (Object.values(d) != 'ok') {
+                            str += '<span class="error-row">BAD</span> <a href="';
+                            str += Object.values(d);
+                            str += '">'
+                            str += Object.values(d);
+                            str += "</a>"
+                        } else {
+                            str += Object.values(d);
+                        }
+                        str += '<br/>';
+
+                    });
+                    errors.push(str);
                     self.setState({
                         modal: {
                             title: 'Check URLs in '+fob,
                             content: <div>
-                                        These are bad:
                                         <div className="errorUrls" dangerouslySetInnerHTML={{__html: errors}}>
                                         </div>
                                     </div>
@@ -434,7 +451,7 @@ checkURL() {
                 title: 'Check URLs',
                 content: <div>
                     <ul>
-                        {errors}
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/b/b1/Loading_icon.gif"/>
                     </ul>
                 </div>
             }

@@ -530,3 +530,6 @@ input[type="checkbox"] {
     max-height: 400px;
     overflow: scroll;
 }
+.error-row {
+    color: #ff0000;
+}
