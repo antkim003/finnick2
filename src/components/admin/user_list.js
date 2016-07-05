@@ -29,6 +29,10 @@ class UserList extends Component {
         {
           "property": "locked",
           "header": "Locked?"
+        },
+        {
+          "property": "delete",
+          "header": "Delete"
         }
       ],
       popupData: {},
@@ -36,19 +40,29 @@ class UserList extends Component {
       clickX: null,
       clickY: null,
       popupState: 'closed',
-      userId: ""
+      userId: "",
+      users: this.props.users,
+      attribute: null,
+      sort: null
     };
     this.clickCell = this.clickCell.bind(this);
     this.renderCell = this.renderCell.bind(this);
     this.closePopup = this.closePopup.bind(this);
     this.renderCheckbox = this.renderCheckbox.bind(this);
     this.choiceChange = this.choiceChange.bind(this);
+    this.deleteRow = this.deleteRow.bind(this);
   }
 
   componentWillMount() {
     this.props.fetchUsers();
   }
-
+  componentWillUpdate(nextProps, nextState) {
+    if (this.state.attribute && this.state.sort) {
+      this.state.users = _.orderBy(nextProps.users, [this.state.attribute] , [this.state.sort]);
+    } else {
+      this.state.users = nextProps.users;
+    }
+  }
   sortColumnClick(column) {
     let attribute = column.property;
     let sort;
@@ -60,7 +74,14 @@ class UserList extends Component {
       column.sort = 'asc'
       sort = 'asc'
     }
-    this.setState({users: _.orderBy(this.props.users, [attribute] , [sort])});
+    this.state.attribute = attribute;
+    this.state.sort = sort;
+    this.setState({users: _.orderBy(this.state.users, [this.state.attribute] , [this.state.sort])});
+  }
+
+  deleteRow(event) {
+    let userId = event.currentTarget.parentElement.getAttribute('data-user-id');
+    this.props.removeUser({userId: userId});
   }
 
   renderColumnHeader(columns) {
@@ -140,8 +161,15 @@ class UserList extends Component {
         targetProperty = targetProperty.toString();
 
       }
+      if (column.property === "delete") {
+        return (
+          <td onClick={self.clickCell} key={i + '-' + z + '-cell'} className={'cell-' + i + '-' + z + ' ' + column.property + ' text-center' } data-property={column.property}  data-user-id={row._id}>
+            <div className="btn btn-danger" onClick={self.deleteRow}>x</div>
+          </td>
+        )
+      }
       return (<td onClick={self.clickCell} key={i + '-' + z + '-cell'} className={'cell-' + i + '-' + z + ' ' + column.property} data-property={column.property}  data-user-id={row._id}>
-        <div className="targetProperty">{targetProperty}</div>
+        <div className="targetProperty">{targetProperty === "select" ? "" : targetProperty}</div>
         {column.property === "locked" || column.property === "lead"? self.renderCheckbox(targetProperty, column.property) : ''}
       </td>);
     });
@@ -162,7 +190,7 @@ class UserList extends Component {
           </thead>
 
           <tbody>
-            {this.renderRow(this.props.users)}
+            {this.renderRow(this.state.users)}
           </tbody>
         </table>
         <div>

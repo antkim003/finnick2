@@ -31,25 +31,45 @@ class Popup extends React.Component {
         response.payload.data.collections.forEach(function(collection) {
           $(self.refs[collection]).prop('checked', true)
           self.state.collections.push(collection);
-        })
+        });
+        $(self.refs[response.payload.data.type]).prop('checked',true)
       });
 
     }
   }
   renderCheckboxes(property) {
     let self = this;
-    return this.props[property].map(function(collection, idx) {
-      return(
-        <div key={idx} className="form-group">
-          <div className="checkbox">
-           <label>
-             <input type="checkbox" type='checkbox' name={collection} key={idx}
-               value={collection} ref={collection} /> {collection}
-           </label>
+    if (property === "type") {
+      return this.props[property].map(function(type, idx) {
+        if (type != "select") {
+          return(
+            <div key={idx} className="form-group">
+              <div className="radio">
+               <label>
+                 <input type="radio" name="type" key={idx}
+                   value={type} ref={type} /> {type}
+               </label>
+              </div>
+            </div>
+          )
+        }
+      });
+    }
+    if (property === "collections") {
+      return this.props[property].map(function(collection, idx) {
+        return(
+          <div key={idx} className="form-group">
+            <div className="checkbox">
+             <label>
+               <input type="checkbox" name={collection} key={idx}
+                 value={collection} ref={collection} /> {collection}
+             </label>
+            </div>
           </div>
-        </div>
-      )
-    });
+        )
+      });
+
+    }
 
   }
   handleClick(e) {
@@ -68,8 +88,8 @@ class Popup extends React.Component {
          array.push(this.refs[key].value);
       }
     }
-    payload.collections = array;
-    var userId = this.props.userId
+    payload[this.props.property] = array;
+    var userId = this.props.userId;
     this.props.updateUser(userId, payload);
     this.props.closePopup();
   }
@@ -78,12 +98,12 @@ class Popup extends React.Component {
       return;
     }
 
-      return (
-        <form onSubmit={this.submitForm}>
-          {this.renderCheckboxes(this.props.property)}
-          <div className="btn btn-primary" type="submit" onClick={this.submitForm}>Save</div>
-        </form>
-      )
+    return (
+      <form onSubmit={this.submitForm}>
+        {this.renderCheckboxes(this.props.property)}
+        <div className="btn btn-primary" type="submit" onClick={this.submitForm}>Save</div>
+      </form>
+    )
   }
   render () {
     let style = {

@@ -8,6 +8,7 @@ import {
   FETCH_USERS,
   FETCH_USER,
   ADD_USER,
+  REMOVE_USER,
   FETCH_SESSION,
   FETCH_COLUMNS,
   FETCH_COLLECTIONS,
@@ -118,6 +119,19 @@ export function fetchUser( {userId}) {
     payload: request
   };
 };
+
+export function removeUser( {userId} ) {
+  return function(dispatch) {
+    axios.delete('/api/users/' + userId)
+      .then(response => {
+        dispatch({ type: REMOVE_USER, payload: response });
+        dispatch(fetchUsers());
+      })
+      .catch(error => {
+
+      });
+  }
+}
 
 export function fetchUsers() {
   const request = axios.get('/api/members');
