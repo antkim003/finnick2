@@ -209,8 +209,8 @@ componentDidMount() {
         getdata()
     });
     window.datainterval = setInterval(function() {
-        getdata()
-    }, 10000);
+        getdata();
+    }, 60000);
 
 },
 
