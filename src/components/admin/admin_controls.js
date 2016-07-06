@@ -165,7 +165,7 @@ class AdminControls extends Component {
   renderOptions(array) {
     try {
       return array.map(function(n) {
-        return (<option value={n}>{n}</option>)
+        return (<option key={n} value={n}>{n}</option>)
       });
     } catch (e) {
       return []
