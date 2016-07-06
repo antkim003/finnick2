@@ -112,22 +112,39 @@ class UserList extends Component {
     if (!event.currentTarget) {
       return;
     }
+    if (this.props.session.user.lead || this.props.session.user.type === "admin") {
+      // LEADS AND ADMINS can do these functions
+      if (event.currentTarget.getAttribute('data-property') === "collections") {
+        this.setState({
+          clickTarget: event.currentTarget,
+          clickX: event.clientX,
+          clickY: event.clientY,
+          popupState: 'open',
+          property: event.currentTarget.getAttribute('data-property'),
+          userId: event.currentTarget.getAttribute('data-user-id')
+        });
+        console.log('user set state: ', this.state.userId, event.currentTarget.getAttribute('data-user-id'));
+      }
 
-    if (event.currentTarget.getAttribute('data-property') === "collections" || event.currentTarget.getAttribute('data-property') === "type" ) {
-      this.setState({
-        clickTarget: event.currentTarget,
-        clickX: event.clientX,
-        clickY: event.clientY,
-        popupState: 'open',
-        property: event.currentTarget.getAttribute('data-property'),
-        userId: event.currentTarget.getAttribute('data-user-id')
-      });
-      console.log('user set state: ', this.state.userId, event.currentTarget.getAttribute('data-user-id'));
-    }
-    if (event.currentTarget.getAttribute('data-property') === "locked" || event.currentTarget.getAttribute('data-property') === "lead" && !event.currentTarget.classList.contains('__clicked')) {
-      this.closePopup();
-      $('.__clicked').removeClass('__clicked');
-      event.currentTarget.className += ' __clicked';
+      // ONLY ADMINS can edit the type of a cell
+      if (event.currentTarget.getAttribute('data-property') === "type" && this.props.session.user.type === "admin") {
+        this.setState({
+          clickTarget: event.currentTarget,
+          clickX: event.clientX,
+          clickY: event.clientY,
+          popupState: 'open',
+          property: event.currentTarget.getAttribute('data-property'),
+          userId: event.currentTarget.getAttribute('data-user-id')
+        });
+        console.log('user set state: ', this.state.userId, event.currentTarget.getAttribute('data-user-id'));
+      }
+
+      // leads and admins can both change locked or leads
+      if (event.currentTarget.getAttribute('data-property') === "locked" || event.currentTarget.getAttribute('data-property') === "lead" && !event.currentTarget.classList.contains('__clicked')) {
+        this.closePopup();
+        $('.__clicked').removeClass('__clicked');
+        event.currentTarget.className += ' __clicked';
+      }
     }
   }
 
@@ -161,7 +178,7 @@ class UserList extends Component {
         targetProperty = targetProperty.toString();
 
       }
-      if (column.property === "delete") {
+      if (column.property === "delete" && (self.props.session.user.lead || self.props.session.user.type === "admin")) {
         return (
           <td onClick={self.clickCell} key={i + '-' + z + '-cell'} className={'cell-' + i + '-' + z + ' ' + column.property + ' text-center' } data-property={column.property}  data-user-id={row._id}>
             <div className="btn btn-danger" onClick={self.deleteRow}>x</div>
@@ -210,7 +227,8 @@ class UserList extends Component {
 
 function mapStateToProps(state) {
   return {
-    users: state.users
+    users: state.users,
+    session: state.session
   };
 }
 

@@ -12,6 +12,21 @@ var ensureAuthenticated = function (req, res, next) {
         res.status(401).end();
     }
 };
+
+var isLeadOrAdmin = function(req, res, next) {
+    console.log('req.session user: ', req.session.passport.user);
+    User.findById(req.session.passport.user).then(function(user) {
+        req.session.user = user;
+        if(req.session.user.lead || req.session.user.type === "admin") {
+            next()
+        } else {
+            res.status(401).end();
+        }
+    }).catch(function() {
+        res.statuse(401).end();
+    });
+};
+
 router.get('/types', function(req, res, next) {
     console.log('this came through to api/users/types');
     User.find({})
@@ -29,20 +44,21 @@ router.get('/types', function(req, res, next) {
 
 router.get('/:userId', function(req, res, next) {
     let userId = req.params.userId;
+
     User.findById(userId)
         .then(function(user) {
             res.json(user);
         }, next);
 });
 
-router.post('/', function(req, res, next) {
+router.post('/', isLeadOrAdmin, function(req, res, next) {
     User.create(req.body)
         .then(function(user) {
             res.json(user);
         }, next);
 });
 
-router.put('/:userId', function(req, res, next) {
+router.put('/:userId', isLeadOrAdmin, function(req, res, next) {
     let userId = req.params.userId;
     console.log('here is reqbody ', req.body, 'id: ', userId);
     var _user;
@@ -55,12 +71,11 @@ router.put('/:userId', function(req, res, next) {
         return user.save();
     })
     .then(function(response) {
-        console.log('did this work?', _user);
         res.json(_user)
     },next);
 });
 
-router.delete('/:userid', function(req, res, next) {
+router.delete('/:userid', isLeadOrAdmin, function(req, res, next) {
     User.findById(req.params.userid)
         .then(function(user) {
             user.remove();

@@ -12,10 +12,25 @@ var ensureAuthenticated = function (req, res, next) {
     }
 };
 
-router.get('/', function(req, res, next) {
-    User.find().then(function(users) {
-        res.json(users);
-    });
+var findUserType = function(req, res, next) {
+    console.log('req.session user: ', req.session.passport.user);
+    User.findById(req.session.passport.user).then(function(user) {
+        req.session.user = user;
+        next();
+    }, next)
+}
+
+router.get('/', findUserType, function(req, res, next) {
+    console.log('user: ', req.session.user);
+    if (req.session.user.type === "admin") {
+        User.find().then(function(users) {
+            res.json(users);
+        });
+    }
+    User.find({type: req.session.user.type})
+        .then(function(users) {
+            res.json(users);
+        });
 });
 
 router.get('/session', function (req, res) {
