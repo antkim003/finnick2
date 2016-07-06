@@ -434,8 +434,8 @@ checkURL() {
                     self.setState({
                         modal: {
                             title: 'Check URLs in '+fob,
-                            content: <div>
-                                        <div className="errorUrls" dangerouslySetInnerHTML={{__html: errors}}>
+                            content: <div style={{height: "90%"}}>
+                                        <div className="errorUrls" style={{height: "100%"}} dangerouslySetInnerHTML={{__html: errors}}>
                                         </div>
                                     </div>
                         }
@@ -530,9 +530,9 @@ leadSheetHelper() {
         {
             modal: {
                 title: 'Photography Lead Sheet',
-                content: <div>
+                content: <div style={{height: "85%"}}>
                     AR ID, INSTORE Description, MCOM Description
-                    <ul id="leadsheet">{ds}</ul>
+                    <ul style={{height: "100%"}} id="leadsheet">{ds}</ul>
                 </div>
             }
         }
