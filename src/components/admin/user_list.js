@@ -11,6 +11,10 @@ class UserList extends Component {
       sortingColumn: null,
       columns: [
         {
+          "property": "name",
+          "header": "name"
+        },
+        {
           "property": "email",
           "header": "Email"
         },
