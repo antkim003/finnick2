@@ -21,95 +21,95 @@ var ColumnFilters = require('./column_filters.js');
 var FieldWrapper = require('./field_wrapper.js');
 var SectionWrapper = require('./section_wrapper.js');
 var columnstoedit = require('./data/columnedit.js')
-var userpermissions = require('./data/userpermissions.js');
+//var userpermissions = require('./data/userpermissions.js');
 
 var scrolling = require('./scrolling.js');
 var sockets = require('./sockets.js');
 import { browserHistory } from 'react-router';
 
 module.exports = React.createClass({
-    displayName: 'FullTable',
-    getInitialState: function(){
-        var self = this;
-        scrolling();
-        var users = [
-            {"name":"Jonathan Garza","email":"jgarza3@columbia.edu","type":"admin","locked":false},
-            {"name":"Jayne Smyth","email":"test@columbia.edu","type":"admin","locked":false}
-        ]
-        window.user = JSON.parse(localStorage.getItem('user'));
-        window.statedata = [];
-        sockets();
-        if (window.location.search == '') {
-            browserHistory.push( window.location.pathname + '?women');
-        }
-        var query = window.location.search.split('?')[1];
-        var queryyes = query ? '/'+query : '/women';
+        displayName: 'ScopeTable',
+        getInitialState: function(){
+            var self = this;
+            scrolling();
+            var users = [
+                {"name":"Jonathan Garza","email":"jgarza3@columbia.edu","type":"admin","locked":false},
+                {"name":"Jayne Smyth","email":"test@columbia.edu","type":"admin","locked":false}
+            ]
+            window.user = JSON.parse(localStorage.getItem('user'));
+            window.statedata = [];
+            sockets();
+            if (window.location.search == '') {
+                browserHistory.push( window.location.pathname + '?women');
+            }
+            var query = window.location.search.split('?')[1];
+            var queryyes = query ? '/'+query : '/women';
 
 
-        var getdata = function(q) {
-            var fob = q ? '/'+q : queryyes;
-            $.ajax({
-                type: "GET",
-                url: '/api/rows' + fob,
-                success: function (data1) {
+            var getdata = function(q) {
+                var fob = q ? '/'+q : queryyes;
+                $.ajax({
+                    type: "GET",
+                    url: '/api/rows' + fob,
+                    success: function (data1) {
 //                    console.log(window.coledit, 'in get data')
-                    var allrows = _.map(data1, 'entries');
-                    var columns = window.coledit;
-                    window.data = data1;
-                    var arr = [];
-                    _.each(allrows, function (row, i) {
-                        //fill in empty subcategories
-                        var allobj = _.zipObject(_.map(columns, 'property'), _.range(columns.length).map(function () {
-                            return ''
-                        }));
-                        _.each(row, function (cell, j) {
-                            var all = {};
-                            if (cell.columnName != 'sortnumber' && cell.columnName != 'id') {
-                                all[cell.columnName] = cell.data;
-                            } else {
-                                all[cell.columnName] = parseInt(cell.data);
-                            }
-                            all.rowIndex = parseInt(cell.rowIndex);
-                            _.extend(allobj, all)
+                        var allrows = _.map(data1, 'entries');
+                        var columns = window.coledit;
+                        window.data = data1;
+                        var arr = [];
+                        _.each(allrows, function (row, i) {
+                            //fill in empty subcategories
+                            var allobj = _.zipObject(_.map(columns, 'property'), _.range(columns.length).map(function () {
+                                return ''
+                            }));
+                            _.each(row, function (cell, j) {
+                                var all = {};
+                                if (cell.columnName != 'sortnumber' && cell.columnName != 'id') {
+                                    all[cell.columnName] = cell.data;
+                                } else {
+                                    all[cell.columnName] = parseInt(cell.data);
+                                }
+                                all.rowIndex = parseInt(cell.rowIndex);
+                                _.extend(allobj, all)
+                            });
+                            arr.push(allobj);
                         });
-                        arr.push(allobj);
-                    });
-                    window.statedata = _.sortBy(arr, 'rowIndex');
-                    self.setState({
-                        data: _.sortBy(arr, 'rowIndex')
-                    });
+                        window.statedata = _.sortBy(arr, 'rowIndex');
+                        self.setState({
+                            data: _.sortBy(arr, 'rowIndex')
+                        });
 
-                },
-                complete: function () {
+                    },
+                    complete: function () {
 
-                }
-            })
-        }
-        $.when(columnstoedit(self)).done(function( ) {
-            getdata()
-        });
-
-
-
-
-
-window.hiding = [];
-
-
-return {
-    editedCell: null,
-    data: statedata,
-    formatters: null,
-    search: {
-        column: '',
-        query: ''
-    },
-    header: {
-        onClick: (column) => {
-            // reset edits
-            this.setState({
-                editedCell: null
+                    }
+                })
+            }
+            $.when(columnstoedit(self)).done(function( ) {
+                getdata()
             });
+
+
+
+
+
+            window.hiding = [];
+
+
+            return {
+                editedCell: null,
+                data: statedata,
+                formatters: null,
+                search: {
+                    column: '',
+                    query: ''
+                },
+                header: {
+                    onClick: (column) => {
+                    // reset edits
+                    this.setState({
+                        editedCell: null
+                    });
 
             sortColumn(
                 this.state.columns,
@@ -127,14 +127,14 @@ return {
     sortingColumn: null, // reference to sorting column
     columns:  _.filter(window.coledit, function(col) { return !_.includes(localStorage.getItem('hidecol'), col.property) }),
     modal: {
-        title: 'title',
+    title: 'title',
         content: 'content',
-    },
-    pagination: {
-        page: 1,
+},
+pagination: {
+    page: 1,
         perPage: 24
-    },
-    hiddencolumns: []
+},
+hiddencolumns: []
 };
 },
 
@@ -193,11 +193,9 @@ componentDidMount() {
                     arr.push(allobj);
                 });
                 data = _.sortBy(arr, 'rowIndex');
-                setTimeout(function() {
-                    self.setState({
-                        data: _.sortBy(arr, 'rowIndex')
-                    });
-                }, 10)
+                self.setState({
+                    data: _.sortBy(arr, 'rowIndex')
+                });
 
             },
             complete: function () {
@@ -220,19 +218,19 @@ componentDidMount() {
 
 render() {
     var columns = _.sortBy(this.state.columns, 'columnorder');
-    columns = _.each(columns, function(col) {
-        var thisuserspermissions = _.filter(userpermissions, function(users) {
-            return users.type == user.type
-        })[0] ? _.filter(userpermissions, function(users) {
-            return users.type == user.type
-        })[0].permission : [];
-        if ((!_.includes(thisuserspermissions, col.property) && user.type != 'admin')
-            || user.locked && user.type != 'admin'
-            || user.collections.length == 0 && user.type != 'admin'
-            || !_.includes(user.collections, window.location.search.split('?')[1]) && user.type != 'admin' ) {
-            col.cell = [];
-        }
-    })
+//    columns = _.each(columns, function(col) {
+//        var thisuserspermissions = _.filter(userpermissions, function(users) {
+//            return users.type == user.type
+//        })[0] ? _.filter(userpermissions, function(users) {
+//            return users.type == user.type
+//        })[0].permission : [];
+//        if ((!_.includes(thisuserspermissions, col.property) && user.type != 'admin')
+//            || user.locked && user.type != 'admin'
+//            || user.collections.length == 0 && user.type != 'admin'
+//            || !_.includes(user.collections, window.location.search.split('?')[1]) && user.type != 'admin' ) {
+//            col.cell = [];
+//        }
+//    })
 
     var pagination = this.state.pagination;
 
@@ -274,21 +272,20 @@ render() {
     }
     buttons.push(<button key="button-url" onClick={this.checkURL}>Check URLs</button>);
 
-    var thisuserspermissions = _.filter(userpermissions, function(users) {
-        return users.type == user.type
-    })[0] ? _.filter(userpermissions, function(users) {
-        return users.type == user.type
-    })[0].permission : [];
+//    var thisuserspermissions = _.filter(userpermissions, function(users) {
+//        return users.type == user.type
+//    })[0] ? _.filter(userpermissions, function(users) {
+//        return users.type == user.type
+//    })[0].permission : [];
 
 //                {thisuserspermissions ? 'Permission to edit columns '+thisuserspermissions.join(', ') : ''}
 
     return (
         <div>
             <div className="user-info">
-                Hi, {window.user.name}. You are a/n {window.user.type} user. {window.user.locked ? 'Your account is locked.' : ''}
+            Hi, {window.user.name}. You are a/n {window.user.type} user. {window.user.locked ? 'Your account is locked.' : ''}
                 {window.user.type != 'admin' && window.user.collections.length == 0 ? 'Unfortunately, you have no collections/FOBs to edit, but you can view them.' : ''}
                 {window.user.type != 'admin' && window.user.type != 'marketing' && !_.includes(window.user.collections, window.location.search.split('?')[1]) ? <div className="fixedError">This is an FOB you don't have access to edit, showing read-only view.</div> : ''}
-                {thisuserspermissions ? 'Permission to edit columns: '+thisuserspermissions.join(', ') : ''}
 
                 <div className="fob">Choose FOB <select className="fob-drop" key="fob" value={window.location.search.split('?')[1]} onChange={this.changeFOB}>{fobs}</select>
                     <button onClick={this.hideCols}>Hide Columns</button>
@@ -315,42 +312,16 @@ render() {
                 return {
                 className: rowIndex % 2 ? 'odd-row row-'+d.id : 'even-row row-'+d.id,
                 onClick: () => {
-                    window.row = d.id;
+                window.row = d.id;
                 },
                 onMouseEnter: (e) => {
-                    //check image
-                    if ((e.target.getAttribute('data-property') == 'tileimage') || (e.target.getAttribute('data-property') == 'imageid')) {
-                        var parts = $(e.target).text().split('').reverse().join('') || '';
-                        parts = parts.match(/[\s\S]{1,2}/g) || [];
-                        var withslash = '';
-                        if (parts.length > 0) {
-                            if (parts.length == 4) {
-                                if (parts[parts.length-1].length < 2) {
-                                    parts[parts.length-1] = parts[parts.length-1]+'0';
-                                    withslash = parts.join('/').split('').reverse().join('');
-                                } else {
-                                    withslash = parts.join('/').split('').reverse().join('');
-                                }
-                            } else {
-                                parts[3] = '00';
-                                withslash = parts.join('/').split('').reverse().join('');
-                            }
-                        }
-                        var url = 'https://stars.macys.com/preview/'+withslash+'/final/'+$(e.target).text()+'-214x261.jpg';
-                        $(e.target).append('<img class="imagehover" src="'+url+'" onerror="this.onerror=null;this.src=\'https://stars.macys.com/UI/Common/Graphics/Main/product-image-not-available.jpeg\';"/>')
-                    }
 
-                    //check link
-                    if ((e.target.getAttribute('data-property') == 'url')) {
-
-                    }
                 },
                 onMouseLeave: (e) => {
-                    $(e.target).parent().find('img').replaceWith('');
                 },
                 dataRow: d.id,
-            };
-            }}
+                };
+                }}
             >
 
             </Table>
@@ -405,7 +376,6 @@ checkURL() {
         if (d.linktype == 'product (p)') {
             urls[i] = "p-"+d.productid;
         }
-//        <div className="errorUrls" dangerouslySetInnerHTML={{__html: errors}}>
 
         if ( i == self.state.data.length -1 ){
             $.ajax({
@@ -437,9 +407,9 @@ checkURL() {
                         modal: {
                             title: 'Check URLs in '+fob,
                             content: <div>
-                                        <div className="errorUrls" dangerouslySetInnerHTML={{__html: errors}}>
-                                        </div>
-                                    </div>
+                                <div className="errorUrls" dangerouslySetInnerHTML={{__html: errors}}>
+                                </div>
+                            </div>
                         }
                     })
                 }
@@ -461,42 +431,27 @@ checkURL() {
     )
 },
 moveRow() {
-    var query = window.location.search.split('?')[1];
-
     this.refs.modal.show();
-    var fobs = [];
-    var collections = window.user.collections.length > 0 ? window.user.collections : ['men', 'for_the_home', 'women'] ;
-    _.each(collections, function(col, i) {
-        fobs.push(<option key={col+'-'+i} value={col}>{col}</option>);
-    });
 
-    var move = function(e) {
-        var row = _.filter(data, function(row) {
-            return row.index == $('#move-row').val();
-        });
-        var idCell = _.find(row[0].entries, function(entry){ return entry.columnName == 'id'});
-        var catCell = _.find(row[0].entries, function(entry){ return entry.columnName == 'category'});
-        var killCell = _.find(row[0].entries, function(entry){ return entry.columnName == 'killedrow'}) ? _.find(row[0].entries, function(entry){ return entry.columnName == 'killedrow'}) : {"_id":'newcell'};
-
-        var params = [{"row": row[0]._id, "fromFOB": row[0].fob, "toFOB": $('#move-to-fob').val(), "idCell": idCell._id, "catCell": catCell._id, "killCell": killCell._id}];
-        $.ajax({
-            url: '/api/rows/moverow',
-            type: 'POST',
-            data: JSON.stringify(params),
-            contentType: "application/json",
-            success: function() {
-                console.log('done moving', row[0])
-            }
-        })
-    }
     this.setState(
         {
             modal: {
                 title: 'Move Row',
                 content: <div>
-                    <div>Which row <input type="number" className="test" id="move-row"/> from <span id="move-from-fob">{query}</span></div>
-                    <div>To which FOB <select className="ts" key="fob2" id="move-to-fob">{fobs}</select></div>
-                    <div><button onClick={move}>Move!</button></div>
+                    <ul>
+                        <li>Grey VS Green headers <br/>
+                        Grey = NO-editing columns; Green (for GO!) = editable columns
+                        </li>
+                        <li>Hover over (i) for more Information on column
+                        </li>
+                        <li>Light blue rows are locked, and can no longer be edited;
+                        </li>
+                        <li>Rows with strikethrough have been killed, and remain as reference.
+                        </li>
+                        <li>Questions/Comments<br/>
+                        email elizabeth.chen@macys.com or anthony.kim@macys.com
+                        </li>
+                    </ul>
                 </div>
             }
         }
@@ -512,16 +467,12 @@ helpModal() {
                 content: <div>
                     <ul>
                         <li>Grey VS Green headers <br/>
-                            Grey = NO-editing columns; Green (for GO!) = editable columns
+                        Grey = NO-editing columns; Green (for GO!) = editable columns
                         </li>
                         <li>Hover over (i) for more Information on column
                         </li>
-                        <li>Light blue rows are locked, and can no longer be edited;
-                        </li>
-                        <li>Rows with strikethrough have been killed, and remain as reference.
-                        </li>
                         <li>Questions/Comments<br/>
-                            email elizabeth.chen@macys.com or anthony.kim@macys.com
+                        email elizabeth.chen@macys.com or anthony.kim@macys.com
                         </li>
                     </ul>
                 </div>
@@ -548,7 +499,7 @@ leadSheetHelper() {
             modal: {
                 title: 'Photography Lead Sheet',
                 content: <div>
-                    AR ID, INSTORE Description, MCOM Description
+                AR ID, INSTORE Description, MCOM Description
                     <ul id="leadsheet">{ds}</ul>
                 </div>
             }
@@ -626,9 +577,9 @@ rowsOneValue() {
                             {columns.map((option) =>
 //                                option.property
                                 <option key={option.property + '-option'} value={option.property}>{option.header}</option>
-                            )}
+                                )}
                         </select>
-                        </div>
+                    </div>
                     <div>Value <input placeholder="value to set to all rows designated" id="same-rows-value"/>
                     </div>
                     <button onClick={saverows}>Save Value to Rows</button>
@@ -640,7 +591,7 @@ rowsOneValue() {
 },
 changeFOB(e) {
 //    browserHistory.push('/finnick?'+ e.target.value);
-   window.location.search = e.target.value;
+    window.location.search = e.target.value;
 },
 rowsToShow(e) {
     var self = this;
@@ -739,14 +690,14 @@ hideCols() {
                 window.hiding = _.uniq(window.hiding.push(hide));
                 localStorage.setItem('hidecol',window.hiding)
                 cols = [];
-               _.each(columns, function(c,i) {
+                _.each(columns, function(c,i) {
                     var propchecked = _.includes(window.hiding, c.property);
-                   if (propchecked) {
-                       cols.push(<div className="showhidecol"><label for={'name-'+c.property}>{c.property}</label><input type="checkbox" value={c.property} checked id={'name-'+c.property} /> </div>)
-                   } else if (c.property == 'id') {
-                   }else {
-                       cols.push(<div className="showhidecol"><label for={'name-'+c.property}>{c.property}</label><input type="checkbox" id={'name-'+c.property} value={c.property} /></div>)
-                   }
+                    if (propchecked) {
+                        cols.push(<div className="showhidecol"><label for={'name-'+c.property}>{c.property}</label><input type="checkbox" value={c.property} checked id={'name-'+c.property} /> </div>)
+                    } else if (c.property == 'id') {
+                    }else {
+                        cols.push(<div className="showhidecol"><label for={'name-'+c.property}>{c.property}</label><input type="checkbox" id={'name-'+c.property} value={c.property} /></div>)
+                    }
                 });
                 colstate();
             } else {

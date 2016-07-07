@@ -4,6 +4,7 @@ var React = require('react');
 var Fork = require('react-ghfork');
 
 var FullTable = require('./full_table.js');
+var ScopeTable = require('./scope_table.js');
 
 // var readme = require('../README.md');
 
