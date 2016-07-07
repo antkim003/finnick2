@@ -11,37 +11,28 @@ require('../../../server/db/models');
 var ColumnIndex = mongoose.model('ColumnIndex');
 var RowIndex = mongoose.model('RowIndex');
 
-describe('ColumnIndex Model', function () {
-  beforeEach('Establish DB connection', function (done) {
+describe('preConnect', function () {
+  before('Establish DB connection', function (done) {
       if (mongoose.connection.db) return done();
       mongoose.connect(dbURI, done);
   });
 
-  afterEach('clear db', function(done) {
+  after('clear db', function(done) {
     clearDB(done);
   });
 
-  it('should exist', function (done) {
-    this.timeout(4000);
-    expect(ColumnIndex).to.be.a('function');
-    done();
+  describe('ColumnIndex Model', function () {
+    it('should exist', function (done) {
+      this.timeout(4000);
+      expect(ColumnIndex).to.be.a('function');
+      done();
+    });
   });
-});
-
-
-describe('RowIndex Model', function () {
-  beforeEach('Establish DB connection', function (done) {
-      if (mongoose.connection.db) return done();
-      mongoose.connect(dbURI, done);
-  });
-
-  afterEach('clear db', function(done) {
-    clearDB(done);
-  });
-
-  it('should exist', function (done) {
-    this.timeout(4000);
-    expect(RowIndex).to.be.a('function');
-    done();
+  describe('RowIndex Model', function () {
+    it('should exist', function (done) {
+      this.timeout(4000);
+      expect(RowIndex).to.be.a('function');
+      done();
+    });
   });
 });

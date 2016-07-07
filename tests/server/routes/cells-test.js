@@ -15,12 +15,12 @@ var agent = supertest(app);
 
 
 describe('cell routes /api/cells', function () {
-  beforeEach('Establish DB connection', function (done) {
+  before('Establish DB connection', function (done) {
     if (mongoose.connection.db) return done();
     mongoose.connect(dbURI, done);
   });
 
-  afterEach('Clear test database', function (done) {
+  after('Clear test database', function (done) {
     clearDB(done);
   });
   var _cell;

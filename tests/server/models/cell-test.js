@@ -12,12 +12,12 @@ var Cell = mongoose.model('Cell');
 
 describe('Cell Model', function () {
   this.timeout(4000);
-  beforeEach('Establish DB connection', function (done) {
+  before('Establish DB connection', function (done) {
       if (mongoose.connection.db) return done();
       mongoose.connect(dbURI, done);
   });
 
-  afterEach('clear db', function(done) {
+  after('clear db', function(done) {
     clearDB(done);
   });
 
