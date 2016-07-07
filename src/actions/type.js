@@ -6,6 +6,7 @@ export const FETCH_USERS = 'fetch_users';
 export const FETCH_USER = 'fetch_user';
 export const UPDATE_USER = 'update_user';
 export const ADD_USER = 'add_user';
+export const REMOVE_USER = 'remove_user';
 export const FETCH_COLLECTIONS = 'fetch_collections';
 export const FETCH_COLUMNS = 'fetch_columns';
 export const FETCH_SESSION = 'fetch_session';

@@ -11,6 +11,10 @@ class UserList extends Component {
       sortingColumn: null,
       columns: [
         {
+          "property": "name",
+          "header": "name"
+        },
+        {
           "property": "email",
           "header": "Email"
         },
@@ -29,6 +33,10 @@ class UserList extends Component {
         {
           "property": "locked",
           "header": "Locked?"
+        },
+        {
+          "property": "delete",
+          "header": "Delete"
         }
       ],
       popupData: {},
@@ -36,19 +44,29 @@ class UserList extends Component {
       clickX: null,
       clickY: null,
       popupState: 'closed',
-      userId: ""
+      userId: "",
+      users: this.props.users,
+      attribute: null,
+      sort: null
     };
     this.clickCell = this.clickCell.bind(this);
     this.renderCell = this.renderCell.bind(this);
     this.closePopup = this.closePopup.bind(this);
     this.renderCheckbox = this.renderCheckbox.bind(this);
     this.choiceChange = this.choiceChange.bind(this);
+    this.deleteRow = this.deleteRow.bind(this);
   }
 
   componentWillMount() {
     this.props.fetchUsers();
   }
-
+  componentWillUpdate(nextProps, nextState) {
+    if (this.state.attribute && this.state.sort) {
+      this.state.users = _.orderBy(nextProps.users, [this.state.attribute] , [this.state.sort]);
+    } else {
+      this.state.users = nextProps.users;
+    }
+  }
   sortColumnClick(column) {
     let attribute = column.property;
     let sort;
@@ -60,7 +78,14 @@ class UserList extends Component {
       column.sort = 'asc'
       sort = 'asc'
     }
-    this.setState({users: _.orderBy(this.props.users, [attribute] , [sort])});
+    this.state.attribute = attribute;
+    this.state.sort = sort;
+    this.setState({users: _.orderBy(this.state.users, [this.state.attribute] , [this.state.sort])});
+  }
+
+  deleteRow(event) {
+    let userId = event.currentTarget.parentElement.getAttribute('data-user-id');
+    this.props.removeUser({userId: userId});
   }
 
   renderColumnHeader(columns) {
@@ -91,22 +116,39 @@ class UserList extends Component {
     if (!event.currentTarget) {
       return;
     }
+    if (this.props.session.user.lead || this.props.session.user.type === "admin") {
+      // LEADS AND ADMINS can do these functions
+      if (event.currentTarget.getAttribute('data-property') === "collections") {
+        this.setState({
+          clickTarget: event.currentTarget,
+          clickX: event.clientX,
+          clickY: event.clientY,
+          popupState: 'open',
+          property: event.currentTarget.getAttribute('data-property'),
+          userId: event.currentTarget.getAttribute('data-user-id')
+        });
+        console.log('user set state: ', this.state.userId, event.currentTarget.getAttribute('data-user-id'));
+      }
 
-    if (event.currentTarget.getAttribute('data-property') === "collections" || event.currentTarget.getAttribute('data-property') === "type" ) {
-      this.setState({
-        clickTarget: event.currentTarget,
-        clickX: event.clientX,
-        clickY: event.clientY,
-        popupState: 'open',
-        property: event.currentTarget.getAttribute('data-property'),
-        userId: event.currentTarget.getAttribute('data-user-id')
-      });
-      console.log('user set state: ', this.state.userId, event.currentTarget.getAttribute('data-user-id'));
-    }
-    if (event.currentTarget.getAttribute('data-property') === "locked" || event.currentTarget.getAttribute('data-property') === "lead" && !event.currentTarget.classList.contains('__clicked')) {
-      this.closePopup();
-      $('.__clicked').removeClass('__clicked');
-      event.currentTarget.className += ' __clicked';
+      // ONLY ADMINS can edit the type of a cell
+      if (event.currentTarget.getAttribute('data-property') === "type" && this.props.session.user.type === "admin") {
+        this.setState({
+          clickTarget: event.currentTarget,
+          clickX: event.clientX,
+          clickY: event.clientY,
+          popupState: 'open',
+          property: event.currentTarget.getAttribute('data-property'),
+          userId: event.currentTarget.getAttribute('data-user-id')
+        });
+        console.log('user set state: ', this.state.userId, event.currentTarget.getAttribute('data-user-id'));
+      }
+
+      // leads and admins can both change locked or leads
+      if (event.currentTarget.getAttribute('data-property') === "locked" || event.currentTarget.getAttribute('data-property') === "lead" && !event.currentTarget.classList.contains('__clicked')) {
+        this.closePopup();
+        $('.__clicked').removeClass('__clicked');
+        event.currentTarget.className += ' __clicked';
+      }
     }
   }
 
@@ -140,8 +182,15 @@ class UserList extends Component {
         targetProperty = targetProperty.toString();
 
       }
+      if (column.property === "delete" && (self.props.session.user.lead || self.props.session.user.type === "admin")) {
+        return (
+          <td onClick={self.clickCell} key={i + '-' + z + '-cell'} className={'cell-' + i + '-' + z + ' ' + column.property + ' text-center' } data-property={column.property}  data-user-id={row._id}>
+            <div className="btn btn-danger" onClick={self.deleteRow}>x</div>
+          </td>
+        )
+      }
       return (<td onClick={self.clickCell} key={i + '-' + z + '-cell'} className={'cell-' + i + '-' + z + ' ' + column.property} data-property={column.property}  data-user-id={row._id}>
-        <div className="targetProperty">{targetProperty}</div>
+        <div className="targetProperty">{targetProperty === "select" ? "" : targetProperty}</div>
         {column.property === "locked" || column.property === "lead"? self.renderCheckbox(targetProperty, column.property) : ''}
       </td>);
     });
@@ -162,7 +211,7 @@ class UserList extends Component {
           </thead>
 
           <tbody>
-            {this.renderRow(this.props.users)}
+            {this.renderRow(this.state.users)}
           </tbody>
         </table>
         <div>
@@ -182,7 +231,8 @@ class UserList extends Component {
 
 function mapStateToProps(state) {
   return {
-    users: state.users
+    users: state.users,
+    session: state.session
   };
 }
 
