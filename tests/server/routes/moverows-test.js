@@ -78,6 +78,8 @@ describe('Move Rows Test', function () {
         }).then(function(){
             console.log('in the then')
             done();
+//            setTimeout(done, 15000);
+
         }).catch(console.error)
 
 
@@ -85,15 +87,19 @@ describe('Move Rows Test', function () {
     })
 
     it ('text', function(done) {
+//        this.timeout(15000);
         var killCell = {"_id":'newcell'};
         var params = [{"row": _womenrow._id, "fromFOB": _womenrow.fob, "toFOB": 'men', "killCell": killCell._id}];
+//        done();
+
         agent.post('/api/rows/moverow')
+//            .set('Content-Type', 'application/json')
             .send(params)
+//            .expect(200, done);
             .expect(200)
             .end(function(err, response) {
-                console.log(response)
-                if (err) done(err)
-                expect(response.body._id.toString()).to.equal(_womenrow._id.toString());
+//                console.log('in res', response)
+                expect(response.body.index).to.equal(3);
                 done();
             });
 

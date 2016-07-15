@@ -6,7 +6,6 @@ var Row = require('mongoose').model('Row');
 var Cell = require('mongoose').model('Cell');
 var Promise = require('bluebird');
 const http = require('http');
-
 var ensureAuthenticated = function (req, res, next) {
     if (req.isAuthenticated()) {
         next();
@@ -90,13 +89,64 @@ router.post('/checkurl', function(req,response,next){
 router.post('/moverow', function(req,resp,next){
      var body = req.body;
      var numrows = [];
-     var _toFOB;
-     Row.find({fob: body[0].toFOB}).populate('entries').then(function(tofobrows) {
-        _toFOB = tofobrows;
-        numrows.push(tofobrows);
-//        console.log(req.body)
-        return Promise.map(body, function(row) {
-            return Row.findByIdAndUpdate(row.row).then(function(row) {
+     var _toFOB, _cell, _newrow, _oldrow;
+
+
+    if (body[0].killCell == 'newcell') {
+        Row.find({fob: body[0].toFOB}).populate('entries')
+            .then(function(tofobrows) {
+                _toFOB = tofobrows;
+                numrows.push(tofobrows);
+                return Row.findByIdAndUpdate(body[0].row).populate('entries')
+            }).then(function(row) {
+                    var _cell;
+                    var obj = {};
+                    obj['data'] = true;
+                    obj['columnName'] = 'killedrow';
+//                    console.log(row.index);
+                    obj['rowIndex'] = row.index;
+                    _newrow = row;
+                    _oldrow = _.cloneDeep(row);
+                    return Cell.create(obj);
+
+            }).then(function(cell) {
+                console.log('first then');
+                _cell = cell;
+                _newrow.entries.push(cell);
+                return _newrow.save();
+            }).then(function() {
+                console.log('third then');
+                var entriesarray = [];
+                entriesarray =
+                _oldrow.entries.map(function(entry){
+                   console.log(entry, 'in map');
+                   entry['rowIndex'] = numrows[0].length+1;
+                   entry['fob'] =  body[0].toFOB;
+                    if (entry['columnName'] == 'id') {
+                        entry['data'] = numrows[0].length+1;
+                    }
+                    if (entry['columnName'] == 'category') {
+                        entry['data'] = body[0].toFOB;
+                    }
+                   return Cell.create(entry);
+
+                });
+
+                return Promise.all(entriesarray).then(function(cells){
+                    return Row.create({entries:cells, fob: body[0].toFOB, index: numrows[0].length+1});
+                });
+
+            }).then(function(everything) {
+                console.log('testing test', everything);
+                resp.json(everything);
+            });
+     } else {
+        Row.find({fob: body[0].toFOB}).populate('entries')
+            .then(function(tofobrows) {
+                _toFOB = tofobrows;
+                numrows.push(tofobrows);
+                return Row.findByIdAndUpdate(body[0].row)
+            }).then(function(row) {
                 if (body[0].killCell == 'newcell') {
                     var _cell;
                     var obj = {};
@@ -104,55 +154,25 @@ router.post('/moverow', function(req,resp,next){
                     obj['columnName'] = 'killedrow';
 //                    console.log(row.index);
                     obj['rowIndex'] = row.index;
-                    return Cell.create(obj)
-                        .then(function(cell) {
-                            _cell = cell;
-                            return row;
-                        })
-                        .then(function(row1) {
-                            row1.entries.push(_cell);
-                            return row1.save(); //created killed row in original fob
-                        })
-                        .then(function() {
-                            var _row;
-                            var entriesarray = [];
-                            row.entries.forEach(function(entry){
-
-//                                return Cell.create(entry).
-                            });
-
-
-                            _row['entries'] = [];
-                            _row['fob'] = body[0].toFOB;
-                            _row['index'] = numrows[0][numrows[0].length-1].index+1;
-                            return Row.create(_row);
-                        })
-                        .then(function(newrow) {
-                            console.log(_toFOB, 'new row');
-                            _toFOB.push(newrow);
-                            return _toFOB.save();
-                        });
-                } else {
-//                    row.entries.forEach(function(e){
-                        return Cell.findByIdAndUpdate(body[0].killCell).then(function(cell) {
-//                        return cell;
-//                            if (cell._id == body[0].killCell) {
-                                console.log( 'killed existed');
-                                return Cell.findByIdAndUpdate(cell._id, {$set: {data: true}}).then(function(cell) {
-                                    var _cell = cell;
-                                    row.entries.push(_cell);
-                                });
-//                            }
-                        })
-//                    });
+                    _newrow = row;
+                    return Cell.create(obj);
                 }
-//                return row;
+            }).then(function(cell) {
+                console.log('first then');
+                _cell = cell;
+                _row.entries.push(cell);
+                return _row.save();
+            }).then(function() {
+                console.log('third then');
+                var entriesarray = [];
+                return Row.create({});
+            }).then(function(everything) {
+                console.log('testing test');
+                resp.json(everything);
+            });
+     }
 
-            })
-        }).then(function(everything) {
-            resp.json(everything);
-        })
-     });
+
 
 
 
