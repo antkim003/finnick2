@@ -687,21 +687,24 @@ onPerPage(e) {
     });
 },
 hideCols() {
-    var columns = _.filter( window.coledit, function(col) { return col.property != 'id' } );
-    var cols = [];
-    var hiddencolumns = localStorage.getItem('hidecol');
-    _.each(columns, function(c,i){
-        var propchecked =
-//            hiddencolumns.indexOf(c.property) > -1;
-            _.includes(hiddencolumns, c.property);
-        if (propchecked) {
-            cols.push(<div className="showhidecol"><label>{c.property}</label><input type="checkbox" value={c.property} checked id={'name-'+c.property} /> </div>)
-        } else if (c.property == 'id') {
-            //dont add checkbox for row id
-        } else {
-            cols.push(<div className="showhidecol"><label>{c.property}</label><input type="checkbox" id={'name-'+c.property} value={c.property} /></div>)
-        }
-    })
+    var self = this;
+    window.cols = []
+    var initialcols = function() {
+        var columns = _.filter( window.coledit, function(col) { return col.property != 'id' } );
+        var hiddencolumns = localStorage.getItem('hidecol');
+        _.each(columns, function(c,i){
+            var propchecked =  _.includes(hiddencolumns, c.property);
+            if (propchecked) {
+                cols.push(<div className="showhidecol" key={c.property+'-1'}><label key={c.property+'-2'}>{c.property}</label><input type="checkbox" key={c.property+'-3'} checked value={c.property} id={'name-'+c.property} /> </div>)
+            } else if (c.property == 'id') {
+                //dont add checkbox for row id
+            } else {
+                cols.push(<div className="showhidecol" key={c.property+'-1'}><label key={c.property+'-2'}>{c.property}</label><input key={c.property+'-3'} type="checkbox" id={'name-'+c.property} value={c.property} /></div>)
+            }
+        });
+    }
+
+
     var onSubmit = (e) => {
         var self = this;
         _.each($('#hideCols').find('.showhidecol'), function (input, i) {
@@ -733,75 +736,33 @@ hideCols() {
             var hiddencolumns = localStorage.getItem('hidecol');
             window.hiding = _.without(hiddencolumns, e.target.value);
             localStorage.setItem('hidecol',window.hiding);
-            console.log('in form change', $(e.target).is(':checked'));
-
-//            if (!$(e.target).is(':checked')) {
-//                window.hiding = _.without(hiddencolumns, e.target.value);
-//                localStorage.setItem('hidecol',window.hiding);
-//                console.log('inhere');
-//                $(e.target).removeProp('checked');
-//            } else {
-////                window.hiding = _.without(hiddencolumns, e.target.value);
-////                localStorage.setItem('hidecol',window.hiding);
-////                $(e.target).removeProp('checked');
-//            }
-//            if ($(e.target).val() == 'all') {
-//                console.log('all');
-//                $(e.target).prop('checked', false)
-//            } else {
-//                window.hiding = _.without(hiddencolumns, e.target.value);
-//                localStorage.setItem('hidecol',window.hiding);
-////                console.log('not all', window.hiding, cols)
-////                colstate();
-//            }
-//
-//
-//            if (e.target.checked) {
-////                $(e.target).removeProp('checked');
-//                window.hiding = _.uniq(window.hiding.push(hide));
-//                localStorage.setItem('hidecol',window.hiding)
-//                cols = [];
-//               _.each(columns, function(c,i) {
-//                    var propchecked = _.includes(window.hiding, c.property);
-//                   if (propchecked) {
-//                       cols.push(<div className="showhidecol"><label for={'name-'+c.property}>{c.property}</label><input type="checkbox" value={c.property} checked id={'name-'+c.property} /> </div>)
-//                   } else if (c.property == 'id') {
-//                   }else {
-//                       cols.push(<div className="showhidecol"><label for={'name-'+c.property}>{c.property}</label><input type="checkbox" id={'name-'+c.property} value={c.property} /></div>)
-//                   }
-//                });
-//                colstate();
-//            } else {
-//                window.hiding = _.uniq(_.without(window.hiding, hide));
-//                localStorage.setItem('hidecol',window.hiding)
-//                cols = [];
-//                _.each(columns, function(c,i) {
-//                    var propchecked = _.includes(window.hiding, c.property);
-//                    if (propchecked) {
-//                        cols.push(<div className="showhidecol"><label for={'name-'+c.property}>{c.property}</label><input type="checkbox" value={c.property} checked id={'name-'+c.property} /> </div>)
-//                    } else if (c.property == 'id') {
-//                    }else {
-//                        cols.push(<div className="showhidecol"><label for={'name-'+c.property}>{c.property}</label><input type="checkbox" id={'name-'+c.property} value={c.property} /></div>)
-//                    }
-//                });
-//                colstate();
-//            }
+            var target = e.target;
+            var checked = target.checked;
+            setTimeout( function() {
+                if (!checked) {
+                    $(target).prop('checked',false);
+                    window.hiding = _.without(hiddencolumns,target.value);
+                    localStorage.setItem('hidecol',window.hiding);
+                }
+            }, 100 );
         }
-
     }
+
     var colstate = () => {
         this.setState({
             modal: {
                 title: 'Columns to Hide',
                 content: <div id="hideCols" onChange={formChange}>
                     <div>
-                            <input type="checkbox" value="all"/>hide all
-                            <button onClick={onSubmit}>Ok</button></div>
-                             {cols}
+                            <div><input type="checkbox" value="all"/>hide all</div>
+                            <button onClick={onSubmit}>Ok</button>
+                    </div>
+                         {  cols }
                 </div>
             }
         });
     }
+    initialcols();
     colstate();
 
 
