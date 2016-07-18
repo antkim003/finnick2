@@ -108,7 +108,6 @@ router.post('/moverow', function(req,resp,next){
                     _newrow = row;
                     _oldrow = _.cloneDeep(row);
                     return Cell.create(obj);
-
             }).then(function(cell) {
                 console.log('first then');
                 _cell = cell;
@@ -117,27 +116,30 @@ router.post('/moverow', function(req,resp,next){
             }).then(function() {
                 console.log('third then');
                 var entriesarray = [];
-                entriesarray =
-                _oldrow.entries.map(function(entry){
-                   console.log(entry, 'in map');
-                   entry['rowIndex'] = numrows[0].length+1;
-                   entry['fob'] =  body[0].toFOB;
-                    if (entry['columnName'] == 'id') {
-                        entry['data'] = numrows[0].length+1;
+//                var _row = _.cloneDeep(_oldrow);
+                _oldrow.entries.forEach(function(entry){
+                   var newentry = {};
+                    newentry['rowIndex'] = numrows[0].length+1;
+                    newentry['fob'] =  body[0].toFOB;
+                    newentry['columnName'] = entry['columnName'];
+                    if (newentry['columnName'] == 'id') {
+                        newentry['data'] = numrows[0].length+1;
+                    } else if (newentry['columnName'] == 'category' ) {
+                        newentry['data'] = body[0].toFOB;
+                    } else {
+                        newentry['data'] = entry['data'];
                     }
-                    if (entry['columnName'] == 'category') {
-                        entry['data'] = body[0].toFOB;
-                    }
-                   return Cell.create(entry);
 
+                    entriesarray.push(Cell.create(newentry));
                 });
 
                 return Promise.all(entriesarray).then(function(cells){
+//                    Row.create({entries:cells, fob: body[0].fromFOB, index: body[0].row});
                     return Row.create({entries:cells, fob: body[0].toFOB, index: numrows[0].length+1});
                 });
 
             }).then(function(everything) {
-                console.log('testing test', everything);
+                console.log('testing test', everything, 'new row?',_newrow );
                 resp.json(everything);
             });
      } else {
@@ -155,17 +157,50 @@ router.post('/moverow', function(req,resp,next){
 //                    console.log(row.index);
                     obj['rowIndex'] = row.index;
                     _newrow = row;
+                    _oldrow = _.cloneDeep(row);
                     return Cell.create(obj);
+                } else {
+                    _oldrow = _.cloneDeep(row);
+                    var cellup = Cell.findByIdAndUpdate(body[0].killCell, {$set: {'data':true}});
+                    row.save();
+                    return cellup;
                 }
             }).then(function(cell) {
-                console.log('first then');
-                _cell = cell;
-                _row.entries.push(cell);
-                return _row.save();
+                if (body[0].killCell == 'newcell') {
+                    console.log('first then');
+                    _cell = cell;
+                    _newrow.entries.push(cell);
+                    return _newrow.save();
+                } else {
+//                    return _newrow.save();
+                }
             }).then(function() {
-                console.log('third then');
-                var entriesarray = [];
-                return Row.create({});
+//                if (body[0].killCell == 'newcell') {
+                    var entriesarray = [];
+//                var _row = _.cloneDeep(_oldrow);
+                    _oldrow.entries.forEach(function(entry){
+                        var newentry = {};
+                        newentry['rowIndex'] = numrows[0].length+1;
+                        newentry['fob'] =  body[0].toFOB;
+                        newentry['columnName'] = entry['columnName'];
+                        if (newentry['columnName'] == 'id') {
+                            newentry['data'] = numrows[0].length+1;
+                        } else if (newentry['columnName'] == 'category' ) {
+                            newentry['data'] = body[0].toFOB;
+                        } else {
+                            newentry['data'] = entry['data'];
+                        }
+                        entriesarray.push(Cell.create(newentry));
+                    });
+
+                    return Promise.all(entriesarray).then(function(cells){
+//                    Row.create({entries:cells, fob: body[0].fromFOB, index: body[0].row});
+                        return Row.create({entries:cells, fob: body[0].toFOB, index: numrows[0].length+1});
+                    });
+//                } else {
+
+//                }
+
             }).then(function(everything) {
                 console.log('testing test');
                 resp.json(everything);
