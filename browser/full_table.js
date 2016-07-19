@@ -214,6 +214,8 @@ componentDidMount() {
         getdata();
     }, 60000);
 
+
+
 },
 
 
@@ -474,9 +476,10 @@ moveRow() {
         var row = _.filter(data, function(row) {
             return row.index == $('#move-row').val();
         });
+        var cell = $('.'+$('#move-row').val()+'-'+'killedrow').attr('data-id');
         var idCell = _.find(row[0].entries, function(entry){ return entry.columnName == 'id'});
         var catCell = _.find(row[0].entries, function(entry){ return entry.columnName == 'category'});
-        var killCell = _.find(row[0].entries, function(entry){ return entry.columnName == 'killedrow'}) ? _.find(row[0].entries, function(entry){ return entry.columnName == 'killedrow'}) : {"_id":'newcell'};
+        var killCell = cell ? cell : {"_id":'newcell'};
 
         var params = [{"row": row[0]._id, "fromFOB": row[0].fob, "toFOB": $('#move-to-fob').val(), "idCell": idCell._id, "catCell": catCell._id, "killCell": killCell._id}];
         $.ajax({
@@ -485,7 +488,9 @@ moveRow() {
             data: JSON.stringify(params),
             contentType: "application/json",
             success: function() {
-                console.log('done moving', row[0])
+                console.log('done moving', row[0]);
+                window.socket.emit('new data', {});
+                self.refs.modal.hide();
             }
         })
     }

@@ -149,35 +149,17 @@ router.post('/moverow', function(req,resp,next){
                 numrows.push(tofobrows);
                 return Row.findByIdAndUpdate(body[0].row)
             }).then(function(row) {
-                if (body[0].killCell == 'newcell') {
-                    var _cell;
-                    var obj = {};
-                    obj['data'] = true;
-                    obj['columnName'] = 'killedrow';
-//                    console.log(row.index);
-                    obj['rowIndex'] = row.index;
+                    console.log('do nothing for now')
+                    _oldrow = _.cloneDeep(row);
                     _newrow = row;
-                    _oldrow = _.cloneDeep(row);
-                    return Cell.create(obj);
-                } else {
-                    _oldrow = _.cloneDeep(row);
                     var cellup = Cell.findByIdAndUpdate(body[0].killCell, {$set: {'data':true}});
                     row.save();
                     return cellup;
-                }
+
             }).then(function(cell) {
-                if (body[0].killCell == 'newcell') {
-                    console.log('first then');
-                    _cell = cell;
-                    _newrow.entries.push(cell);
-                    return _newrow.save();
-                } else {
-//                    return _newrow.save();
-                }
+                    console.log('do nothing for now 2')
             }).then(function() {
-//                if (body[0].killCell == 'newcell') {
                     var entriesarray = [];
-//                var _row = _.cloneDeep(_oldrow);
                     _oldrow.entries.forEach(function(entry){
                         var newentry = {};
                         newentry['rowIndex'] = numrows[0].length+1;
@@ -194,12 +176,9 @@ router.post('/moverow', function(req,resp,next){
                     });
 
                     return Promise.all(entriesarray).then(function(cells){
-//                    Row.create({entries:cells, fob: body[0].fromFOB, index: body[0].row});
                         return Row.create({entries:cells, fob: body[0].toFOB, index: numrows[0].length+1});
                     });
-//                } else {
 
-//                }
 
             }).then(function(everything) {
                 console.log('testing test');

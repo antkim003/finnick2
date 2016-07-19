@@ -19,7 +19,6 @@ require('./configure')(app);
 // Routes that will be accessed via AJAX should be prepended with
 // /api so they are isolated from our GET /* wildcard.
 app.use('/api', require('./routes'));
-
 /*
  This middleware will catch any URLs resembling a file extension
  for example: .js, .html, .css
@@ -40,6 +39,11 @@ app.use(function (req, res, next) {
 
 });
 
+express.static.mime.define({
+    'application/x-font-woff': ['woff', 'woff2'],
+    'application/font-woff': ['woff','woff2'],
+    'application/x-font-truetype': ['ttf']
+});
 // webpack hot loading middleware
 if (isDeveloping) {
   const compiler = webpack(config);
@@ -70,10 +74,12 @@ if (isDeveloping) {
 }
 
 
-
 // Error catching endware.
 app.use(function (err, req, res, next) {
     console.error(err)
     console.error(err.stack);
     res.status(err.status || 500).send(err.message || 'Internal server error.');
 });
+
+app.use('/lib', express.static(__dirname + '/browser'))
+
