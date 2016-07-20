@@ -7,11 +7,6 @@
     "type": "git",
     "url": ""
   },
-  "presets": [
-    "es2015",
-    "react",
-    "stage-0"
-  ],
   "keywords": [
     "express",
     "webpack",
