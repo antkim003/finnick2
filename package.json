@@ -28,7 +28,8 @@
     "test-server": "node node_modules/.bin/mocha --compilers js:babel-register --recursive tests/server/**/*.js || true",
     "test-routes": "mocha --compilers js:babel-register tests/server/routes/* || true",
     "test-moverow": "mocha --compilers js:babel-register tests/server/routes/moverows-test || true",
-    "jscs": "jscs ."
+    "jscs": "jscs .",
+    "heroku-prebuild": "node seed"
   },
   "dependencies": {
     "axios": "^0.12.0",
