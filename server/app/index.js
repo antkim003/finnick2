@@ -3,12 +3,8 @@ const path = require('path');
 const express = require('express');
 const app = express();
 
-const webpack = require('webpack');
-const webpackMiddleware = require('webpack-dev-middleware');
-const webpackHotMiddleware = require('webpack-hot-middleware');
-const config = require('../../webpack.config.js');
-
 const isDeveloping = process.env.NODE_ENV !== 'production';
+console.log('what development is this? ', isDeveloping, process.env.NODE_ENV)
 
 module.exports = app;
 
@@ -46,6 +42,10 @@ express.static.mime.define({
 });
 // webpack hot loading middleware
 if (isDeveloping) {
+  const config = require('../../webpack.config.js');
+  const webpack = require('webpack');
+  const webpackMiddleware = require('webpack-dev-middleware');
+  const webpackHotMiddleware = require('webpack-hot-middleware');
   const compiler = webpack(config);
   const middleware = webpackMiddleware(compiler, {
     publicPath: config.output.publicPath,
@@ -82,4 +82,3 @@ app.use(function (err, req, res, next) {
 });
 
 app.use('/lib', express.static(__dirname + '/browser'))
-
