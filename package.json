@@ -2,11 +2,16 @@
   "name": "finnick-2.0",
   "version": "1.0.0",
   "description": "Macys Finnick Tool",
-  "main": "server.js",
+  "main": "server/start.js",
   "repository": {
     "type": "git",
     "url": ""
   },
+  "presets": [
+    "es2015",
+    "react",
+    "stage-0"
+  ],
   "keywords": [
     "express",
     "webpack",
@@ -28,7 +33,8 @@
     "test-server": "node node_modules/.bin/mocha --compilers js:babel-register --recursive tests/server/**/*.js || true",
     "test-routes": "mocha --compilers js:babel-register tests/server/routes/* || true",
     "test-moverow": "mocha --compilers js:babel-register tests/server/routes/moverows-test || true",
-    "jscs": "jscs ."
+    "jscs": "jscs .",
+    "heroku-postbuild": "npm run build"
   },
   "dependencies": {
     "axios": "^0.12.0",
