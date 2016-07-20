@@ -43,6 +43,7 @@
     "connect-mongo": "^1.2.0",
     "cookie-parser": "^1.4.3",
     "crypto": "0.0.3",
+    "express": "^4.14.0",
     "express-session": "^1.13.0",
     "jwt-simple": "^0.5.0",
     "less": "^2.7.1",
