@@ -30,6 +30,7 @@ const Admin = require('../src/components/admin/admin.js');
 const Login = require('../src/components/auth/login.js');
 const Logout = require('../src/components/auth/logout.js');
 const Landing = require('../src/components/landing.js');
+const Combobulator = require('../src/components/combobulator.js');
 // ReactDOM.render(<App />, document.getElementById('root'));
 
 ReactDOM.render(
@@ -39,6 +40,7 @@ ReactDOM.render(
         <IndexRoute component={Landing} />
         <Route path="admin" component={RequireAuth(Admin)}/>
         <Route path="finnick" component={RequireAuth(App)} />
+        <Route path="combobulator" component={Combobulator} />
         <Route path="login" component={Login}/>
         <Route path="logout" component={Logout}/>
       </Route>
