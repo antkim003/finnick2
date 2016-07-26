@@ -34,16 +34,15 @@ router.get('/combobulator', function (req, res, next) {
         });
         arr = t;
         return t;
-
-//        res.json(t);
-//    })
     }).then(function(obj) {
-        _.each(_rows, function(row, i) {
-            if (row.fob == Object.keys(obj)) {
-                obj.push(row);
-            }
-        });
-        res.json(obj);
+        _.each(obj, function(main,i){
+            _.each(_rows, function(row,i) {
+                if (row.fob == Object.keys(main)[0]) {
+                    console.log(main[row.fob].push(row));
+                }
+            })
+        })
+        res.json(arr);
     })
 });
 
