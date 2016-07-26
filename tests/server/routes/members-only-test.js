@@ -12,7 +12,6 @@ var supertest = require('supertest');
 var app = require('../../../server/app');
 
 describe('Members Route', function () {
-
 	before('Establish DB connection', function (done) {
 		if (mongoose.connection.db) return done();
 		mongoose.connect(dbURI, done);

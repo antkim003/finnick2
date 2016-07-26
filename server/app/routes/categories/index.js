@@ -16,14 +16,11 @@ var ensureAuthenticated = function (req, res, next) {
 
 // get all unique categories
 router.get('/', function(req,res,next) {
-    console.log("this came here /categories");
     Cell.find({"columnName": "category" }).then(function(categoryCells) {
-        console.log('it found all the category cells', categoryCells);
         let categories = categoryCells.map(function(cell) {
             return cell.data;
         });
         let uniqueCategories = _.uniq(categories);
-        console.log('heres the unique categories', uniqueCategories);
         res.json({categories: uniqueCategories});
     },next);
 });

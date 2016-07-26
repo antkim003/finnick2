@@ -16,7 +16,6 @@ var agent = supertest(app);
 
 
 describe('Move Rows Test', function () {
-    this.timeout(15000);
     beforeEach('Establish DB connection', function (done) {
         if (mongoose.connection.db) return done();
         mongoose.connect(dbURI, done);
@@ -87,7 +86,6 @@ describe('Move Rows Test', function () {
     })
 
     it ('text', function(done) {
-//        this.timeout(15000);
         var killCell = {"_id":'newcell'};
         var params = [{"row": _womenrow._id, "fromFOB": _womenrow.fob, "toFOB": 'men', "killCell": killCell._id}];
 //        done();

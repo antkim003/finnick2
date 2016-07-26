@@ -34,7 +34,6 @@ describe('columns/index Route', function () {
 
   });
   describe('Authenticated request', function () {
-
     var loggedInAgent;
 
     var userInfo = {
@@ -42,17 +41,16 @@ describe('columns/index Route', function () {
       password: 'shoopdawoop'
     };
 
-    beforeEach('Create a user', function (done) {
+    before('Create a user', function (done) {
       User.create(userInfo, done);
     });
 
-    beforeEach('Create loggedIn user agent and authenticate', function (done) {
+    before('Create loggedIn user agent and authenticate', function (done) {
       loggedInAgent = supertest.agent(app);
       loggedInAgent.post('/login').send(userInfo).end(done);
     });
 
     it('GET /api/columns/index returns 200', function (done) {
-      this.timeout(5000);
       loggedInAgent.get('/api/columns/index').expect(200).end(function (err, response) {
         if (err) return done(err);
         expect(response.body).to.be.an('array');

@@ -2,7 +2,7 @@
 var router = require('express').Router();
 module.exports = router;
 var _ = require('lodash');
-var ColumnIndex = require('mongoose').model('ColumnIndex');
+var Cell = require('mongoose').model('Cell');
 var Promise = require('bluebird');
 
 var ensureAuthenticated = function (req, res, next) {
@@ -13,8 +13,8 @@ var ensureAuthenticated = function (req, res, next) {
     }
 };
 
-router.get('/index', function (req, res, next) {
-    ColumnIndex.find().then(function(columns) {
-        res.json(columns);
+router.get('/', ensureAuthenticated, function (req, res, next) {
+    Cell.find().then(function(cells) {
+        res.json(cells);
     });
 });

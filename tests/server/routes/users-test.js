@@ -14,17 +14,22 @@ var agent = supertest(app);
 
 
 describe('users routes /api/users', function () {
-  before('Establish DB connection', function (done) {
+  beforeEach('Establish DB connection', function (done) {
     if (mongoose.connection.db) return done();
     mongoose.connect(dbURI, done);
   });
 
-  after('Clear test database', function (done) {
+  afterEach('Clear test database', function (done) {
     clearDB(done);
   });
 
   // CRUD ROUTES FOR USER
   let _user;
+  let loggedInAgent;
+  let userInfo =  {
+    email: 'test@test.com',
+    password: 'test'
+  };
   beforeEach('create a user', function(done) {
     User.create({
       email: 'test@test.com',
@@ -38,6 +43,12 @@ describe('users routes /api/users', function () {
     });
   });
 
+  beforeEach('Create loggedIn user agent and authenticate', function (done) {
+    loggedInAgent = supertest.agent(app);
+    loggedInAgent.post('/login').send(userInfo).end(done);
+  });
+
+
   it('GET /:userid ', function (done) {
     agent.get('/api/users/' + _user._id)
       .expect(200)
@@ -49,31 +60,31 @@ describe('users routes /api/users', function () {
   });
 
   it('GET /types ', function(done) {
-    agent.get('/api/users/types')
+    loggedInAgent.get('/api/users/types')
       .expect(200)
       .end(function(err, response) {
         if(err) done(err);
-        expect(response.body).to.be.an("array");
+        expect(response.body.types).to.be.an("array");
+        expect(response.body.types[0]).to.equal("Admin");
         done()
       });
   });
 
   it('PUT /:userid', function(done) {
-    agent.put('/api/users/' + _user._id)
+    loggedInAgent.put('/api/users/' + _user._id)
       .send({
         'email': 'test1@test.com'
       })
       .expect(200)
       .end(function(err, response) {
         if (err) done(err);
-        console.log('putresponse: ', response.body);
         expect(response.body.email).to.equal('test1@test.com');
         done()
       });
   });
 
   it('DELETE /:userid ', function(done) {
-    agent.delete('/api/users/' + _user._id)
+    loggedInAgent.delete('/api/users/' + _user._id)
       .expect(200)
       .end(function(err,response) {
         if (err) done(err);
@@ -83,7 +94,7 @@ describe('users routes /api/users', function () {
   });
 
   it ('POST /', function(done) {
-    agent.post('/api/users')
+    loggedInAgent.post('/api/users')
       .send({
         email: 'test123@test.com',
         password: 'test',

@@ -4,6 +4,7 @@ const express = require('express');
 const app = express();
 
 const isDeveloping = process.env.NODE_ENV !== 'production';
+const isTestingServer = process.env.TESTING === 'testing';
 console.log('what development is this? ', isDeveloping, process.env.NODE_ENV)
 
 module.exports = app;
@@ -41,7 +42,7 @@ express.static.mime.define({
     'application/x-font-truetype': ['ttf']
 });
 // webpack hot loading middleware
-if (isDeveloping) {
+if (isDeveloping && !isTestingServer) {
   const config = require('../../webpack.config.js');
   const webpack = require('webpack');
   const webpackMiddleware = require('webpack-dev-middleware');

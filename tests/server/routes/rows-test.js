@@ -84,7 +84,6 @@ describe('Rows Route', function () {
     });
 
     it('GET /api/rows returns 200', function (done) {
-      this.timeout(5000);
       loggedInAgent.get('/api/rows').expect(200).end(function (err, response) {
         if (err) return done(err);
         expect(response.body).to.be.an('array');
