@@ -38,7 +38,8 @@ router.get('/combobulator', function (req, res, next) {
         _.each(obj, function(main,i){
             _.each(_rows, function(row,i) {
                 if (row.fob == Object.keys(main)[0]) {
-                    console.log(main[row.fob].push(row));
+//                    console.log(main[row.fob].push(row));
+                    main[row.fob].push(row)
                 }
             })
         })
