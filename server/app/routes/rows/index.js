@@ -20,10 +20,41 @@ router.get('/', function (req, res, next) {
     });
 });
 
+
+router.get('/combobulator', function (req, res, next) {
+    var arr = [];
+    var _rows;
+    Row.find().populate('entries').then(function(rows) {
+        var t = [];
+        _rows = rows;
+        _.each(_.uniq(_.map(rows, 'fob')), function(e,i) {
+            var obj = {};
+            obj[e] = [];
+            t.push(obj);
+        });
+        arr = t;
+        return t;
+
+//        res.json(t);
+//    })
+    }).then(function(obj) {
+        _.each(_rows, function(row, i) {
+            if (row.fob == Object.keys(obj)) {
+                obj.push(row);
+            }
+        });
+        res.json(obj);
+    })
+});
+
 router.get('/:category', function(req,res,next) {
-   Row.find({fob: req.params.category}).populate('entries').then(function(rows) {
-       res.json(rows);
-   });
+   if (req.params.category != 'combobulator') {
+       Row.find({fob: req.params.category}).populate('entries').then(function (rows) {
+           res.json(rows);
+       });
+   }else {
+       next();
+   }
 });
 
 router.post('/boost', function(req,res,next) {

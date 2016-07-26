@@ -1,0 +1,129 @@
+* {
+    box-sizing: border-box;
+}
+.tile {
+    width: 230px;
+    height: 480px;
+    border: 1px solid #999999;
+    margin: 20px 6px 20px 6px;
+    position: relative;
+    display: inline-block;
+    vertical-align: top;
+}
+.tile-img-wrap {
+    height: 284px;
+    width: 100%;
+    position: relative;
+}
+.tile-img-link {
+    display: block;
+    height: 100%;
+    width: 100%;
+}
+.tile-img-pin {
+    display: block;
+    position: absolute;
+    bottom: 8px;
+    right: 5px;
+}
+.tile-img {
+    width: 100%;
+}
+
+.only-banner {
+    display: none;
+}
+
+.instore-only {
+    display: block;
+    left: 35%;
+    position: relative;
+}
+
+.online-only {
+    display: block;
+    left: 35%;
+    position: relative;
+}
+
+.tile-content {
+    clear: both;
+    text-align: center;
+    padding: 15px 10px 0 10px;
+
+    font-family: "arial", sans-serif;
+    font-size: 13px;
+    line-height: 15px;
+}
+.tile-title {
+    color: #d10000;
+    text-align: center;
+    clear: both;
+    width: 100%;
+    display: inline-block;
+}
+.tile-title_1 {
+    font-family: "Avenir LT W01 95 Black";
+    font-size: 17px;
+    line-height: 1.1
+}
+.narrow {
+    padding: 0 25px;
+}
+.tile-title_2 {
+    font-family: "Avenir LT W01 95 Black";
+    font-size: 30px;
+    line-height: 25px;
+}
+.tile-desc {
+    color: #000;
+    margin: 4px 0 0 0;
+}
+
+.tile-desc-line {
+    width: 100%;
+    display: inline-block;
+    clear: both;
+}
+
+.tile-btns {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    padding: 8px;
+    left: 0;
+}
+.tile-btn {
+    display: block;
+    width: 103px;
+    background: #cc0001;
+    height: 38px;
+    color: #fff;
+    line-height: 38px;
+    text-decoration: none;
+    font-family: "Helvetica", arial, sans-serif;
+    font-size: 12px;
+}
+
+.tile-btn_addToList {
+    background: #000000;
+}
+.tile-btn_added {
+    display: none;
+    background: #ccc;
+}
+.tile-btn_add {
+    float: left;
+}
+.tile-btn_shop {
+    float: right;
+}
+
+.pretext {
+    text-transform: uppercase;
+    margin: 0 0 4px 0;
+}
+.imageinfo {
+    position:absolute;
+    bottom: -32px;
+}
