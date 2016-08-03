@@ -208,7 +208,23 @@ componentDidMount() {
 
 
     window.socket.on('new data', function(data) {
-        getdata()
+        console.log('data in emit!!!!', data);
+        window.statedata = window.statedata.map(function(row){
+            data.forEach(function(cell){
+                if (row.rowIndex == cell.rowIndex) {
+                     return row[cell.columnName] = cell.data;
+                }
+            });
+            return row;
+        });
+        console.log(window.statedata)
+        self.setState({
+            data: _.sortBy(window.statedata, 'rowIndex')
+        })
+
+//        console.log(_.where(data, {rowIndex: data.rowIndex}))
+//        window.statedata =
+//        getdata()
     });
 //    window.datainterval = setInterval(function() {
 ////        getdata();

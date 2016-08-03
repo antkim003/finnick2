@@ -36,9 +36,10 @@ module.exports = function (server) {
 //                    body += chunk;
 //                });
 //                response.on('end', function() {
-                    socket.broadcast.emit('new data', '')
+                    socket.broadcast.emit('new data', data);
 //                    socket.emit('new data', body);
 
+                    console.log(data);
 //                });
 //                socket.broadcast.emit('new data', response);
 //            });
