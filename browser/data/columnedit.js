@@ -87,12 +87,12 @@ module.exports = (app) => {
                                 'url': '/api/cells/',
                                 'data': JSON.stringify(params),
                                 'contentType': "application/json",
-                                'success': function() {
-                                    console.log('done');
-                                    window.socket.emit('my other event', { val: val, row: window.row-1 });
-                                    window.datainterval;
-                                    var scrollX = window.scrollX+1
-                                    var scrollY = window.scrollY+1
+                                'success': function(data) {
+                                    console.log('put data in here!!!!!!', data);
+                                    window.socket.emit('my other event', data);
+//                                    window.datainterval;
+                                    var scrollX = window.scrollX+1;
+                                    var scrollY = window.scrollY+1;
                                     if ($('.demonstration').size() > 0) {
                                         window.scrollTo(scrollX,scrollY);
                                     }
@@ -108,10 +108,10 @@ module.exports = (app) => {
                                     'contentType': "application/json",
                                     'success': function(data) {
                                         window.socket.emit('my other event', { val: val, row: window.row-1 });
-                                        window.datainterval;
+//                                        window.datainterval;
                                         $('.'+datrow).attr('data-id', data[0]._id);
-                                        var scrollX = window.scrollX+1
-                                        var scrollY = window.scrollY+1
+                                        var scrollX = window.scrollX+1;
+                                        var scrollY = window.scrollY+1;
                                         if ($('.demonstration').size() > 0) {
                                             window.scrollTo(scrollX,scrollY);
                                         }
