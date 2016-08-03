@@ -30,18 +30,18 @@ module.exports = function (server) {
                 port: process.env.PORT || 3000,
                 path: '/api/rows/'
             };
-            http.get(options, function(response){
-                var body = '';
-                response.on('data', function(chunk) {
-                    body += chunk;
-                });
-                response.on('end', function() {
-                    socket.broadcast.emit('new data', body)
+//            http.get(options, function(response){
+//                var body = '';
+//                response.on('data', function(chunk) {
+//                    body += chunk;
+//                });
+//                response.on('end', function() {
+                    socket.broadcast.emit('new data', '')
 //                    socket.emit('new data', body);
 
-                });
+//                });
 //                socket.broadcast.emit('new data', response);
-            });
+//            });
 //            socket.emit('new data', data);
 
         });
