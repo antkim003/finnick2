@@ -210,9 +210,9 @@ componentDidMount() {
     window.socket.on('new data', function(data) {
         getdata()
     });
-    window.datainterval = setInterval(function() {
-        getdata();
-    }, 60000);
+//    window.datainterval = setInterval(function() {
+////        getdata();
+//    }, 60000);
 
 
 
@@ -598,17 +598,17 @@ rowsOneValue() {
             success: function() {
                 console.log('done');
                 window.socket.emit('my other event', { val: value, row: window.row-1 });
-                window.datainterval;
+//                window.datainterval;
 //                window.location.reload(true);
                 _.each(cellsincol, function(cell, i) {
                     self.state.data[cell.rowIndex-1][column] = value;
                     if (i == cellsincol.length-1) {
-                        setTimeout(function(){
+//                        setTimeout(function(){
                             self.setState({
                                 data: query ? _.filter(_.sortBy(statedata, 'rowIndex'), function(d) { return d.category == query}) : statedata
                             });
                             self.refs.modal.hide();
-                        }, 1000)
+//                        }, 1000)
                     }
                 })
 
