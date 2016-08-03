@@ -27,7 +27,7 @@ module.exports = function (server) {
             console.log('now send to all browsers', data);
 //            socket.broadcast.emit('new data', data);
             var options = {
-                port: 3000,
+                port: process.env.PORT || 3000,
                 path: '/api/rows/'
             };
             http.get(options, function(response){
