@@ -193,8 +193,8 @@ module.exports =
         forWho: ["admin","buyer","buyer_lead"],
     },
     {
-        property: 'extraomniprojectedsales',
-        forWho: ["admin","buyer","buyer_lead"],
+        property: 'extra',
+        forWho: ["admin"],
     },
     {
         property: 'killedrow',

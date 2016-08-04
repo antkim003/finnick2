@@ -577,11 +577,11 @@ window.coledit =     [
     columnorder: 50
 },
 {
-    property: 'extraomniprojectedsales',
-    header: 'Extra Omni Projected Sales',
+    property: 'extra',
+    header: 'Extra',
     cell: [app.editable({
     editor: editors.input(_.filter(validations, function(v) { return v.name == 'currency'})),
-    }), app.highlighter('extraomniprojectedsales')],
+    }), app.highlighter('Extra')],
     columnorder: 51
 },
 {
