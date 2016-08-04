@@ -203,5 +203,13 @@ module.exports =
     {
         property: 'typeofspecial',
         forWho: ["admin","buyer","buyer_lead"],
+    },
+    {
+        property: 'notesfrombuyersimg',
+        forWho: ["admin","buyer","buyer_lead"],
+    },
+    {
+        property: 'notesfromretouchimg',
+        forWho: ["admin","photography", "photography_lead"],
     }
 ]
