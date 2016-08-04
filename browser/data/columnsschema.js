@@ -37,7 +37,7 @@ module.exports =
     },
     {
         property: 'pricingcategory',
-        forWho: ['admin','buyer','buyer_lead'],
+        forWho: ['admin'],
     },
     {
         property: 'instorespecial',
@@ -129,11 +129,11 @@ module.exports =
     },
     {
         property: 'plenti',
-        forWho: ["admin","buyer","buyer_lead"],
+        forWho: ["admin"],
     },
     {
         property: 'bffavorites',
-        forWho: ["admin","buyer","buyer_lead"],
+        forWho: ["admin"],
     },
     {
         property: 'goingfast',
