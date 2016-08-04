@@ -1,8 +1,6 @@
 body {
     background: #fefefe;
-
     font-family: Sans-Serif;
-
     line-height: 1.5;
 }
 
@@ -50,7 +48,6 @@ header .description {
 
 article {
     display: block !important;
-
     margin-top: 6em;
     margin-left: auto;
     margin-right: auto;
@@ -443,7 +440,7 @@ table .sort-desc:after, .sort-desc .fixedHead:after {
 }
 .demonstration [data-locked='true'] [data-property="id"]:after {
     font-family: "Glyphicons Halflings";
-    content: '\e033';
+    content: '\ ';
     display: inline-block;
     position: absolute;
     right:-1em;
