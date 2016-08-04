@@ -580,7 +580,7 @@ window.coledit =     [
     property: 'extra',
     header: 'Extra',
     cell: [app.editable({
-    editor: editors.input(_.filter(validations, function(v) { return v.name == 'currency'})),
+    editor: editors.input(),
     }), app.highlighter('Extra')],
     columnorder: 51
 },
