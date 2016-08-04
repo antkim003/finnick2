@@ -542,7 +542,7 @@ helpModal() {
                         <li>Rows with strikethrough have been killed, and remain as reference.
                         </li>
                         <li>Questions/Comments<br/>
-                            email elizabeth.chen@macys.com or anthony.kim@macys.com
+                            email Mallory.lovato@macys.com
                         </li>
                     </ul>
                 </div>
