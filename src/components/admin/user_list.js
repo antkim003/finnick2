@@ -184,12 +184,12 @@ class UserList extends Component {
       }
       if (column.property === "delete" && (self.props.session.user.lead || self.props.session.user.type === "admin")) {
         return (
-          <td onClick={self.clickCell} key={i + '-' + z + '-cell'} className={'cell-' + i + '-' + z + ' ' + column.property + ' text-center' } data-property={column.property}  data-user-id={row._id}>
+          <td onClick={self.clickCell} key={i + '-' + z + '-cell'} className={'cell-' + i + '-' + z + ' ' + column.property + ' text-center' } data-property={column.property}  data-user-id={row._id} >
             <div className="btn btn-danger" onClick={self.deleteRow}>x</div>
           </td>
         )
       }
-      return (<td onClick={self.clickCell} key={i + '-' + z + '-cell'} className={'cell-' + i + '-' + z + ' ' + column.property} data-property={column.property}  data-user-id={row._id}>
+      return (<td onClick={self.clickCell} key={i + '-' + z + '-cell'} className={'cell-' + i + '-' + z + ' ' + column.property} data-property={column.property}  data-user-id={row._id} style={{"whiteSpace": "pre-line"}}>
         <div className="targetProperty">{targetProperty === "select" ? "" : targetProperty}</div>
         {column.property === "locked" || column.property === "lead"? self.renderCheckbox(targetProperty, column.property) : ''}
       </td>);

@@ -24,8 +24,8 @@ export function loginUser( { email, password }) {
         dispatch({ type: AUTH_USER });
         dispatch(fetchSession());
         localStorage.setItem('token', response.data.token);
-      localStorage.setItem('all', JSON.stringify(response.data));
-      localStorage.setItem('user',  JSON.stringify({
+        localStorage.setItem('all', JSON.stringify(response.data));
+        localStorage.setItem('user',  JSON.stringify({
               name: response.data.user.name,
               email: email,
               type: response.data.user.type,
@@ -113,7 +113,6 @@ export function updateUser( userId, data ) {
 
 export function fetchUser( {userId}) {
   const request = axios.get('/api/users/' + userId);
-
   return {
     type: FETCH_USER,
     payload: request

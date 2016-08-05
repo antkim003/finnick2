@@ -46,7 +46,7 @@ var seedRowData = function() {
 
     return Promise.map(outerArray, function(row) {
         return Cell.create(row).then(function(createdrow) {
-            console.log('created row: ', createdrow[0].fob)
+            console.log('created row: ', createdrow[0])
             return Row.create({
                 entries: createdrow,
                 index: createdrow[0].rowIndex,
