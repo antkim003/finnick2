@@ -101,8 +101,18 @@ var categories = [
     size: 50},
     {name: "furniture&mattresses",
     size: 100},
-    {name: "international",
-    size: 300}
+    {name:"IntlWomen",
+    size: 40},
+    {name: "intlmen", size: 40},
+    {name: "intlkids", size: 40},
+    {name: "intlshoes", size: 40},
+    {name: "intljewelry&Watches", size: 40},
+    {name: "intlhandbags&Accessories", size: 40},
+    {name: "intljuniors", size: 40},
+    {name: "intlforthehome", size: 40},
+    {name: "intlkitchen&dining", size: 40},
+    {name: "intlbed&bath", size: 40},
+    {name: "intlluggage&accessories", size: 40}
 ]
 var seedCategories = function() {
     return Promise.each(categories, function(category) {
@@ -157,13 +167,94 @@ var seedRowData = function(name, size) {
         console.error('err', err);
     });
 };
+var seedUsers = function () {
+
+    var users = [
+        {
+            name: "testing",
+            username: 'testing',
+            password: 'password',
+            collections: ["women","for_the_home"],
+            locked: false,
+            lead: true
+        },
+        {
+            name: "admin",
+            username: 'admin',
+            password: 'test',
+            locked: false,
+            lead: true,
+            type: "admin"
+        },
+        {
+            "name":"photography",
+            password: 'test',
+            "username":"photography",
+            "type":"photography",
+            collections: ["women", "for_the_home"],
+            "locked":false
+        },
+        {
+            "name":"sitemerch",
+            password: 'test',
+            "username":"sitemerch",
+            "type":"site_merch",
+            "collections":["women"],
+            "locked":false
+        },
+        {
+            "name":"nocollections_sitemerch",
+            password: 'test',
+            "username":"nocollections_sitemerch",
+            "type":"site_merch",
+            "locked":false
+        },
+        {
+            "name":"buyer",
+            password: 'test',
+            "username":"buyer",
+            "type":"buyer",
+            "lead": true,
+            "locked":false,
+            collections: ["women", "for_the_home"]
+        },
+        {
+            "name":"Marketing",
+            password: 'test',
+            "username":"marketing",
+            collections: ["women"],
+            "type":"marketing", "lead": true,"locked":false
+        },
+        {
+            "name":"copy",
+            password: 'test',
+            "username":"copy",
+            "type":"copy",
+            "lead": true,
+            "collections":["men"],
+            "locked":false
+        },
+        {
+            "name":"copylocked",
+            password: 'test',
+            "username":"copylocked",
+            "type":"copy",
+            "lead": true,
+            "collections":["men"],
+            "locked":true
+        }
+    ];
+
+    return User.create(users);
+
+};
 
 connectToDb
     .then(function () {
         return wipeCollections();
     })
     .then(function () {
-        return Promise.all([seedCategories()]);
+        return Promise.all([seedCategories(), seedUsers()]);
     })
     .then(function (data) {
         console.log(chalk.green('Seed successful!', data.length));

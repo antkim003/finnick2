@@ -70,7 +70,7 @@ describe('Rows Route', function () {
     var loggedInAgent;
 
     var userInfo = {
-      email: 'joe@gmail.com',
+      username: 'joe',
       password: 'shoopdawoop'
     };
 

@@ -5,8 +5,8 @@ import { browserHistory } from 'react-router';
 import * as actions from '../../actions';
 
 class Login extends Component {
-  handleFormSubmit({ email, password }) {
-    this.props.loginUser({ email, password });
+  handleFormSubmit({ username, password }) {
+    this.props.loginUser({ username, password });
   }
   renderAlert() {
     if (this.props.errorMessage) {
@@ -23,7 +23,7 @@ class Login extends Component {
     }
   }
   render() {
-    const { handleSubmit, fields: { email, password}} = this.props;
+    const { handleSubmit, fields: { username, password}} = this.props;
     return (
       <div>
 
@@ -31,8 +31,8 @@ class Login extends Component {
           <h2>Login</h2>
           <form onSubmit={handleSubmit(this.handleFormSubmit.bind(this))}>
             <div className="form-group">
-              <label>Email:</label>
-              <input {...email} className="form-control" />
+              <label>Username:</label>
+              <input {...username} className="form-control" />
             </div>
             <div className="form-group">
               <label>Password:</label>
@@ -56,5 +56,5 @@ function mapStateToProps(state) {
 
 module.exports = reduxForm({
   form: 'login',
-  fields: ['email', 'password']
+  fields: ['username', 'password']
 }, mapStateToProps, actions)(Login);

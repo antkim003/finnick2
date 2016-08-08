@@ -79,7 +79,7 @@ module.exports = function (server) {
         socket.on('add user', function (username) {
             if (addedUser) return;
             currentUsers.push(username);
-            currentUsers = _.uniqBy(currentUsers, 'email')
+            currentUsers = _.uniqBy(currentUsers, 'username')
             // we store the username in the socket session for this client
             socket.username = username;
             ++numUsers;
@@ -100,7 +100,7 @@ module.exports = function (server) {
         socket.on('disconnect', function () {
             if (addedUser) {
                 --numUsers;
-                currentUsers = _.uniqBy( _.without(currentUsers, socket.username), 'email' );
+                currentUsers = _.uniqBy( _.without(currentUsers, socket.username), 'username' );
 
                 // echo globally that this client has left
                 socket.broadcast.emit('user left', {
@@ -112,7 +112,7 @@ module.exports = function (server) {
         });
 
     });
-    
+
     return io;
 
 };

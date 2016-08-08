@@ -27,12 +27,12 @@ describe('users routes /api/users', function () {
   let _user;
   let loggedInAgent;
   let userInfo =  {
-    email: 'test@test.com',
+    username: 'test',
     password: 'test'
   };
   beforeEach('create a user', function(done) {
     User.create({
-      email: 'test@test.com',
+      username: 'test',
       password: 'test',
       locked: true,
       type: 'Admin',
@@ -73,12 +73,12 @@ describe('users routes /api/users', function () {
   it('PUT /:userid', function(done) {
     loggedInAgent.put('/api/users/' + _user._id)
       .send({
-        'email': 'test1@test.com'
+        'username': 'test1'
       })
       .expect(200)
       .end(function(err, response) {
         if (err) done(err);
-        expect(response.body.email).to.equal('test1@test.com');
+        expect(response.body.username).to.equal('test1');
         done()
       });
   });
@@ -96,7 +96,7 @@ describe('users routes /api/users', function () {
   it ('POST /', function(done) {
     loggedInAgent.post('/api/users')
       .send({
-        email: 'test123@test.com',
+        username: 'test123',
         password: 'test',
         locked: true,
         type: 'Admin',
@@ -105,7 +105,7 @@ describe('users routes /api/users', function () {
       .expect(200)
       .end(function(err, response) {
         if (err) done(err);
-        expect(response.body.email).to.equal('test123@test.com');
+        expect(response.body.username).to.equal('test123');
         done();
       })
   })

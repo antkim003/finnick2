@@ -16,10 +16,10 @@ import {
   FETCH_TYPES
 } from './type';
 
-export function loginUser( { email, password }) {
+export function loginUser( { username, password }) {
   // redux thunk here
   return function(dispatch) {
-    axios.post('/login', { email, password })
+    axios.post('/login', { username, password })
       .then(response => {
         dispatch({ type: AUTH_USER });
         dispatch(fetchSession());
@@ -27,7 +27,7 @@ export function loginUser( { email, password }) {
         localStorage.setItem('all', JSON.stringify(response.data));
         localStorage.setItem('user',  JSON.stringify({
               name: response.data.user.name,
-              email: email,
+              username: username,
               type: response.data.user.type,
               locked: response.data.user.locked,
               collections: response.data.user.collections,

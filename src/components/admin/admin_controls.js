@@ -22,7 +22,7 @@ class AdminControls extends Component {
     this.setState(
       {
         showModal: false,
-        email: {
+        username: {
           value: "",
           error: "",
           dirty: false
@@ -131,9 +131,9 @@ class AdminControls extends Component {
     } else {
       this.setState(
       {
-        email: {
+        username: {
           dirty: true,
-          value: self.refs.email.value
+          value: self.refs.username.value
         },
         name: {
           dirty: true,
@@ -194,10 +194,10 @@ class AdminControls extends Component {
                 <input onChange={this.updatenow} ref="name" data-ref="name" type="text" placeholder="Enter text" className="form-control" id="formControlsText"></input>
                 <HelpBlock>{this.state.name.error}</HelpBlock>
               </FormGroup>
-              <FormGroup validationState={this.getValidationState('email','required')} controlId="formControlsEmail">
-                <ControlLabel>Email address</ControlLabel>
-                <input onChange={this.updatenow} ref="email" data-ref="email" type="email" placeholder="Enter Email" className="form-control" id="formControlsEmail"></input>
-                <HelpBlock>{this.state.email.error}</HelpBlock>
+              <FormGroup validationState={this.getValidationState('username','required')} controlId="formControlsUsername">
+                <ControlLabel>Username</ControlLabel>
+                <input onChange={this.updatenow} ref="username" data-ref="username" type="text" placeholder="Enter Username" className="form-control" id="formControlsUsername"></input>
+                <HelpBlock>{this.state.username.error}</HelpBlock>
               </FormGroup>
               <FormGroup validationState={this.getValidationState('password','required')} controlId="formControlsPassword">
                 <ControlLabel>Password</ControlLabel>

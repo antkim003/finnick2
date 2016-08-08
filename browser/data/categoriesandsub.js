@@ -5,76 +5,351 @@ module.exports =
         {
             value: 'women',
             name: 'Women',
-            subcategories: [{value: 'womencat1', name: "W Cat1"},{value: 'womencat2', name: 'W Cat2'}]
+            subcategories: [
+                {
+                    value: 'missy',
+                    name: "Missy"
+                },
+                {
+                    value: 'plus',
+                    name: 'Plus'
+                },
+                {
+                    value: 'petite',
+                    name: "Petite"},
+                {
+                    value: 'juniors',
+                    name: 'Juniors'
+                },
+                {
+                    value: 'lingerie_&_sleepwear',
+                    name: "Lingerie & Sleepwear"
+                },
+                {
+                    value: 'accessories',
+                    name: 'Accessories'
+                },
+                {
+                    value: 'shoes',
+                    name: "Shoes"
+                },
+                {
+                    value: 'jewelry',
+                    name: 'Jewelry'
+                },
+                {
+                    value: 'handbags',
+                    name: 'Handbags'
+                },
+                {
+                    value: 'beauty',
+                    name: 'Beauty'
+                }
+            ]
         },
         {
             value: 'men',
             name: 'Men',
-            subcategories: [{value: 'mencat1', name: "M Cat1"},{value: 'mencat2', name: 'M Cat2'}]
+            subcategories: [
+                {
+                    value: 'men',
+                    name: "Men"
+                },
+                {
+                    value: 'big_and_tall',
+                    name: 'Big and Tall'
+                },
+                {
+                    value: 'guys',
+                    name: "Guys"},
+                {
+                    value: 'shoes',
+                    name: 'Shoes'
+                },
+                {
+                    value: 'accessories',
+                    name: "Accessories"
+                },
+                {
+                    value: 'electronics',
+                    name: 'Electronics'
+                }
+            ]
         },
         {
-            value: 'womens_shoes',
-            name: 'Womens Shoes',
-            subcategories: [{value: 'wsmcat1', name: "WS Cat1"},{value: 'wsmcat2', name: 'WS Cat2'}]
+            value: 'shoes',
+            name: 'Shoes',
+            subcategories: [
+                {
+                    value: 'womens',
+                    name: "Women's"
+                },
+                {
+                    value: 'mens',
+                    name: "Men's"
+                },
+                {
+                    value: 'kids',
+                    name: "Kids"
+                }
+            ]
         },
         {
-            value: 'mens_shoes',
-            name: 'Mens Shoes',
-            subcategories: [{value: 'mens_shoes1', name: "mens_shoes 1"},{value: 'mens_shoes2', name: 'mens_shoes 2'}]
-        },
-        {
-            value: 'jewelry_and_watches',
+            value: 'jewlery&watches',
             name: 'Jewelry and Watches',
-            subcategories: [{value: 'jewelry_and_watches1', name: "M jewelry_and_watches1"},{value: 'jewelry_and_watches2', name: 'M jewelry_and_watches2'}]
+            subcategories: [
+                {
+                    value: 'fine_jewelry',
+                    name: "Fine Jewelry"
+                },
+                {
+                    value: 'fashion_jewelry',
+                    name: "Fashion Jewelry"
+                },
+                {
+                    value: 'watches',
+                    name: "Watches"
+                }
+            ]
         },
         {
-            value: 'handbags_and_accessories',
+            value: 'handbags&accessories',
             name: 'Handbags and Accessories',
-            subcategories: [{value: 'handbags_and_accessories1', name: "M handbags_and_accessories1"},{value: 'handbags_and_accessories2', name: 'M handbags_and_accessories2'}]
+            subcategories: [
+                {
+                    value: 'handbags',
+                    name: "Handbags"
+                },
+                {
+                    value: 'accessories',
+                    name: "Accessories"
+                }
+            ]
         },
         {
             value: 'juniors',
             name: 'Juniors',
-            subcategories: [{value: 'juniors1', name: "M juniors1"},{value: 'juniors2', name: 'M juniors1'}]
+            subcategories: [
+                {
+                    value: 'juniors',
+                    name: "Juniors"
+                },
+                {
+                    value: 'shoes',
+                    name: "Shoes"
+                },
+                {
+                    value: 'handbags_&_accessories',
+                    name: "Handbags & Accessories"
+                },
+                {
+                    value: 'electronics',
+                    name: "Electronics"
+                },
+                {
+                    value: 'beauty',
+                    name: "Beauty"
+                },
+                {
+                    value: 'sleepwear',
+                    name: "Sleepwear"
+                }
+            ]
         },
         {
             value: 'kids',
             name: 'Kids',
-            subcategories: [{value: 'kids1', name: "M kids"},{value: 'kids2', name: 'M kids2'}]
+            subcategories: [
+                {
+                    value: 'baby',
+                    name: "Baby"
+                },
+                {
+                    value: 'girls',
+                    name: 'Girls'
+                },
+                {
+                    value: 'boys',
+                    name: "Boys"
+                },
+                {
+                    value: 'toys',
+                    name: 'Toys'
+                }
+            ]
         },
         {
             value: 'beauty',
             name: 'Beauty',
-            subcategories: [{value: 'beauty1', name: "M beauty1"},{value: 'beauty2', name: 'M beauty2'}]
+            subcategories: [
+                {
+                    value: 'makeup',
+                    name: "Makeup"
+                },
+                {
+                    value: 'skincare',
+                    name: 'Skincare'
+                },
+                {
+                    value: 'fragrance',
+                    name: "Fragrance"
+                },
+                {
+                    value: 'cologne_&_grooming',
+                    name: 'Cologne & Grooming'
+                }
+            ]
         },
         {
             value: 'for_the_home',
             name: 'For the Home',
-            subcategories: [{value: 'for_the_home1', name: "M for_the_home1"},{value: 'for_the_home2', name: 'M for_the_home2'}]
+            subcategories: [
+                {
+                    value: 'bedding',
+                    name: "Bedding"
+                },
+                {
+                    value: 'bath',
+                    name: 'Bath'
+                },
+                {
+                    value: 'electrics',
+                    name: "Electrics"},
+                {
+                    value: 'kitchen',
+                    name: 'Kitchen'
+                },
+                {
+                    value: 'holiday_lane',
+                    name: "Holiday Lane (Décor Only)"
+                },
+                {
+                    value: 'furniture_and_mattress',
+                    name: 'Furniture and Mattress'
+                },
+                {
+                    value: 'dining',
+                    name: "Dining"
+                },
+                {
+                    value: 'luggage',
+                    name: 'Luggage'
+                },
+                {
+                    value: 'home_décor',
+                    name: 'Home Décor'
+                },
+                {
+                    value: 'gourmet_food_&_gifts',
+                    name: 'Gourmet Food & Gifts'
+                },
+                {
+                    value: 'vaccums_&_floor_care',
+                    name: 'Vaccums & Floor Care'
+                },
+                {
+                    value: 'personal_care',
+                    name: 'Personal Care'
+                }
+            ]
         },
         {
-            value: 'kitchen',
-            name: 'Kitchen',
-            subcategories: [{value: 'kitchen1', name: "M kitchen1"},{value: 'kitchen2', name: 'M kitchen2'}]
+            value: 'kitchen&dining',
+            name: 'Kitchen & Dining',
+            subcategories: [
+                {
+                    value: 'electrics',
+                    name: "Electrics"
+                },
+                {
+                    value: 'cookware',
+                    name: 'Cookware'
+                },
+                {
+                    value: 'bakeware',
+                    name: "Bakeware"},
+                {
+                    value: 'gadgets',
+                    name: 'Gadgets'
+                },
+                {
+                    value: 'cutlery',
+                    name: "Cutlery"
+                },
+                {
+                    value: 'dinnerware',
+                    name: 'Dinnerware'
+                },
+                {
+                    value: 'barware',
+                    name: "Barware"
+                },
+                {
+                    value: 'drinkware',
+                    name: 'Drinkware'
+                },
+                {
+                    value: 'flatware',
+                    name: 'Flatware'
+                },
+                {
+                    value: 'gourmet_food_&_gifts',
+                    name: 'Gourmet Food & Gifts'
+                },
+                {
+                    value: 'holiday_lane',
+                    name: "Holiday Lane (Dining/Dishes Only)"
+                }
+            ]
         },
         {
-            value: 'bed_and_bath',
-            name: 'Bed and Bath',
-            subcategories: [{value: 'bed_and_bath1', name: "M bed_and_bath1"},{value: 'bed_and_bath2', name: 'M bed_and_bath2'}]
+            value: 'bed&bath',
+            name: 'Bed & Bath',
+            subcategories: [
+                {
+                    value: 'bedding',
+                    name: "Bedding"
+                },
+                {
+                    value: 'bedding_collections',
+                    name: "Bedding Collections"
+                },
+                {
+                    value: 'bedding_basics',
+                    name: "Bedding Basics"
+                },
+                {
+                    value: 'sheets',
+                    name: "Sheets"
+                },
+                {
+                    value: 'bath',
+                    name: "Bath"
+                }
+            ]
         },
         {
-            value: 'dining',
-            name: 'Dining',
-            subcategories: [{value: 'dining1', name: "M dining1"},{value: 'dining2', name: 'M dining2'}]
+            value: 'luggage&accessories',
+            name: 'Luggage & Accessories',
+            subcategories: [
+                {
+                    value: 'all_luggage',
+                    name: "All Luggage"
+                }
+            ]
         },
         {
-            value: 'luggage',
-            name: 'Luggage',
-            subcategories: [{value: 'luggage1', name: "M luggage1"},{value: 'luggage2', name: 'M luggage3'}]
-        },
-        {
-            value: 'furniture_and_mattress',
+            value: "furniture&mattresses",
             name: 'Furniture and Matress',
-            subcategories: [{value: 'furniture_and_mattress1', name: "M furniture_and_mattress1"},{value: 'furniture_and_mattress2', name: 'M furniture_and_mattress2'}]
+            subcategories: [
+                {
+                    value: 'furniture',
+                    name: "Furniture"
+                },
+                {
+                    value: 'mattresses',
+                    name: "Mattresses"
+                }
+            ]
         }
     ]

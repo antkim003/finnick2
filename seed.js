@@ -69,7 +69,7 @@ var seedUsers = function () {
     var users = [
         {
             name: "testing",
-            email: 'testing@fsa.com',
+            username: 'testing',
             password: 'password',
             collections: ["women","for_the_home"],
             locked: false,
@@ -77,7 +77,7 @@ var seedUsers = function () {
         },
         {
             name: "admin",
-            email: 'admin@gmail.com',
+            username: 'admin',
             password: 'test',
             locked: false,
             lead: true,
@@ -86,7 +86,7 @@ var seedUsers = function () {
         {
             "name":"photography",
             password: 'test',
-            "email":"photography@gmail.com",
+            "username":"photography",
             "type":"photography",
             collections: ["women", "for_the_home"],
             "locked":false
@@ -94,7 +94,7 @@ var seedUsers = function () {
         {
             "name":"sitemerch",
             password: 'test',
-            "email":"sitemerch@gmail.com",
+            "username":"sitemerch",
             "type":"site_merch",
             "collections":["women"],
             "locked":false
@@ -102,14 +102,14 @@ var seedUsers = function () {
         {
             "name":"nocollections_sitemerch",
             password: 'test',
-            "email":"nocollections_sitemerch@gmail.com",
+            "username":"nocollections_sitemerch",
             "type":"site_merch",
             "locked":false
         },
         {
             "name":"buyer",
             password: 'test',
-            "email":"buyer@gmail.com",
+            "username":"buyer",
             "type":"buyer",
             "lead": true,
             "locked":false,
@@ -118,14 +118,14 @@ var seedUsers = function () {
         {
             "name":"Marketing",
             password: 'test',
-            "email":"marketing@gmail.com",
+            "username":"marketing",
             collections: ["women"],
             "type":"marketing", "lead": true,"locked":false
         },
         {
             "name":"copy",
             password: 'test',
-            "email":"copy@gmail.com",
+            "username":"copy",
             "type":"copy",
             "lead": true,
             "collections":["men"],
@@ -134,57 +134,12 @@ var seedUsers = function () {
         {
             "name":"copylocked",
             password: 'test',
-            "email":"copylocked@gmail.com",
+            "username":"copylocked",
             "type":"copy",
             "lead": true,
             "collections":["men"],
             "locked":true
-        },
-        {"name":"Lillian Willis",
-            password: 'test',
-            "email":"lwillis5@latimes.com","type":"copy","locked":true},
-        {"name":"Evelyn Flores",
-            password: 'test',
-            "email":"eflores6@baidu.com","type":"photography","locked":true},
-        {"name":"Kathryn Allen",
-            password: 'test',
-            "email":"kallen7@howstuffworks.com","type":"copy", "lead": true,"locked":false},
-        {"name":"Thomas Mitchell",
-            password: 'test',
-            "email":"tmitchell8@bigcartel.com","type":"buyer", "lead": true,"locked":true},
-        {"name":"Bobby Nelson",
-            password: 'test',
-            "email":"bnelson9@usatoday.com","type":"copy", "lead": true,"collections":["women"],"locked":false},
-        {"name":"Frances Gray",
-            password: 'test',
-            "email":"fgraya@tumblr.com","type":"photography","collections":["men"],"locked":true},
-        {"name":"Teresa Ray",
-            password: 'test',
-            "email":"trayb@eventbrite.com","type":"site_merch", "lead": true,"collections":["women"],"locked":true},
-        {"name":"Frances Diaz",
-            password: 'test',
-            "email":"fdiazc@ft.com","type":"copy", "lead": true,"locked":false},
-        {"name":"Ruth Ramos",
-            password: 'test',
-            "email":"rramosd@ning.com","type":"site_merch","locked":false},
-        {"name":"Kevin Green",
-            password: 'test',
-            "email":"kgreene@nature.com","type":"buyer", "lead": true,"locked":true},
-        {"name":"Linda Mitchell",
-            password: 'test',
-            "email":"lmitchellf@github.com","type":"copy","collections":["women"],"locked":true},
-        {"name":"Peter Peterson",
-            password: 'test',
-            "email":"ppetersong@xing.com","type":"copy", "lead": true,"locked":true},
-        {"name":"Harold Price",
-            password: 'test',
-            "email":"hpriceh@guardian.co.uk","type":"buyer","collections":["women"],"locked":true},
-        {"name":"Sarah Alvarez",
-            password: 'test',
-            "email":"salvarezi@about.com","type":"buyer", "lead": true,"locked":false},
-        {"name":"Kelly Mitchell",
-            password: 'test',
-            "email":"kmitchellj@drupal.org","type":"copy","collections":["women"],"locked":true}
+        }
     ];
 
     return User.create(users);

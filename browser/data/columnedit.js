@@ -257,7 +257,7 @@ window.coledit =     [
 },
 {
     property: 'storeregularprice',
-    header: 'Store Reg Price (range)',
+    header: 'Store Reg Price',
     info: 'range of prices, can be singular, must have .XX',
     cell: [app.editable({
     editor: editors.input(_.filter(validations, function(v) { return v.name == 'currency'})),
@@ -266,7 +266,7 @@ window.coledit =     [
 },
 {
     property: 'storespecialprice',
-    header: 'Store Special Price (range)',
+    header: 'Store Special Price',
     info: 'range of prices, can be singular, must have .XX',
     cell: [app.editable({
     editor: editors.input(_.filter(validations, function(v) { return v.name == 'currency'})),
@@ -301,7 +301,7 @@ window.coledit =     [
 },
 {
     property: 'mcomspecialprice',
-    header: 'MCOM Special Price (range)',
+    header: 'MCOM Special Price',
     info: 'range of prices, can be singular, must have .XX',
     cell: [app.editable({
     editor: editors.input(_.filter(validations, function(v) { return v.name == 'currency'})),

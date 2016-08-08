@@ -27,12 +27,12 @@ describe('columns/index Route', function () {
   let _user;
   let loggedInAgent;
   let userInfo =  {
-    email: 'test@test.com',
+    username: 'test@test.com',
     password: 'test'
   };
   beforeEach('create a user', function(done) {
     User.create({
-      email: 'test@test.com',
+      username: 'test@test.com',
       password: 'test',
       locked: true,
       type: 'Admin',

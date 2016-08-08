@@ -15,8 +15,8 @@ class UserList extends Component {
           "header": "name"
         },
         {
-          "property": "email",
-          "header": "Email"
+          "property": "username",
+          "header": "Username"
         },
         {
           "property": "collections",

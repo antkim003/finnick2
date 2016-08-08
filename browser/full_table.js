@@ -33,8 +33,8 @@ module.exports = React.createClass({
         var self = this;
         scrolling();
         var users = [
-            {"name":"Jonathan Garza","email":"jgarza3@columbia.edu","type":"admin","locked":false},
-            {"name":"Jayne Smyth","email":"test@columbia.edu","type":"admin","locked":false}
+            {"name":"Jonathan Garza","username":"jgarza3","type":"admin","locked":false},
+            {"name":"Jayne Smyth","username":"test","type":"admin","locked":false}
         ]
         window.user = JSON.parse(localStorage.getItem('user'));
         window.statedata = [];

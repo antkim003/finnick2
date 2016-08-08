@@ -4,11 +4,11 @@ module.exports =
     [
         {
             type: 'buyer_lead',
-            permission: ['subcategories','notesoncategory','doubleexposure','doubleexposuresubcategory','pricingcategory','instorespecial','storeregularprice','storespecialprice','mcomspecial','pricinginfo','mcomregprice','pricingcomments','markettointernational','projectedunits','projectedsales','salesfor2015','imageid','arimageid','singleormultiple','featureproductid','plenti','bffavorites','goingfast','alsoinpetites','livedate','omniprojectedsales','extraomniprojectedsales','typeofspecial']
+            permission: ['subcategories','notesoncategory','doubleexposure','doubleexposuresubcategory','doubleexposure2','doubleexposuresubcategory2','doubleexposure3','mcomspecialprice', 'doubleexposuresubcategory3','instorespecial','storeregularprice','storespecialprice','mcomspecial','pricinginfo','mcomregprice','pricingcomments','markettointernational','projectedunits','projectedsales','salesfor2015','imageid','arimageid','singleormultiple','featureproductid','alsoinpetites','livedate','omniprojectedsales','extraomniprojectedsales','typeofspecial']
         },
         {
             type: 'buyer',
-            permission: ['subcategories','notesoncategory','doubleexposure','doubleexposuresubcategory','pricingcategory','instorespecial','storeregularprice','storespecialprice','mcomspecial','pricinginfo','mcomregprice','pricingcomments','markettointernational','projectedunits','projectedsales','salesfor2015','imageid','arimageid','singleormultiple','featureproductid','plenti','bffavorites','goingfast','alsoinpetites','livedate','omniprojectedsales','extraomniprojectedsales','typeofspecial']
+            permission: ['subcategories','notesoncategory','doubleexposure','doubleexposuresubcategory','doubleexposure2','doubleexposuresubcategory2','doubleexposure3','mcomspecialprice', 'doubleexposuresubcategory3','instorespecial','storeregularprice','storespecialprice','mcomspecial','pricinginfo','mcomregprice','pricingcomments','markettointernational','projectedunits','projectedsales','salesfor2015','imageid','arimageid','singleormultiple','featureproductid','alsoinpetites','livedate','omniprojectedsales','extraomniprojectedsales','typeofspecial']
         },
         {
             type: 'admin',
