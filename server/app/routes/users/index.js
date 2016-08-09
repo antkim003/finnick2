@@ -16,7 +16,7 @@ var ensureAuthenticated = function (req, res, next) {
 var isLeadOrAdmin = function(req, res, next) {
     User.findById(req.session.passport.user).then(function(user) {
         req.session.user = user;
-        if(req.session.user.lead === "admin" || req.session.user.type === "admin") {
+        if(req.session.user.lead || req.session.user.type.toLowerCase() === "admin") {
             next()
         } else {
             res.status(401).end();
