@@ -6,16 +6,11 @@ var Cell = require('mongoose').model('Cell');
 var _ = require('lodash');
 var http = require('http');
 
-const redis = require('redis');
-const redisAdapter = require('socket.io-redis');
-const redisUrl = process.env.RESITOGO_URL || 'redis://127.0.0.1:6379';
-
 module.exports = function (server) {
 
     if (io) return io;
 
-    io = socketio.listen(server);
-    io.adapter(redisAdapter({ host: 'localhost' , port : 6379 }));
+    io = socketio(server);
 
 
     var numUsers = 0;
@@ -104,7 +99,6 @@ module.exports = function (server) {
         });
 
     });
-    console.log('Redis adapter started with url: ' + redisUrl);
 
     return io;
 
