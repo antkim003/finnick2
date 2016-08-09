@@ -24,11 +24,12 @@ router.get('/', findUserType, function(req, res, next) {
         User.find().then(function(users) {
             res.json(users);
         });
+    } else {
+        User.find({type: req.session.user.type})
+            .then(function(users) {
+                res.json(users);
+            });
     }
-    User.find({type: req.session.user.type})
-        .then(function(users) {
-            res.json(users);
-        });
 });
 
 router.get('/session', function (req, res) {

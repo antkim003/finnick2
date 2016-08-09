@@ -119,7 +119,7 @@ class AdminControls extends Component {
     }
   }
   updatenow(event) {
-    let self = this;
+    this.state.clean = false; // setting form clean to false once any input is put in
     if (event != "reset") {
       let type = event.currentTarget.getAttribute('data-ref');
       let obj = {}

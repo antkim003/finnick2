@@ -10,12 +10,15 @@ class Popup extends React.Component {
     this.renderCheckboxes = this.renderCheckboxes.bind(this);
     this.handleClick = this.handleClick.bind(this);
     this.submitForm = this.submitForm.bind(this);
+    this.closeOverlay = this.closeOverlay.bind(this);
+    this.changeUsername = this.changeUsername.bind(this);
     this.state = {
-      collections: []
+      collections: [],
+      username: null
     };
   }
   componentWillMount() {
-    this.props.fetchCollections().then(this.props.fetchTypes())
+    this.props.fetchCollections().then(this.props.fetchTypes());
   }
   componentWillUpdate(nextProps, nextState) {
     let self = this;
@@ -26,7 +29,6 @@ class Popup extends React.Component {
             $(self.refs[collection]).prop('checked', false)
         }
       });
-      console.log('whats the next props? ', nextProps.userId);
       this.props.fetchUser(nextProps).then(function(response) {
         response.payload.data.collections.forEach(function(collection) {
           $(self.refs[collection]).prop('checked', true)
@@ -37,40 +39,66 @@ class Popup extends React.Component {
 
     }
   }
+  componentWillReceiveProps(nextProps) {
+    if(this.state.username != nextProps.userName) {
+      this.setState({
+        username: this.props.userName
+      })
+    }
+  }
   renderCheckboxes(property) {
     let self = this;
-    if (property === "type") {
-      return this.props[property].map(function(type, idx) {
-        if (type != "select") {
+
+    switch (property) {
+      case "type":
+        return this.props[property].map(function(type, idx) {
+          if (type != "select") {
+            return(
+              <div key={idx} className="form-group">
+                <div className="radio">
+                 <label>
+                   <input type="radio" name="type" key={idx}
+                     value={type} ref={type} /> {type}
+                 </label>
+                </div>
+              </div>
+            )
+          }
+        });
+        break;
+      case "collections":
+        return this.props[property].map(function(collection, idx) {
           return(
             <div key={idx} className="form-group">
-              <div className="radio">
+              <div className="checkbox">
                <label>
-                 <input type="radio" name="type" key={idx}
-                   value={type} ref={type} /> {type}
+                 <input type="checkbox" name={collection} key={idx}
+                   value={collection} ref={collection} /> {collection}
                </label>
               </div>
             </div>
           )
-        }
-      });
-    }
-    if (property === "collections") {
-      return this.props[property].map(function(collection, idx) {
+        });
+        break;
+      case "username":
         return(
-          <div key={idx} className="form-group">
-            <div className="checkbox">
-             <label>
-               <input type="checkbox" name={collection} key={idx}
-                 value={collection} ref={collection} /> {collection}
-             </label>
-            </div>
+          <div className="form-group">
+            <input type="text" ref="username" onChange={this.changeUsername} value={this.state.username} />
           </div>
         )
-      });
+        break;
+      default:
 
     }
 
+  }
+  changeUsername() {
+    this.setState({
+      username: this.refs.username.value
+    })
+  }
+  closeOverlay() {
+    this.props.closePopup();
   }
   handleClick(e) {
     let current = e.currentTarget;
@@ -83,12 +111,19 @@ class Popup extends React.Component {
   submitForm() {
     let array = [];
     let payload = {};
+
     for (var key in this.refs) {
       if ($(this.refs[key]).is(':checked')) {
          array.push(this.refs[key].value);
       }
+
     }
-    payload[this.props.property] = array;
+    if (this.refs.username) {
+      payload['username'] = this.refs.username.value
+    } else {
+      payload[this.props.property] = array;
+    }
+
     var userId = this.props.userId;
     this.props.updateUser(userId, payload);
     this.props.closePopup();
@@ -97,38 +132,53 @@ class Popup extends React.Component {
     if (!this.props.clickTarget) {
       return;
     }
+    const popupContentBodyStyle = {
+      maxHeight: '400px',
+      overflowY: 'auto',
+      overflowX: 'hidden',
+      width: '210px'
+    };
+
+    // TODO make an all encompassing overlay come out here
 
     return (
       <form onSubmit={this.submitForm}>
-        {this.renderCheckboxes(this.props.property)}
+        <div className="popup-content_body" style={popupContentBodyStyle}>
+            {this.renderCheckboxes(this.props.property)}
+        </div>
         <div className="btn btn-primary" type="submit" onClick={this.submitForm}>Save</div>
       </form>
     )
   }
   render () {
-    let style = {
+    let popupStyle = {
       left: this.props.clickX-70,
       top: this.props.clickY-100,
       position: 'absolute',
       backgroundColor: 'white',
-      border: "2px solid black"
+      border: "2px solid black",
+      zIndex: 1000
     };
 
     return(
-      <div className={"panel panel-default popup " + this.props.popupState} style={style}>
-        <div className="panel-heading">
-          <div className="panel-title"><strong>Collections</strong></div>
-        </div>
-        <div className="panel-body">
-          {this.renderInput()}
+      <div>
+        <div onClick={this.closeOverlay} className={`js-popup-overlay popup-overlay ${this.props.popupState}`} style={{position: 'fixed', 'left': 0, 'right': 0, 'top': 0, 'bottom': 0, 'zIndex': 10}} ></div>
+
+        <div className={`panel panel-default popup ${this.props.popupState}`} style={popupStyle}>
+          <div className="panel-heading">
+            <div className="panel-title"><strong>{this.props.userName ? 'Username' : 'Collections'}</strong></div>
+          </div>
+          <div className="panel-body">
+            {this.renderInput()}
+          </div>
         </div>
       </div>
+
     )
   }
 }
 
 function mapStateToProps(state) {
-  console.log('map state to props in popup: ', state);
   return {
       collections: state.collections,
       user: state.user,

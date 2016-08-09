@@ -113,41 +113,50 @@ class UserList extends Component {
   }
 
   clickCell(event) {
+    const self = this;
     if (!event.currentTarget) {
       return;
     }
+    function setStateForPopup(event) {
+      self.setState({
+        clickTarget: event.currentTarget,
+        clickX: event.clientX,
+        clickY: event.clientY,
+        popupState: 'open',
+        property: event.currentTarget.getAttribute('data-property'),
+        userId: event.currentTarget.getAttribute('data-user-id')
+      });
+    }
     if (this.props.session.user.lead || this.props.session.user.type === "admin") {
-      // LEADS AND ADMINS can do these functions
-      if (event.currentTarget.getAttribute('data-property') === "collections") {
-        this.setState({
-          clickTarget: event.currentTarget,
-          clickX: event.clientX,
-          clickY: event.clientY,
-          popupState: 'open',
-          property: event.currentTarget.getAttribute('data-property'),
-          userId: event.currentTarget.getAttribute('data-user-id')
-        });
-        console.log('user set state: ', this.state.userId, event.currentTarget.getAttribute('data-user-id'));
-      }
+      switch (event.currentTarget.getAttribute('data-property')) {
+        case 'collections':
+          // LEADS AND ADMINS can do these functions
+          setStateForPopup(event);
+          console.log('user set state: ', this.state.userId, event.currentTarget.getAttribute('data-user-id'));
+          break;
 
-      // ONLY ADMINS can edit the type of a cell
-      if (event.currentTarget.getAttribute('data-property') === "type" && this.props.session.user.type === "admin") {
-        this.setState({
-          clickTarget: event.currentTarget,
-          clickX: event.clientX,
-          clickY: event.clientY,
-          popupState: 'open',
-          property: event.currentTarget.getAttribute('data-property'),
-          userId: event.currentTarget.getAttribute('data-user-id')
-        });
-        console.log('user set state: ', this.state.userId, event.currentTarget.getAttribute('data-user-id'));
-      }
-
-      // leads and admins can both change locked or leads
-      if (event.currentTarget.getAttribute('data-property') === "locked" || event.currentTarget.getAttribute('data-property') === "lead" && !event.currentTarget.classList.contains('__clicked')) {
-        this.closePopup();
-        $('.__clicked').removeClass('__clicked');
-        event.currentTarget.className += ' __clicked';
+        case 'username':
+          setStateForPopup(event);
+          self.setState({
+            username: $(event.currentTarget).find('.targetProperty').html()
+          })
+          break;
+        case 'type':
+          // ONLY ADMINS can edit the type of a cell
+          if (this.props.session.user.type === "admin") {
+            setStateForPopup(event);
+            console.log('user set state: ', this.state.userId, event.currentTarget.getAttribute('data-user-id'));
+          }
+          break;
+        case 'locked' || 'lead':
+          if (!event.currentTarget.classList.contains('__clicked')) {
+            this.closePopup();
+            $('.__clicked').removeClass('__clicked');
+            event.currentTarget.className += ' __clicked';
+          }
+          break;
+        default:
+          return;
       }
     }
   }
@@ -222,6 +231,7 @@ class UserList extends Component {
                 userId = {this.state.userId}
                 closePopup = {this.closePopup}
                 property = {this.state.property}
+                userName = {this.state.username}
                 />
         </div>
       </div>

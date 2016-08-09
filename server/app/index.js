@@ -5,7 +5,7 @@ const app = express();
 
 const isDeveloping = process.env.NODE_ENV !== 'production';
 const isTestingServer = process.env.TESTING === 'testing';
-console.log('what development is this? ', isDeveloping, process.env.NODE_ENV)
+console.log('Development Server is: ', process.env.NODE_ENV)
 
 module.exports = app;
 

@@ -1,6 +1,9 @@
 .popup.closed {
   display: none;
 }
+.popup-overlay.closed {
+  display: none;
+}
 
 .UserList .__clicked .lockedCheckbox {
   display: block;

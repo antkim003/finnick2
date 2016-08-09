@@ -23,27 +23,14 @@ module.exports = function (server) {
 
         console.log('io connection on');
         socket.on('my other event', function (data) {
-//            console.log(data);
             console.log('now send to all browsers', data);
-//            socket.broadcast.emit('new data', data);
             var options = {
                 port: process.env.PORT || 3000,
                 path: '/api/rows/'
             };
-//            http.get(options, function(response){
-//                var body = '';
-//                response.on('data', function(chunk) {
-//                    body += chunk;
-//                });
-//                response.on('end', function() {
-                    socket.broadcast.emit('new data', data);
-//                    socket.emit('new data', body);
+            socket.broadcast.emit('new data', data);
 
-                    console.log(data);
-//                });
-//                socket.broadcast.emit('new data', response);
-//            });
-//            socket.emit('new data', data);
+            console.log(data);
 
         });
         socket.on('new data', function (data) {

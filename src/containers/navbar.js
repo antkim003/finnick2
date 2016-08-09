@@ -9,9 +9,9 @@ class NavBar extends Component {
         [<li className="nav-item" key="n1">
           <Link className="nav-link" to="/admin" key="n1-1">Admin</Link>
         </li>,
-        <li className="nav-item" key="n3">
-          <Link className="nav-link" to="/combobulator" key="n1-1">Combobulator</Link>
-        </li>,
+        // <li className="nav-item" key="n3">
+        //   <Link className="nav-link" to="/combobulator" key="n1-1">Combobulator</Link>
+        // </li>,
         <li className="nav-item" key="n2">
           <Link className="nav-link" to="/logout" key="n2-1">Log Out</Link>
         </li>]
@@ -26,7 +26,7 @@ class NavBar extends Component {
   }
   render () {
     return (
-      <nav className="navbar navbar-fixed-top">
+      <nav className="navbar navbar-fixed-top" style={{'zIndex': '100', 'backgroundColor': 'white'}}>
       <div className="clearfix container-fluid">
         <div className="navbar-header">
           <button type="button" className="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">

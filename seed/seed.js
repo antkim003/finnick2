@@ -1,12 +1,12 @@
 var mongoose = require('mongoose');
 var Promise = require('bluebird');
 var chalk = require('chalk');
-var connectToDb = require('./server/db');
+var connectToDb = require('../server/db');
 var User = mongoose.model('User');
 var Cell = mongoose.model('Cell');
 var Row = mongoose.model('Row');
 var ColumnIndex = mongoose.model('ColumnIndex');
-var fakeColumnIndexData = require('./browser/data/dummycolumnindex.js');
+var fakeColumnIndexData = require('../browser/data/dummycolumnindex.js');
 var fakeRowData = require('./browser/data/dummyrowdata');
 
 var wipeCollections = function () {

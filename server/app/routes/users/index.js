@@ -16,28 +16,28 @@ var ensureAuthenticated = function (req, res, next) {
 var isLeadOrAdmin = function(req, res, next) {
     User.findById(req.session.passport.user).then(function(user) {
         req.session.user = user;
-        if(req.session.user.lead || req.session.user.type === "admin") {
+        if(req.session.user.lead === "admin" || req.session.user.type === "admin") {
             next()
         } else {
             res.status(401).end();
         }
     }).catch(function() {
-        res.statuse(401).end();
+        res.status(401).end();
     });
 };
 
 router.get('/types', function(req, res, next) {
     User.find({})
         .then(function(users) {
-            let types = users.map(function(user) {
+            const types = users.map(function(user) {
                 return user.type;
             });
             let uniqueTypes = _.uniq(types);
             uniqueTypes = uniqueTypes.filter( n => {
                 return n != undefined
             });
-            res.json({types: uniqueTypes})
-        }, next);
+            res.json({types: uniqueTypes});
+        },next);
 });
 
 router.get('/:userId', function(req, res, next) {

@@ -10,7 +10,7 @@ class Admin extends Component {
     if (session.user) {
       return (
         <strong>
-          {session.user.email}
+          {session.user.username}
         </strong>
       )
     }
@@ -20,7 +20,8 @@ class Admin extends Component {
       return (
           <div>
               <div className="container">
-                <h1>WELCOME {this.renderUser(this.props.session)}! this is the admin view</h1>
+                <h1>Welcome {this.renderUser(this.props.session)}!</h1>
+                <p>This is the admin view</p>
                 <AdminControls />
                 <UserList />
               </div>
