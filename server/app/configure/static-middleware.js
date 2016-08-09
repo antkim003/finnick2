@@ -10,5 +10,7 @@ module.exports = function (app) {
 
     app.use(favicon(app.getValue('faviconPath')));
     app.use(express.static(distPath));
-    app.use(express.static(path.join(root,'node_modules')));
+    app.use('/bootstrap', express.static(path.join(root,'node_modules/bootstrap')));
+    app.use('/socket.io-client',express.static(path.join(root,'node_modules/socket.io-client')));
+    app.use('/jquery',express.static(path.join(root,'node_modules/jquery')));
 };

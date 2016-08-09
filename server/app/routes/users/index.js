@@ -37,7 +37,7 @@ router.get('/types', function(req, res, next) {
                 return n != undefined
             });
             res.json({types: uniqueTypes});
-        },next);
+        }, next);
 });
 
 router.get('/:userId', function(req, res, next) {
@@ -69,7 +69,7 @@ router.put('/:userId', isLeadOrAdmin, function(req, res, next) {
     })
     .then(function(response) {
         res.json(_user)
-    },next);
+    }, next);
 });
 
 router.delete('/:userid', isLeadOrAdmin, function(req, res, next) {

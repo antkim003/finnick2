@@ -5,6 +5,7 @@ var Fork = require('react-ghfork');
 
 var FullTable = require('./full_table.js');
 var ScopeTable = require('./scope_table.js');
+require('./lib/jquery.js');
 
 // var readme = require('../README.md');
 
@@ -20,9 +21,6 @@ module.exports = React.createClass({
     componentDidMount: function() {
     },
     render() {
-//    <header className='pure-u-1'>
-//        <h1>Finnick 2.0</h1>
-//    </header>
         return (
             <div className='pure-g'>
 

@@ -25,7 +25,6 @@ module.exports = React.createClass({
                     code: 'editors.dropdown(countries)',
                     description: 'The dropdown expects an array of value-name object pairs and emits the selected one.'
                 },
-//
                 {
                     name: 'Checkbox',
                     editor: editors.checkbox(countries),
