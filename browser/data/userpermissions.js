@@ -3,11 +3,7 @@
 module.exports =
     [
         {
-            type: 'buyer_lead',
-            permission: ['subcategories','notesoncategory','doubleexposure','doubleexposuresubcategory','doubleexposure2','doubleexposuresubcategory2','doubleexposure3','mcomspecialprice', 'doubleexposuresubcategory3','instorespecial','storeregularprice','storespecialprice','mcomspecial','pricinginfo','mcomregprice','pricingcomments','markettointernational','projectedunits','projectedsales','salesfor2015','imageid','arimageid','singleormultiple','featureproductid','alsoinpetites','livedate','omniprojectedsales','extraomniprojectedsales','typeofspecial']
-        },
-        {
-            type: 'buyer',
+            type: 'buying',
             permission: ['subcategories','notesoncategory','doubleexposure','doubleexposuresubcategory','doubleexposure2','doubleexposuresubcategory2','doubleexposure3','mcomspecialprice', 'doubleexposuresubcategory3','instorespecial','storeregularprice','storespecialprice','mcomspecial','pricinginfo','mcomregprice','pricingcomments','markettointernational','projectedunits','projectedsales','salesfor2015','imageid','arimageid','singleormultiple','featureproductid','alsoinpetites','livedate','omniprojectedsales','extraomniprojectedsales','typeofspecial']
         },
         {
@@ -19,15 +15,7 @@ module.exports =
             permission: ['arimageid','tileimage']
         },
         {
-            type: 'photography_lead',
-            permission: ['arimageid','tileimage']
-        },
-        {
             type: 'site_merch',
-            permission: ['savedsetid','petitessavedset','linktype','needsavedset','categoryid','productid','url','petiteslinktype','petitescategoryid','petitesproductid','petitesurl']
-        },
-        {
-            type: 'site_merch_lead',
             permission: ['savedsetid','petitessavedset','linktype','needsavedset','categoryid','productid','url','petiteslinktype','petitescategoryid','petitesproductid','petitesurl']
         },
         {
@@ -39,15 +27,7 @@ module.exports =
             permission: ['tilecopy1','tilecopy2','tilecopy3','tilecopy4']
         },
         {
-            type: 'copywriter_lead',
-            permission: ['tilecopy1','tilecopy2','tilecopy3','tilecopy4']
-        },
-        {
             type: 'copy',
             permission: ['tilecopy1','tilecopy2','tilecopy3','tilecopy4']
-        },
-        {
-            type: 'copy_lead',
-            permission: ['tilecopy1','tilecopy2','tilecopy3','tilecopy4']
-        },
+        }
     ]

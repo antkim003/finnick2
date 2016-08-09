@@ -13,7 +13,8 @@ import {
   FETCH_COLUMNS,
   FETCH_COLLECTIONS,
   UPDATE_USER,
-  FETCH_TYPES
+  FETCH_TYPES,
+  FETCH_PERMISSIONS
 } from './type';
 
 export function loginUser( { username, password }) {
@@ -158,6 +159,15 @@ export function fetchColumns() {
     payload: request
   };
 };
+
+export function fetchPermissions() {
+  const request = axios.get('/api/permissions');
+
+  return {
+    type: FETCH_PERMISSIONS,
+    payload:request
+  }
+}
 
 export function authError(error) {
   return {

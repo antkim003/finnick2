@@ -11,3 +11,4 @@ export const FETCH_COLLECTIONS = 'fetch_collections';
 export const FETCH_COLUMNS = 'fetch_columns';
 export const FETCH_SESSION = 'fetch_session';
 export const FETCH_TYPES = 'fetch_types';
+export const FETCH_PERMISSIONS = 'fetch_permissions';

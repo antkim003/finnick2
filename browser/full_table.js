@@ -2,12 +2,8 @@
 
 var React = require('react');
 var Form = require('plexus-form');
-//var validate = require('plexus-validate');
 var SkyLight = require('react-skylight').default;
-//var generators = require('annogenerate');
-//var math = require('annomath');
 var Paginator = require('react-pagify').default;
-//var titleCase = require('title-case');
 var orderBy = require('lodash/orderBy');
 var cx = require('classnames');
 var segmentize = require('segmentize');
@@ -29,30 +25,30 @@ import { browserHistory } from 'react-router';
 
 module.exports = React.createClass({
     displayName: 'FullTable',
+    isInCollection: function(collection) {
+        return window.user.collections.indexOf(collection) >= 0 ? true : false;
+    },
     getInitialState: function(){
         var self = this;
         scrolling();
-        var users = [
-            {"name":"Jonathan Garza","username":"jgarza3","type":"admin","locked":false},
-            {"name":"Jayne Smyth","username":"test","type":"admin","locked":false}
-        ]
         window.user = JSON.parse(localStorage.getItem('user'));
         window.statedata = [];
         sockets();
+
         if (window.location.search == '') {
-            browserHistory.push( window.location.pathname + '?women');
+            browserHistory.push( window.location.pathname + '?' + window.user.collections[0]);
         }
         var query = window.location.search.split('?')[1];
-        var queryyes = query ? '/'+query : '/women';
-
-
+        if (!this.isInCollection(query)) {
+            browserHistory.push( window.location.pathname + '?' + window.user.collections[0]);
+            query = window.user.collections[0];
+        }
         var getdata = function(q) {
-            var fob = q ? '/'+q : queryyes;
+            var fob = `/${query}`;
             $.ajax({
                 type: "GET",
                 url: '/api/rows' + fob,
                 success: function (data1) {
-//                    console.log(window.coledit, 'in get data')
                     var allrows = _.map(data1, 'entries');
                     var columns = window.coledit;
                     window.data = data1;
@@ -162,11 +158,16 @@ componentDidMount() {
     var self = this;
     var columns = _.sortBy(this.state.columns, 'columnorder');
 
+    if (window.location.search == '') {
+        browserHistory.push( window.location.pathname + '?' + window.user.collections[0]);
+    }
     var query = window.location.search.split('?')[1];
-    var queryyes = query ? '/'+query : '/women';
+    if (!this.isInCollection(query)) {
+        browserHistory.push( window.location.pathname + '?' + window.user.collections[0]);
+    };
 
     var getdata = function(query) {
-        var fob = query ? query : queryyes;
+        var fob = query;
         var data = [];
         $.ajax({
             type: "GET",

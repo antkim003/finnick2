@@ -100,8 +100,7 @@ class UserList extends Component {
   }
 
   renderRow(data) {
-    var _data = data;
-    console.log('data: ', data);
+    let _data = data;
     let arr = data.map((row,i) => {
       return (
           <tr className={i + "-row " + (i % 2 === 1 ? 'odd-row' : 'even-row') } key={i + '-key'}>
@@ -127,7 +126,7 @@ class UserList extends Component {
         userId: event.currentTarget.getAttribute('data-user-id')
       });
     }
-    if (this.props.session.user.lead || this.props.session.user.type === "admin") {
+    if (this.props.session.user.type === "admin") {
       switch (event.currentTarget.getAttribute('data-property')) {
         case 'collections':
           // LEADS AND ADMINS can do these functions
@@ -189,7 +188,6 @@ class UserList extends Component {
       }
       if (typeof targetProperty === "boolean") {
         targetProperty = targetProperty.toString();
-
       }
       if (column.property === "delete" && (self.props.session.user.lead || self.props.session.user.type === "admin")) {
         return (
@@ -242,7 +240,8 @@ class UserList extends Component {
 function mapStateToProps(state) {
   return {
     users: state.users,
-    session: state.session
+    session: state.session,
+    permissions: state.permissions
   };
 }
 

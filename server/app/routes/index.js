@@ -9,6 +9,7 @@ router.use('/cells', require('./cells'));
 router.use('/categories', require('./categories'));
 router.use('/users', require('./users'));
 router.use('/combobulator', require('./combobulator'));
+router.use('/permissions', require('./permissions'));
 
 // Make sure this is after all of
 // the registered routes!

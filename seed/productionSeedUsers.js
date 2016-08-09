@@ -45,8 +45,8 @@ var seedUsers = function () {
         },
         {
             "name":"shoebuying",
-            "password": 'shoebuying',
-            "username":"shoeb77",
+            "password": 'shoeb77',
+            "username":"shoebuying",
             "type":"buying",
             "collections":["shoes"],
             "locked":false,
@@ -56,7 +56,7 @@ var seedUsers = function () {
             "name":"Kelsey Monahan",
             "password": 'kelseym31',
             "username":"kelseym",
-            "type":"beauty",
+            "type":"buying",
             "collections":["beauty"],
             "locked":false,
             "lead": true
@@ -81,8 +81,8 @@ var seedUsers = function () {
         },
         {
             "name":"Tammy Blum",
-            "password": 'tammyb',
-            "username":"tammyb74",
+            "password": 'tammyb74',
+            "username":"tammyb",
             "type":"buying",
             "collections":["handbags&accessories"],
             "locked":false,
