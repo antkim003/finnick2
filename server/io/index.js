@@ -1,25 +1,25 @@
 'use strict';
-const socketio = require('socket.io');
-let io = null;
-const Row = require('mongoose').model('Row');
-const Cell = require('mongoose').model('Cell');
-const _ = require('lodash');
-const http = require('http');
-const redis = require('redis');
-const ioredis = require('socket.io-redis');
-const url = require('url');
+var socketio = require('socket.io');
+var io = null;
+var Row = require('mongoose').model('Row');
+var Cell = require('mongoose').model('Cell');
+var _ = require('lodash');
+var http = require('http');
+var redis = require('redis');
+var ioredis = require('socket.io-redis');
+var url = require('url');
 
-const isDeveloping = process.env.NODE_ENV !== 'production';
-const isTestingServer = process.env.TESTING === 'testing';
+var isDeveloping = process.env.NODE_ENV !== 'production';
+var isTestingServer = process.env.TESTING === 'testing';
 console.log('is developing? ', isDeveloping);
 if (!isDeveloping) {
-  let redisURL = url.parse(process.env.REDISCLOUD_URL || 'localhost:6379' );
+  var redisURL = url.parse(process.env.REDISCLOUD_URL || 'localhost:6379' );
 
-  let pub = redis.createClient(redisURL.port, redisURL.hostname, {return_buffers: true});
-  let sub = redis.createClient(redisURL.port, redisURL.hostname, {return_buffers: true});
+  var pub = redis.createClient(redisURL.port, redisURL.hostname, {return_buffers: true});
+  var sub = redis.createClient(redisURL.port, redisURL.hostname, {return_buffers: true});
   pub.auth(redisURL.auth.split(":")[1]);
   sub.auth(redisURL.auth.split(":")[1]);
-  const redisOptions = {
+  var redisOptions = {
     pubClient: pub,
     subClient: sub,
     host: redisURL.hostname,
