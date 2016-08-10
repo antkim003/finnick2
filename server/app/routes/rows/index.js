@@ -49,7 +49,7 @@ router.get('/combobulator', function (req, res, next) {
 
 router.get('/:category', function(req,res,next) {
     console.log('req.params: ', req.params.category);
-    Row.find({fob: req.params.category}).limit(20).populate('entries').then(function (rows) {
+    Row.find({fob: req.params.category}).populate('entries').then(function (rows) {
         console.log('category rows: ', rows.length);
         res.json(rows);
     });
