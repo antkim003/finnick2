@@ -5,23 +5,22 @@ var Row = require('mongoose').model('Row');
 var Cell = require('mongoose').model('Cell');
 var _ = require('lodash');
 var http = require('http');
+var redis = require('socket.io-redis');
 
 module.exports = function (server) {
 
     if (io) return io;
 
-    io = socketio(server);
+    io = socketio.listen(server);
+    console.log('redis layer enabled! ', process.env.REDISTOGO_URL);
+    io.adapter(redis(process.env.REDISTOGO_URL));
 
 
     var numUsers = 0;
     var currentUsers = [];
 
     io.on('connection', function (socket) {
-
         var addedUser = false;
-
-
-        console.log('io connection on');
         socket.on('my other event', function (data) {
             console.log('now send to all browsers', data);
             var options = {
