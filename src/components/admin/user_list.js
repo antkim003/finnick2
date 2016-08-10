@@ -147,7 +147,14 @@ class UserList extends Component {
             console.log('user set state: ', this.state.userId, event.currentTarget.getAttribute('data-user-id'));
           }
           break;
-        case 'locked' || 'lead':
+        case 'locked':
+          if (!event.currentTarget.classList.contains('__clicked')) {
+            this.closePopup();
+            $('.__clicked').removeClass('__clicked');
+            event.currentTarget.className += ' __clicked';
+          }
+          break;
+        case 'lead':
           if (!event.currentTarget.classList.contains('__clicked')) {
             this.closePopup();
             $('.__clicked').removeClass('__clicked');
