@@ -375,7 +375,7 @@ window.coledit =     [
 },
 {
     property: 'notesfrombuyersimg',
-        header: 'Notes on Category from Buyers',
+        header: 'Notes on Image from Buyers',
     info: 'notes from buyers to photo/retouching',
     cell: [app.editable({
     editor: editors.input(),
@@ -384,7 +384,7 @@ window.coledit =     [
 },
 {
     property: 'notesfromretouchimg',
-        header: 'Notes on Category from Retouching',
+        header: 'Notes on Image from Retouching',
     info: 'notes from retouching to photo',
     cell: [app.editable({
     editor: editors.input(),
