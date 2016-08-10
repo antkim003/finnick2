@@ -5,7 +5,8 @@ var Row = require('mongoose').model('Row');
 var Cell = require('mongoose').model('Cell');
 var _ = require('lodash');
 var http = require('http');
-var redis = require('socket.io-redis');
+var redis = require('redis');
+var ioredis = require('socket.io-redis');
 var url = require('url');
 var redisURL = url.parse(process.env.REDISCLOUD_URL );
 
