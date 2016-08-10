@@ -208,9 +208,9 @@ componentDidMount() {
     window.socket.on('new data', function(data) {
         getdata()
     });
-    window.datainterval = setInterval(function() {
-        getdata()
-    }, 10000);
+    // window.datainterval = setInterval(function() {
+    //     getdata()
+    // }, 10000);
 
 },
 
