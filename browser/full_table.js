@@ -44,6 +44,9 @@ module.exports = React.createClass({
             browserHistory.push( window.location.pathname + '?' + window.user.collections[0]);
             query = window.user.collections[0];
         }
+        if (window.user.type === "admin") {
+            query = 'women';
+        }
         var getdata = function(q) {
             var fob = `/${query}`;
 
@@ -51,7 +54,6 @@ module.exports = React.createClass({
                 type: "GET",
                 url: '/api/rows' + fob,
                 success: function (data1) {
-                    console.log('this is the time after the call comes: ', Date.now()-timeNow, 'ms');
                     var allrows = _.map(data1, 'entries');
                     var columns = window.coledit;
                     window.data = data1;
@@ -73,7 +75,6 @@ module.exports = React.createClass({
                         });
                         arr.push(allobj);
                     });
-                    console.log('this is the time after the calculations ', Date.now()-timeNow, 'ms');
                     window.statedata = _.sortBy(arr, 'rowIndex');
 
                     self.setState({
@@ -83,9 +84,7 @@ module.exports = React.createClass({
                 }
             })
         }
-        console.log('this is the start of the promise ', Date.now()-timeNow, 'ms');
         $.when(columnstoedit(self)).done(function( ) {
-            console.log('this is the time after columnstoedit comes back ', Date.now()-timeNow, 'ms');
             getdata()
         });
 
@@ -213,7 +212,6 @@ componentDidMount() {
 
 
     window.socket.on('new data', function(data) {
-        console.log('data in emit!!!!', data);
         window.statedata = window.statedata.map(function(row){
             data.forEach(function(cell){
                 if (row.rowIndex == cell.rowIndex) {
@@ -222,12 +220,10 @@ componentDidMount() {
             });
             return row;
         });
-        console.log(window.statedata)
         self.setState({
             data: _.sortBy(window.statedata, 'rowIndex')
         })
 
-//        console.log(_.where(data, {rowIndex: data.rowIndex}))
 //        window.statedata =
 //        getdata()
     });
@@ -509,7 +505,6 @@ moveRow() {
             data: JSON.stringify(params),
             contentType: "application/json",
             success: function() {
-                console.log('done moving', row[0]);
                 window.socket.emit('new data', {});
                 self.refs.modal.hide();
             }
@@ -617,7 +612,6 @@ rowsOneValue() {
             data: JSON.stringify(datacells),
             contentType: "application/json",
             success: function() {
-                console.log('done');
                 window.socket.emit('my other event', { val: value, row: window.row-1 });
 //                window.datainterval;
 //                window.location.reload(true);
@@ -675,7 +669,6 @@ rowsToShow(e) {
         pagination.hide = true;
         pagination.perPage = e.target.previousSibling.value.split('-')[1] - e.target.previousSibling.value.split('-')[0] + 1;
         pagination.page = (parseFloat(e.target.previousSibling.value.split('-')[0] - 1) / parseFloat(pagination.perPage)) + 1.01;
-//        console.log(pagination)
     } else {
         pagination.hide = false;
         var page = $('.per-page-container').find('input').val();
