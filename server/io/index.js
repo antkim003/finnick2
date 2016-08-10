@@ -6,6 +6,20 @@ var Cell = require('mongoose').model('Cell');
 var _ = require('lodash');
 var http = require('http');
 var redis = require('socket.io-redis');
+var url = require('url');
+var redisURL = url.parse(process.env.REDISCLOUD_URL );
+
+var pub = redis.createClient(redisURL.port, redisURL.hostname, {return_buffers: true});
+var sub = redis.createClient(redisURL.port, redisURL.hostname, {return_buffers: true});
+pub.auth(redisURL.auth.split(":")[1]);
+sub.auth(redisURL.auth.split(":")[1]);
+
+var redisOptions = {
+  pubClient: pub,
+  subClient: sub,
+  host: redisURL.hostname,
+  port: redisURL.port
+};
 
 module.exports = function (server) {
 
