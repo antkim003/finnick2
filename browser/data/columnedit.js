@@ -148,26 +148,26 @@ window.coledit =     [
     header: 'Sort Number',
     info: 'sorting by projected sales',
     cell: [app.editable({
-    editor: editors.input(),
-})],
+        editor: editors.input(),
+    })],
     columnorder: 1
 },
 {
     property: 'name',
-        header: 'Name',
+    header: 'Name',
     cell: [app.editable({
     editor: editors.input()}), app.highlighter('name')],
     columnorder: 2
 },
 {
     property: 'category',
-        header: 'Category',
+    header: 'Category',
     cell: [ app.highlighter('category')],
     columnorder: 3
 },
 {
     property: 'subcategories',
-        header: 'Subcategories',
+    header: 'Subcategories',
     cell: [app.editable({
     editor: editors.checkbox(categoriesandsub2, 'category', app)
 }), app.highlighter('subcategories')],
@@ -184,25 +184,25 @@ window.coledit =     [
 },
 {
     property: 'doubleexposure',
-        header: 'Double Exposure',
+    header: 'Double Exposure',
     info: 'additional category/fob for product',
     cell: [app.editable({
-    editor: editors.checkbox(categoriesandsub)
-}), app.highlighter('doubleexposure')],
+        editor: editors.checkbox(categoriesandsub)
+    }), app.highlighter('doubleexposure')],
     columnorder: 6
 },
 {
     property: 'doubleexposuresubcategory',
-        header: 'Double Exposure Subcategory',
+    header: 'Double Exposure Subcategory',
     info: 'subcategories specific to double exposed category',
     cell: [app.editable({
-    editor: editors.checkbox(categoriesandsub1, 'doubleexposure', app)
-}), app.highlighter('doubleexposuresubcategory')],
+        editor: editors.checkbox(categoriesandsub1, 'doubleexposure', app)
+    }), app.highlighter('doubleexposuresubcategory')],
     columnorder: 7
 },
 {
     property: 'doubleexposure2',
-        header: 'Double Exposure 2',
+    header: 'Double Exposure 2',
     info: 'additional category/fob for product',
     cell: [app.editable({
     editor: editors.checkbox(categoriesandsub3)
@@ -618,8 +618,5 @@ window.coledit =     [
     columnorder: 55
 }
 ]
-
-
-
 
 }

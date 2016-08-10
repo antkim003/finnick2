@@ -39,6 +39,7 @@ module.exports = React.createClass({
         var columns = this.props.columns;
         var rowKey = this.props.rowKey;
         var rowProps = this.props.row || noop;
+        var self = this;
 
         var props = update(this.props, {
             $merge: {
@@ -107,7 +108,9 @@ module.exports = React.createClass({
                                 entryId = null;
                             }
 
-                            return <td data-id={entryId} data-parent-id={_.sortBy(window.data, 'index')[i]._id} data-property={property} data-edit={column.cell.length == 0 ? 'noedit' : 'editor'} data-cell={rowid+'-'+property} data-active={content.props.activeEdit} className={'cell-'+j+' '+(row[rowKey] || i)+'-'+property+ ' '} key={j + '-cell'} {...content.props} >{content.value}</td>;
+                            return <td data-id={entryId} data-parent-id={_.sortBy(window.data, 'index')[i]._id} data-property={property} data-edit={column.cell.length == 0 ? 'noedit' : 'editor'} data-cell={rowid+'-'+property} data-active={content.props.activeEdit}
+                            rel={`js-cell-${j}-${row[rowKey] || i}`}
+                            className={`cell-${j} ${(row[rowKey] || i)}-${property}`} key={j + '-cell'} {...content.props} >{content.value}</td>;
                         }
                     )}</tr>)}
                 </tbody>

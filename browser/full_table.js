@@ -220,19 +220,8 @@ componentDidMount() {
         self.setState({
             data: _.sortBy(window.statedata, 'rowIndex')
         })
-
-//        window.statedata =
-//        getdata()
     });
-//    window.datainterval = setInterval(function() {
-////        getdata();
-//    }, 60000);
-
-
-
 },
-
-
 
 render() {
     var columns = _.sortBy(this.state.columns, 'columnorder');
@@ -324,13 +313,14 @@ render() {
             </div>
             <Table
             className='pure-table pure-table-striped'
+            rel="js-finnick-table"
             columnNames={this.columnFilters}
             columns={columns}
             data={paginated.data}
             row={(d, rowIndex) => {
                 return {
                 className: rowIndex % 2 ? 'odd-row row-'+d.id : 'even-row row-'+d.id,
-                onClick: () => {
+                onClick: (event) => {
                     window.row = d.id;
                 },
                 onMouseEnter: (e) => {
@@ -493,6 +483,7 @@ moveRow() {
         var cell = $('.'+$('#move-row').val()+'-'+'killedrow').attr('data-id');
         var idCell = _.find(row[0].entries, function(entry){ return entry.columnName == 'id'});
         var catCell = _.find(row[0].entries, function(entry){ return entry.columnName == 'category'});
+        debugger;
         var killCell = cell ? cell : {"_id":'newcell'};
 
         var params = [{"row": row[0]._id, "fromFOB": row[0].fob, "toFOB": $('#move-to-fob').val(), "idCell": idCell._id, "catCell": catCell._id, "killCell": killCell._id}];

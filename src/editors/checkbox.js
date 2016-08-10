@@ -1,24 +1,24 @@
 'use strict';
-
-var React = require('react');
-
+const React = require('react');
+const ReactDOM = require('react-dom');
 
 module.exports = (options, cat, dat, fields={}) => {
     const nameField = fields.name || 'name';
     const valueField = fields.value || 'value';
+    var category;
     return React.createClass({
         displayName: 'Checkbox',
-
         propTypes: {
 //            value: React.PropTypes.string || React.PropTypes.array,
             onValue: React.PropTypes.func,
         },
-        componentDidMount: function() {
-            var self = this;
-
-
+        componentWillMount: function() {
+            if (cat) {
+                var $currNodeRel = $(ReactDOM.findDOMNode(this)).parent().attr('rel');
+                var rowNumber = $currNodeRel.split('-')[3];
+                category = dat.state.data[rowNumber][cat];
+            }
         },
-
         render() {
 
             const edit = (e) =>
@@ -39,32 +39,43 @@ module.exports = (options, cat, dat, fields={}) => {
             }
 
             var filteredoptions = options;
-
-            if (cat) {
-                var cat1 = _.filter(dat.state.data, function (d) {
-                    return d.rowIndex == window.row
-                })[0][cat];
-
-                if (typeof _.filter(filteredoptions, function (cat) { return cat.value == cat1})[0] !== 'undefined') {
-                    filteredoptions = cat1 ? _.filter(options, function (cat) {
-                        return cat.value == cat1
-                    })[0].subcategories : options;
-                } else {
-                    filteredoptions = options;
-                }
+            if (category) {
+                filteredoptions = _.find(options, {value: category})['subcategories'];
+            }
+            if (cat && !category) {
+                return (
+                    <form>
+                        <div>
+                            {`No ${cat} category selected.`}
+                        </div>
+                    </form>
+                )
             }
 
+            // if (cat) {
+            //     var cat1 = _.filter(dat.state.data, function (d) {
+            //         return d.rowIndex == window.row
+            //     })[0][cat];
+            //
+            //     if (typeof _.filter(filteredoptions, function (cat) { return cat.value == cat1})[0] !== 'undefined') {
+            //         filteredoptions = cat1 ? _.filter(options, function (cat) {
+            //             return cat.value == cat1
+            //         })[0].subcategories : options;
+            //     } else {
+            //         filteredoptions = options;
+            //     }
+            // }
 
             return (
                 <form>
                     {filteredoptions.map((option, i) =>
-                        <div className="checkboxselect"><input type="checkbox"
+                        <div key={`checkboxWrapper-${i}`} className="checkboxselect"><input type="checkbox"
                         key={"check-"+i}
                         value={option[valueField]}
                         name="checkbox2"
-                        /><label>{option[nameField]}</label></div>
+                        /><label key={`option-${i}`}>{option[nameField]}</label></div>
                         )}
-                    <button onClick={edit}>Save</button>
+                        <button onClick={edit}>Save</button>
                 </form>
             );
         }

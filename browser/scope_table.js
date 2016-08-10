@@ -32,10 +32,6 @@ module.exports = React.createClass({
         getInitialState: function(){
             var self = this;
             scrolling();
-            var users = [
-                {"name":"Jonathan Garza","email":"jgarza3@columbia.edu","type":"admin","locked":false},
-                {"name":"Jayne Smyth","email":"test@columbia.edu","type":"admin","locked":false}
-            ]
             window.user = JSON.parse(localStorage.getItem('user'));
             window.statedata = [];
             sockets();

@@ -157,7 +157,7 @@ window.coledit =     [
 },
 {
     property: 'category',
-        header: 'Category',
+    header: 'Category',
     cell: [ app.highlighter('category')],
     columnorder: 3
 },
