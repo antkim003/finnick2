@@ -19,7 +19,7 @@ if (!isDeveloping) {
   let sub = redis.createClient(redisURL.port, redisURL.hostname, {return_buffers: true});
   pub.auth(redisURL.auth.split(":")[1]);
   sub.auth(redisURL.auth.split(":")[1]);
-  let redisOptions = {
+  const redisOptions = {
     pubClient: pub,
     subClient: sub,
     host: redisURL.hostname,
