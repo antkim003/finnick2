@@ -43,7 +43,11 @@ module.exports = function(editProperty, onValue, o) {
                         state[editProperty] = idx;
                         context.setState(state);
                         window.user = _.extend(window.user, state);
-                        window.socket.emit('user editing', {user: window.user, cell: $('.'+state.editedCell).attr('data-cell'), fob: window.location.search.split('?')[1]})
+                        window.socket.emit('user editing', {
+                            user: window.user,
+                            cell: e.currentTarget.outerHTML,
+                            fob: window.location.search.split('?')[1]
+                        })
                     },
                 }
             };

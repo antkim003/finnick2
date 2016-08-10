@@ -43,6 +43,8 @@ module.exports = function (server) {
 
     io.on('connection', function (socket) {
         var addedUser = false;
+        socket.broadcast.emit('user connected');
+
         socket.on('my other event', function (data) {
             console.log('now send to all browsers', data);
             var options = {
@@ -59,31 +61,10 @@ module.exports = function (server) {
         });
         socket.on('user editing', function (data) {
             socket.broadcast.emit('other user editing', data);
-
-//            socket.emit('new data', data);
-//            socket.broadcast.emit('user editing', data);
         });
         socket.on('other user editing', function (data) {
             console.log('other user')
-//            var options = {
-//                port: 3000,
-//                path: '/api/rows/women'
-//            };
-//            http.get(options, function(response){
-//                var body = '';
-//                response.on('data', function(chunk) {
-//                    body += chunk;
-//                });
-//                response.on('end', function() {
-//                    socket.emit('new data', body)
-//                });
-//            });
         });
-        socket.broadcast.emit('user connected');
-
-
-
-
         socket.on('add user', function (username) {
             if (addedUser) return;
             currentUsers.push(username);
