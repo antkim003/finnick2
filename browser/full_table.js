@@ -209,17 +209,19 @@ componentDidMount() {
 
 
     window.socket.on('new data', function(data) {
-        window.statedata = window.statedata.map(function(row){
-            data.forEach(function(cell){
-                if (row.rowIndex == cell.rowIndex) {
-                     return row[cell.columnName] = cell.data;
-                }
+        if (window.statedata[0].category === data[0].fob) {
+            window.statedata = window.statedata.map(function(row){
+                data.forEach(function(cell){
+                    if (row.rowIndex === cell.rowIndex) {
+                         return row[cell.columnName] = cell.data;
+                    }
+                });
+                return row;
             });
-            return row;
-        });
-        self.setState({
-            data: _.sortBy(window.statedata, 'rowIndex')
-        })
+            self.setState({
+                data: _.sortBy(window.statedata, 'rowIndex')
+            });
+        }
     });
 },
 

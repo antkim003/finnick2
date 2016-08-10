@@ -2,10 +2,10 @@
 const React = require('react');
 const ReactDOM = require('react-dom');
 
-module.exports = (options, cat, dat, fields={}) => {
+module.exports = (allOptions, referenceColumn, dat, fields={}) => {
     const nameField = fields.name || 'name';
     const valueField = fields.value || 'value';
-    var category;
+    var categories;
     return React.createClass({
         displayName: 'Checkbox',
         propTypes: {
@@ -13,10 +13,10 @@ module.exports = (options, cat, dat, fields={}) => {
             onValue: React.PropTypes.func,
         },
         componentWillMount: function() {
-            if (cat) {
+            if (referenceColumn) {
                 var $currNodeRel = $(ReactDOM.findDOMNode(this)).parent().attr('rel');
                 var rowNumber = $currNodeRel.split('-')[3];
-                category = dat.state.data[rowNumber][cat];
+                categories = dat.state.data[rowNumber][referenceColumn];
             }
         },
         render() {
@@ -24,7 +24,6 @@ module.exports = (options, cat, dat, fields={}) => {
             const edit = (e) =>
             {
                 e.preventDefault();
-//                console.log(e.target.form, document.querySelectorAll('form'), window.row-1);
                 var checkboxes = e.target.form.querySelectorAll('input');
                 var checkboxesChecked = [];
                 for (var i=0; i<checkboxes.length; i++) {
@@ -33,20 +32,23 @@ module.exports = (options, cat, dat, fields={}) => {
                         checkboxesChecked.push(checkboxes[i].value);
                     }
                 }
-//                window.socket.emit('my other event', { val: checkboxesChecked, row: window.row-1 });
-                console.log(checkboxesChecked, '');
                 this.props.onValue({ val: checkboxesChecked, row: window.row-1 });
             }
 
-            var filteredoptions = options;
-            if (category) {
-                filteredoptions = _.find(options, {value: category})['subcategories'];
+            var filteredSubcategories = allOptions;
+            if (categories) {
+                categories = Array.isArray(categories) ? categories : [categories];
+                filteredSubcategories = categories.map(function(_category) {
+                    let subcategories = _.find(allOptions, {value: _category})['subcategories'];
+                    return subcategories;
+                });
+                filteredSubcategories = _.flatten(filteredSubcategories);
             }
-            if (cat && !category) {
+            if (referenceColumn && !categories) {
                 return (
                     <form>
                         <div>
-                            {`No ${cat} category selected.`}
+                            {`No ${referenceColumn} category selected.`}
                         </div>
                     </form>
                 )
@@ -68,7 +70,7 @@ module.exports = (options, cat, dat, fields={}) => {
 
             return (
                 <form>
-                    {filteredoptions.map((option, i) =>
+                    {filteredSubcategories.map((option, i) =>
                         <div key={`checkboxWrapper-${i}`} className="checkboxselect"><input type="checkbox"
                         key={"check-"+i}
                         value={option[valueField]}
