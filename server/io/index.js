@@ -5,21 +5,21 @@ const Row = require('mongoose').model('Row');
 const Cell = require('mongoose').model('Cell');
 const _ = require('lodash');
 const http = require('http');
-let redis = require('redis');
-let ioredis = require('socket.io-redis');
+const redis = require('redis');
+const ioredis = require('socket.io-redis');
 const url = require('url');
 
 const isDeveloping = process.env.NODE_ENV !== 'production';
 const isTestingServer = process.env.TESTING === 'testing';
 console.log('is developing? ', isDeveloping);
 if (!isDeveloping) {
-  const redisURL = url.parse(process.env.REDISCLOUD_URL || 'localhost:6379' );
+  let redisURL = url.parse(process.env.REDISCLOUD_URL || 'localhost:6379' );
 
-  const pub = redis.createClient(redisURL.port, redisURL.hostname, {return_buffers: true});
-  const sub = redis.createClient(redisURL.port, redisURL.hostname, {return_buffers: true});
+  let pub = redis.createClient(redisURL.port, redisURL.hostname, {return_buffers: true});
+  let sub = redis.createClient(redisURL.port, redisURL.hostname, {return_buffers: true});
   pub.auth(redisURL.auth.split(":")[1]);
   sub.auth(redisURL.auth.split(":")[1]);
-  const redisOptions = {
+  let redisOptions = {
     pubClient: pub,
     subClient: sub,
     host: redisURL.hostname,
