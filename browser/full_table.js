@@ -45,10 +45,12 @@ module.exports = React.createClass({
         }
         var getdata = function(q) {
             var fob = `/${query}`;
+            var timeNow = Date.now();
             $.ajax({
                 type: "GET",
                 url: '/api/rows' + fob,
                 success: function (data1) {
+                    console.log('this is the time after the call comes: ', timeNow - Date.now());
                     var allrows = _.map(data1, 'entries');
                     var columns = window.coledit;
                     window.data = data1;
@@ -70,7 +72,9 @@ module.exports = React.createClass({
                         });
                         arr.push(allobj);
                     });
+                    console.log('this is the time after the calculations ', timeNow - Date.now());
                     window.statedata = _.sortBy(arr, 'rowIndex');
+
                     self.setState({
                         data: _.sortBy(arr, 'rowIndex')
                     });

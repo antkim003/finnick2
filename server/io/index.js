@@ -1,35 +1,41 @@
 'use strict';
-var socketio = require('socket.io');
-var io = null;
-var Row = require('mongoose').model('Row');
-var Cell = require('mongoose').model('Cell');
-var _ = require('lodash');
-var http = require('http');
-var redis = require('redis');
-var ioredis = require('socket.io-redis');
-var url = require('url');
-var redisURL = url.parse(process.env.REDISCLOUD_URL );
+const socketio = require('socket.io');
+let io = null;
+const Row = require('mongoose').model('Row');
+const Cell = require('mongoose').model('Cell');
+const _ = require('lodash');
+const http = require('http');
+const redis = require('redis');
+const ioredis = require('socket.io-redis');
+const url = require('url');
 
-var pub = redis.createClient(redisURL.port, redisURL.hostname, {return_buffers: true});
-var sub = redis.createClient(redisURL.port, redisURL.hostname, {return_buffers: true});
-pub.auth(redisURL.auth.split(":")[1]);
-sub.auth(redisURL.auth.split(":")[1]);
+const isDeveloping = process.env.NODE_ENV !== 'production';
+const isTestingServer = process.env.TESTING === 'testing';
 
-var redisOptions = {
-  pubClient: pub,
-  subClient: sub,
-  host: redisURL.hostname,
-  port: redisURL.port
-};
+if (!isDeveloping) {
+  const redisURL = url.parse(process.env.REDISCLOUD_URL || 'localhost:6379' );
+
+  const pub = redis.createClient(redisURL.port, redisURL.hostname, {return_buffers: true});
+  const sub = redis.createClient(redisURL.port, redisURL.hostname, {return_buffers: true});
+  pub.auth(redisURL.auth.split(":")[1]);
+  sub.auth(redisURL.auth.split(":")[1]);
+  const redisOptions = {
+    pubClient: pub,
+    subClient: sub,
+    host: redisURL.hostname,
+    port: redisURL.port
+  };
+}
 
 module.exports = function (server) {
 
     if (io) return io;
 
     io = socketio.listen(server);
-    console.log('redis layer enabled! ', process.env.REDISTOGO_URL);
-    io.adapter(ioredis(redisOptions));
-
+    console.log('redis layer enabled! ', process.env.REDISCLOUD_URL);
+    if (!isDeveloping) {
+        io.adapter(ioredis(redisOptions));
+    }
 
     var numUsers = 0;
     var currentUsers = [];
