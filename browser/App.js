@@ -13,6 +13,7 @@ import highlight from 'highlight.js/styles/github.css';
 import reactpage from 'react-pagify/style.css';
 import main from './css/main.css';
 import skylight from './css/skylight.css';
+// import admin from './css/admin.css';
 
 
 module.exports = React.createClass({

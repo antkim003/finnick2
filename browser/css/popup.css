@@ -14,3 +14,6 @@
 .UserList .lockedCheckbox {
   display: none;
 }
+.UserList .lead {
+  min-width: 100px;
+}
