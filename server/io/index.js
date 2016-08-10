@@ -11,7 +11,8 @@ var url = require('url');
 
 var isDeveloping = process.env.NODE_ENV !== 'production';
 var isTestingServer = process.env.TESTING === 'testing';
-console.log('is developing? ', isDeveloping);
+
+// only enable redis cache layer when it's deployed
 if (!isDeveloping) {
   var redisURL = url.parse(process.env.REDISCLOUD_URL || 'localhost:6379' );
 

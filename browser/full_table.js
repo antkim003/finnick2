@@ -29,6 +29,7 @@ module.exports = React.createClass({
         return window.user.collections.indexOf(collection) >= 0 ? true : false;
     },
     getInitialState: function(){
+        var timeNow = Date.now();
         var self = this;
         scrolling();
         window.user = JSON.parse(localStorage.getItem('user'));
@@ -45,12 +46,12 @@ module.exports = React.createClass({
         }
         var getdata = function(q) {
             var fob = `/${query}`;
-            var timeNow = Date.now();
+
             $.ajax({
                 type: "GET",
                 url: '/api/rows' + fob,
                 success: function (data1) {
-                    console.log('this is the time after the call comes: ', timeNow - Date.now());
+                    console.log('this is the time after the call comes: ', Date.now()-timeNow, 'ms');
                     var allrows = _.map(data1, 'entries');
                     var columns = window.coledit;
                     window.data = data1;
@@ -72,7 +73,7 @@ module.exports = React.createClass({
                         });
                         arr.push(allobj);
                     });
-                    console.log('this is the time after the calculations ', timeNow - Date.now());
+                    console.log('this is the time after the calculations ', Date.now()-timeNow, 'ms');
                     window.statedata = _.sortBy(arr, 'rowIndex');
 
                     self.setState({
@@ -82,7 +83,9 @@ module.exports = React.createClass({
                 }
             })
         }
+        console.log('this is the start of the promise ', Date.now()-timeNow, 'ms');
         $.when(columnstoedit(self)).done(function( ) {
+            console.log('this is the time after columnstoedit comes back ', Date.now()-timeNow, 'ms');
             getdata()
         });
 
