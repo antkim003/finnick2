@@ -11,7 +11,7 @@ const url = require('url');
 
 const isDeveloping = process.env.NODE_ENV !== 'production';
 const isTestingServer = process.env.TESTING === 'testing';
-
+console.log('is developing? ', isDeveloping);
 if (!isDeveloping) {
   const redisURL = url.parse(process.env.REDISCLOUD_URL || 'localhost:6379' );
 

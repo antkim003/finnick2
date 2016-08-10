@@ -79,9 +79,6 @@ module.exports = React.createClass({
                         data: _.sortBy(arr, 'rowIndex')
                     });
 
-                },
-                complete: function () {
-
                 }
             })
         }

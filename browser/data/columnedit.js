@@ -61,10 +61,7 @@ module.exports = (app) => {
                                     }
                                 }
                             })
-                        } else {
-
-                        }
-
+                        } 
                     }
                     app.setState(
                         {
