@@ -5,8 +5,8 @@ const Row = require('mongoose').model('Row');
 const Cell = require('mongoose').model('Cell');
 const _ = require('lodash');
 const http = require('http');
-const redis = require('redis');
-const ioredis = require('socket.io-redis');
+let redis = require('redis');
+let ioredis = require('socket.io-redis');
 const url = require('url');
 
 const isDeveloping = process.env.NODE_ENV !== 'production';
