@@ -28,7 +28,7 @@ module.exports = function (server) {
 
     io = socketio.listen(server);
     console.log('redis layer enabled! ', process.env.REDISTOGO_URL);
-    io.adapter(redis(process.env.REDISTOGO_URL));
+    io.adapter(ioredis(redisOptions));
 
 
     var numUsers = 0;
