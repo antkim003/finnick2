@@ -42,10 +42,7 @@ module.exports = React.createClass({
         var query = window.location.search.split('?')[1];
         if (!this.isInCollection(query)) {
             browserHistory.push( window.location.pathname + '?' + window.user.collections[0]);
-            query = window.user.collections[0];
-        }
-        if (window.user.type === "admin") {
-            query = 'women';
+            query = window.user.collections[0] ? window.user.collections[0] : '/women';
         }
         var getdata = function(q) {
             var fob = `/${query}`;

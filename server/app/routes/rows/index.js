@@ -48,13 +48,11 @@ router.get('/combobulator', function (req, res, next) {
 });
 
 router.get('/:category', function(req,res,next) {
-   if (req.params.category != 'combobulator') {
-       Row.find({fob: req.params.category}).populate('entries').then(function (rows) {
-           res.json(rows);
-       });
-   }else {
-       next();
-   }
+    console.log('req.params: ', req.params.category);
+    Row.find({fob: req.params.category}).limit(20).populate('entries').then(function (rows) {
+        console.log('category rows: ', rows.length);
+        res.json(rows);
+    });
 });
 
 router.post('/boost', function(req,res,next) {
