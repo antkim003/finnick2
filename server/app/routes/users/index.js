@@ -52,8 +52,13 @@ router.get('/:userId', function(req, res, next) {
 router.post('/', isLeadOrAdmin, function(req, res, next) {
     User.create(req.body)
         .then(function(user) {
+            console.log("user was created: ", user);
             res.json(user);
-        }, next);
+        })
+        .catch(function(error) {
+            console.error('whats going on: ', error);
+            next();
+        })
 });
 
 router.put('/:userId', isLeadOrAdmin, function(req, res, next) {
@@ -61,6 +66,11 @@ router.put('/:userId', isLeadOrAdmin, function(req, res, next) {
     var _user;
     User.findById(userId).then(function(user) {
         let keys = Object.keys(req.body);
+        console.log('keys: ', keys);
+        if (user.type === 'admin' && (keys.indexOf('type') >= 0 || keys.indexOf('lead') >= 0)) {
+            res.status(403).send("admins cannot be changed");
+            next()
+        }
         keys.forEach(function(key) {
             user[key] = req.body[key];
         });

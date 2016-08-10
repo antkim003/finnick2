@@ -20,13 +20,18 @@ var findUserType = function(req, res, next) {
 }
 
 router.get('/', findUserType, function(req, res, next) {
+    console.log('req.session.user.type', req.session.user.type);
     if (req.session.user.type === "admin") {
+        console.log('admin user means everyone');
         User.find().then(function(users) {
+            console.log('here are the users', users);
             res.json(users);
         });
     } else {
+        console.log('nonadmin user');
         User.find({type: req.session.user.type})
             .then(function(users) {
+                console.log('here are the users', users);
                 res.json(users);
             });
     }

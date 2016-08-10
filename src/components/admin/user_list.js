@@ -143,11 +143,14 @@ class UserList extends Component {
           break;
         case 'type':
           // ONLY ADMINS can edit the type of a cell
+          if (event.target.innerHTML === 'admin') {
+            break;
+          }
           if (this.props.session.user.type === "admin") {
             setStateForPopup(event);
             console.log('user set state: ', this.state.userId, event.currentTarget.getAttribute('data-user-id'));
+            break;
           }
-          break;
         case 'locked':
           if (!event.currentTarget.classList.contains('__clicked')) {
             this.closePopup();
@@ -198,11 +201,13 @@ class UserList extends Component {
         targetProperty = targetProperty.toString();
       }
       if (column.property === "delete" && (self.props.session.user.lead || self.props.session.user.type === "admin")) {
-        return (
-          <td onClick={self.clickCell} key={i + '-' + z + '-cell'} className={'cell-' + i + '-' + z + ' ' + column.property + ' text-center' } data-property={column.property}  data-user-id={row._id} >
-            <div className="btn btn-danger" onClick={self.deleteRow}>x</div>
-          </td>
-        )
+        if (row.type != "admin") {
+          return (
+            <td onClick={self.clickCell} key={i + '-' + z + '-cell'} className={'cell-' + i + '-' + z + ' ' + column.property + ' text-center' } data-property={column.property}  data-user-id={row._id} >
+              <div className="btn btn-danger" onClick={self.deleteRow}>x</div>
+            </td>
+          )
+        } 
       }
       return (<td onClick={self.clickCell} key={i + '-' + z + '-cell'} className={'cell-' + i + '-' + z + ' ' + column.property} data-property={column.property}  data-user-id={row._id} style={{"whiteSpace": "pre-line"}}>
         <div className="targetProperty">{targetProperty === "select" ? "" : targetProperty}</div>

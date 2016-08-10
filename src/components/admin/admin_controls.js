@@ -13,11 +13,11 @@ class AdminControls extends Component {
     this.updatenow = this.updatenow.bind(this);
     this.getValidationState = this.getValidationState.bind(this);
     this.resetState = this.resetState.bind(this);
-    this.resetState();
   }
   componentWillMount() {
     this.resetState()
   }
+
   resetState() {
     this.setState(
       {
@@ -164,8 +164,8 @@ class AdminControls extends Component {
   }
   renderOptions(array) {
     try {
-      return array.map(function(n) {
-        return (<option key={n} value={n}>{n}</option>)
+      return array.map(function(n,idx) {
+        return (<option key={`${n}-${idx}`} value={n}>{n}</option>)
       });
     } catch (e) {
       return []

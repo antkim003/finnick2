@@ -18,18 +18,20 @@ class Popup extends React.Component {
     };
   }
   componentWillMount() {
-    this.props.fetchCollections().then(this.props.fetchTypes());
+    // this.props.fetchCollections().then(this.props.fetchTypes());
+    this.props.fetchCollections();
+    this.props.fetchTypes();
   }
   componentWillUpdate(nextProps, nextState) {
     let self = this;
     if (nextProps.userId != "" && nextProps.userId != this.props.userId) {
       self.state.collections = [];
-      this.props.collections.forEach(function(collection) {
+      self.props.collections.forEach(function(collection) {
         if (self.refs[collection]) {
             $(self.refs[collection]).prop('checked', false)
         }
       });
-      this.props.fetchUser(nextProps).then(function(response) {
+      self.props.fetchUser(nextProps).then(function(response) {
         response.payload.data.collections.forEach(function(collection) {
           $(self.refs[collection]).prop('checked', true)
           self.state.collections.push(collection);

@@ -27,7 +27,15 @@ var seedUsers = function () {
             "lead": true
         },
         {
-            "name": "admin",
+            "name": "mallory_admin",
+            "username": 'admin',
+            "password": 'test',
+            "locked": false,
+            "lead": true,
+            "type": "admin"
+        },
+        {
+            "name": "developer_admin",
             "username": 'admin',
             "password": 'test',
             "locked": false,
@@ -301,12 +309,31 @@ var seedUsers = function () {
 
 };
 
+function seedAdmin() {
+    var admins = [{
+        "name": "mallory_admin",
+        "username": 'mallory_admin',
+        "password": 'mallory123',
+        "locked": false,
+        "lead": true,
+        "type": "admin"
+    },
+    {
+        "name": "developer_admin",
+        "username": 'developer_admin',
+        "password": 'test123',
+        "locked": false,
+        "lead": true,
+        "type": "admin"
+    }];
+    return User.create(admins);
+}
 connectToDb
+    // .then(function () {
+    //     // return wipeCollections();
+    // })
     .then(function () {
-        return wipeCollections();
-    })
-    .then(function () {
-        return Promise.all([seedUsers()]);
+        return Promise.all([seedAdmin()]);
     })
     .then(function (data) {
         console.log(chalk.green('Seed successful!', data.length));
