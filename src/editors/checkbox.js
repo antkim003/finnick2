@@ -35,11 +35,23 @@ module.exports = (allOptions, referenceColumn, dat, fields={}) => {
             }
 
             var filteredSubcategories = allOptions;
+
+            if (/intl/.test(categories)) { // test to see if it is an international
+                return (
+                    <form>
+                        <div>
+                            {`No subcategories for ${categories}`}
+                        </div>
+                    </form>
+                )
+            }
             if (categories) {
                 categories = Array.isArray(categories) ? categories : [categories];
                 filteredSubcategories = categories.map(function(_category) {
-                    let subcategories = _.find(allOptions, {value: _category})['subcategories'];
-                    return subcategories;
+                    if (!/intl/.test(_category)) { // extra check here just in case
+                        let subcategories = _.find(allOptions, {value: _category.toLowerCase()})['subcategories'];
+                        return subcategories;
+                    }
                 });
                 filteredSubcategories = _.flatten(filteredSubcategories);
             }
