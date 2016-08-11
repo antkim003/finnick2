@@ -38,7 +38,6 @@ router.get('/combobulator', function (req, res, next) {
         _.each(obj, function(main,i){
             _.each(_rows, function(row,i) {
                 if (row.fob == Object.keys(main)[0]) {
-//                    console.log(main[row.fob].push(row));
                     main[row.fob].push(row)
                 }
             })
@@ -48,9 +47,7 @@ router.get('/combobulator', function (req, res, next) {
 });
 
 router.get('/:category', function(req,res,next) {
-    console.log('req.params: ', req.params.category);
     Row.find({fob: req.params.category}).populate('entries').then(function (rows) {
-        console.log('category rows: ', rows.length);
         res.json(rows);
     });
 });
@@ -83,7 +80,6 @@ var promisifiedReq = function(row, i) {
                 }).on('end', function(){
                     var bod = Buffer.concat(t).toString();
                     if(i==1){
-//                        console.log(bod, 'test');
                     }
                     if (bod.indexOf('title') > -1) {
                         if (bod.indexOf('Not Available') > -1) {
@@ -132,18 +128,15 @@ router.post('/moverow', function(req,resp,next){
                     var obj = {};
                     obj['data'] = true;
                     obj['columnName'] = 'killedrow';
-//                    console.log(row.index);
                     obj['rowIndex'] = row.index;
                     _newrow = row;
                     _oldrow = _.cloneDeep(row);
                     return Cell.create(obj);
             }).then(function(cell) {
-                console.log('first then');
                 _cell = cell;
                 _newrow.entries.push(cell);
                 return _newrow.save();
             }).then(function() {
-                console.log('third then');
                 var entriesarray = [];
 //                var _row = _.cloneDeep(_oldrow);
                 _oldrow.entries.forEach(function(entry){
@@ -168,7 +161,6 @@ router.post('/moverow', function(req,resp,next){
                 });
 
             }).then(function(everything) {
-                console.log('testing test', everything, 'new row?',_newrow );
                 resp.json(everything);
             });
      } else {
@@ -178,7 +170,6 @@ router.post('/moverow', function(req,resp,next){
                 numrows.push(tofobrows);
                 return Row.findByIdAndUpdate(body[0].row)
             }).then(function(row) {
-                    console.log('do nothing for now')
                     _oldrow = _.cloneDeep(row);
                     _newrow = row;
                     var cellup = Cell.findByIdAndUpdate(body[0].killCell, {$set: {'data':true}});
@@ -186,7 +177,6 @@ router.post('/moverow', function(req,resp,next){
                     return cellup;
 
             }).then(function(cell) {
-                    console.log('do nothing for now 2')
             }).then(function() {
                     var entriesarray = [];
                     _oldrow.entries.forEach(function(entry){
@@ -210,7 +200,6 @@ router.post('/moverow', function(req,resp,next){
 
 
             }).then(function(everything) {
-                console.log('testing test');
                 resp.json(everything);
             });
      }

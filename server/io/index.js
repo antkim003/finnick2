@@ -33,7 +33,6 @@ module.exports = function (server) {
     if (io) return io;
 
     io = socketio.listen(server);
-    // console.log('redis layer enabled! ', process.env.REDISCLOUD_URL);
     // if (!isDeveloping) {
     //     io.adapter(ioredis(redisOptions));
     // }
@@ -46,24 +45,14 @@ module.exports = function (server) {
         socket.broadcast.emit('user connected');
 
         socket.on('my other event', function (data) {
-            console.log('now send to all browsers', data);
             var options = {
                 port: process.env.PORT || 3000,
                 path: '/api/rows/'
             };
             socket.broadcast.emit('new data', data);
-
-            console.log(data);
-
-        });
-        socket.on('new data', function (data) {
-            console.log('new data');
         });
         socket.on('user editing', function (data) {
             socket.broadcast.emit('other user editing', data);
-        });
-        socket.on('other user editing', function (data) {
-            console.log('other user')
         });
         socket.on('add user', function (username) {
             if (addedUser) return;
