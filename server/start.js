@@ -11,6 +11,6 @@
  start your application from main.js.
 
 */
-
+require('newrelic');
 require('babel-register');
 require('./server');
