@@ -15,20 +15,15 @@ import main from './css/main.css';
 import skylight from './css/skylight.css';
 // import admin from './css/admin.css';
 
-
 module.exports = React.createClass({
     displayName: 'App',
-    componentDidMount: function() {
-    },
     render() {
         return (
             <div className='pure-g'>
-
                 <article className='pure-u-1'>
                     <section className='demonstration'>
                         <FullTable />
                     </section>
-
                 </article>
             </div>
             );

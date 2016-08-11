@@ -31,6 +31,6 @@ module.exports = () =>
             $('.activeOtherCell').removeClass('activeOtherCell');
             $('').replaceAll('.userspan');
             $('[data-id="'+cellId+'"]').addClass('activeOtherCell').append('<span class="userspan">'+ first + ' ' +'</span>');
-        })
+        });
 
     }

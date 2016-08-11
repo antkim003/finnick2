@@ -9,7 +9,6 @@ module.exports = (allOptions, referenceColumn, dat, fields={}) => {
     return React.createClass({
         displayName: 'Checkbox',
         propTypes: {
-//            value: React.PropTypes.string || React.PropTypes.array,
             onValue: React.PropTypes.func,
         },
         componentWillMount: function() {
@@ -53,20 +52,6 @@ module.exports = (allOptions, referenceColumn, dat, fields={}) => {
                     </form>
                 )
             }
-
-            // if (cat) {
-            //     var cat1 = _.filter(dat.state.data, function (d) {
-            //         return d.rowIndex == window.row
-            //     })[0][cat];
-            //
-            //     if (typeof _.filter(filteredoptions, function (cat) { return cat.value == cat1})[0] !== 'undefined') {
-            //         filteredoptions = cat1 ? _.filter(options, function (cat) {
-            //             return cat.value == cat1
-            //         })[0].subcategories : options;
-            //     } else {
-            //         filteredoptions = options;
-            //     }
-            // }
 
             return (
                 <form>

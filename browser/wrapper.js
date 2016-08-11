@@ -8,6 +8,8 @@ export default class Wrapper extends Component {
     let style = {
       paddingTop: 51
     };
+    window.__loader = {};
+    window.__loader.state = false;
     return (
       <div>
         <NavBar />
