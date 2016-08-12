@@ -18,25 +18,35 @@ module.exports = (allOptions, referenceColumn, dat, fields={}) => {
                 categories = dat.state.data[rowNumber][referenceColumn];
             }
         },
-        render() {
 
-            const edit = (e) =>
-            {
-                e.preventDefault();
-                var checkboxes = e.target.form.querySelectorAll('input');
-                var checkboxesChecked = [];
-                for (var i=0; i<checkboxes.length; i++) {
-                    // And stick the checked ones onto an array...
-                    if (checkboxes[i].checked) {
-                        checkboxesChecked.push(checkboxes[i].value);
-                    }
+        handleSubmit: function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            let checkboxes = $(e.target).find("[rel='js-checkbox']");
+            let checkboxesChecked = checkboxes.map(function(idx,checkbox) {
+                if (checkbox.checked) {
+                    return checkbox.value;
                 }
-                this.props.onValue({ val: checkboxesChecked, row: window.row-1 });
-            }
+            });
+            checkboxesChecked = Array.prototype.slice.call(checkboxesChecked);
+            this.props.onValue({ val: checkboxesChecked, row: window.row-1 });
+            this.gotoNextCell(e);
+        },
+        gotoNextCell(e) {
+            var currRel = $(e.target.parentElement).attr('rel');
+            var brokenDown = currRel.split('-');
+            brokenDown[2] = Number(brokenDown[2]);
+            brokenDown[2]++;
+            var nextCell = brokenDown.join('-');
 
+            setTimeout(function () {
+                $(`[rel='${nextCell}']`).click();
+            }, 10);
+        },
+        render() {
             var filteredSubcategories = allOptions;
 
-            if (/intl/.test(categories)) { // test to see if it is an international
+            if (/intl/i.test(categories)) { // test to see if it is an international
                 return (
                     <form>
                         <div>
@@ -48,7 +58,7 @@ module.exports = (allOptions, referenceColumn, dat, fields={}) => {
             if (categories) {
                 categories = Array.isArray(categories) ? categories : [categories];
                 filteredSubcategories = categories.map(function(_category) {
-                    if (!/intl/.test(_category)) { // extra check here just in case
+                    if (!/intl/i.test(_category)) { // extra check here just in case
                         let subcategories = _.find(allOptions, {value: _category.toLowerCase()})['subcategories'];
                         return subcategories;
                     }
@@ -64,17 +74,25 @@ module.exports = (allOptions, referenceColumn, dat, fields={}) => {
                     </form>
                 )
             }
-
+            // focus on the form
+            setTimeout(function () {
+                $("[rel='js-checkbox-form']").focus();
+            }, 10);
             return (
-                <form>
+                <form onSubmit={this.handleSubmit} rel="js-checkbox-form">
                     {filteredSubcategories.map((option, i) =>
-                        <div key={`checkboxWrapper-${i}`} className="checkboxselect"><input type="checkbox"
-                        key={"check-"+i}
-                        value={option[valueField]}
-                        name="checkbox2"
-                        /><label key={`option-${i}`}>{option[nameField]}</label></div>
-                        )}
-                        <button onClick={edit}>Save</button>
+                        <div key={`checkboxWrapper-${i}`} className="checkboxselect">
+                            <input type="checkbox"
+                                ref={`jsCheckbox`}
+                                rel={`js-checkbox`}
+                                id={option[valueField]}
+                                key={"check-"+i}
+                                value={option[valueField]}
+                                name="checkbox2" />
+                            <label htmlFor={option[valueField]} key={`option-${i}`}>{option[nameField]}</label>
+                        </div>
+                    )}
+                        <input className="btn btn-sm" type="submit" />
                 </form>
             );
         }

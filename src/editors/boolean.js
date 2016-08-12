@@ -12,7 +12,6 @@ module.exports = () => {
             onClick: React.PropTypes.func,
             onValue: React.PropTypes.func,
         },
-
         render() {
             return (
                 <span>

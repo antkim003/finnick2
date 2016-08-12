@@ -11,7 +11,6 @@ module.exports = (attrs) => {
         displayName: 'Input',
 
         propTypes: {
-//            value: React.PropTypes.string,
             onValue: React.PropTypes.func,
         },
 
@@ -22,14 +21,23 @@ module.exports = (attrs) => {
         },
 
         render() {
-
-//            console.log('input', attrs, this);
+            setTimeout(function () {
+                $("[rel='js-input-field']").focus();
+            }, 10);
             return (
                 <input
+                    ref="jsInputField"
+                    rel="js-input-field"
+                    className="form-control"
+                    style= {{
+                        margin: 'auto',
+                        height: '25px'
+                    }}
                     value={this.state.value}
                     onFocus={this.onFocus}
                     onChange={this.onChange}
-                    onKeyUp={this.keyUp}
+                    onKeyDown={this.keyDown}
+                    onKeyUp = {this.keyDown}
                     onBlur={this.done}
                     {...attrs} />
             );
@@ -51,18 +59,28 @@ module.exports = (attrs) => {
             });
         },
 
-        keyUp(e) {
-            if(e.keyCode === 13) {
+        keyDown(e) {
+            var ENTERKEY = 13,
+                TABKEY = 9;
+            if(e.keyCode === ENTERKEY || e.keyCode === TABKEY) {
                 $(e.target).blur();
-//                e.preventDefault();
-//                this.done(e);
+                this.gotoNextCell(e);
             }
         },
+        gotoNextCell(e) {
+            var currRel = $(e.target.parentElement).attr('rel');
+            var brokenDown = currRel.split('-');
+            brokenDown[2] = Number(brokenDown[2]);
+            brokenDown[2]++;
+            var nextCell = brokenDown.join('-');
 
+            setTimeout(function () {
+                $(`[rel='${nextCell}']`).click();
+            }, 10);
+        },
         done(e) {
-        var self = this;
 
-//        var once =  _.once(function() {
+            var self = this;
             function identical(array) {
                 for (var i = 0; i < array.length - 1; i++) {
                     if (array[i] !== array[i + 1] && !array[i]) {
@@ -75,7 +93,6 @@ module.exports = (attrs) => {
             if (typeof attrs[0] !== 'undefined') {
                 var r = new RegExp(attrs[0].value);
                 if (typeof attrs[0].multidelimeter !== 'undefined') {
-                    console.log('! multi val')
                     var vals = e.target.value.split(attrs[0].multidelimeter);
                     var valid = [];
                     _.each(vals, function (val, i) {
@@ -99,7 +116,6 @@ module.exports = (attrs) => {
                     }
 
                 } else {
-                    console.log('! one val')
                     var test = r.test(e.target.value);
                     if (test) {
                         self.props.onValue(ReactDOM.findDOMNode(self).value)
@@ -123,11 +139,8 @@ module.exports = (attrs) => {
                 }
 
             } else {
-                console.log('! no validation')
                 self.props.onValue(ReactDOM.findDOMNode(self).value)
             }
-//        })
-//        once();
 
         },
     });
