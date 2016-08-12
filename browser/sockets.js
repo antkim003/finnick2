@@ -28,9 +28,12 @@ module.exports = () =>
             var fob = data.fob;
             var cellId = $(data.cell).data('id');
 
-            $('.activeOtherCell').removeClass('activeOtherCell');
+            $(`.activeOtherCell_${user}`).removeClass(`activeOtherCell_${user} activeOtherCell`);
+
+            $('').replaceAll(`.userspan_${user}`);
             $('').replaceAll('.userspan');
-            $('[data-id="'+cellId+'"]').addClass('activeOtherCell').append('<span class="userspan">'+ first + ' ' +'</span>');
+
+            $('[data-id="'+cellId+'"]').addClass(`activeOtherCell_${user}`).addClass('activeOtherCell').append('<span class="userspan userspan_' + user + '">'+ first + ' ' +'</span>');
         });
 
     }
