@@ -73,7 +73,6 @@ module.exports = React.createClass({
                         arr.push(allobj);
                     });
                     window.statedata = _.sortBy(arr, 'rowIndex');
-
                     self.setState({
                         data: _.sortBy(arr, 'rowIndex')
                     });

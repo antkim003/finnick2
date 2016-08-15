@@ -52,9 +52,32 @@ router.get('/:category', function(req,res,next) {
     });
 });
 
-router.post('/boost', function(req,res,next) {
-
-});
+router.get('/:category/repurposed', function(req,res,next) {
+    Row.find({fob: req.params.category}).populate('entries')
+        .then(function(rows) {
+            var allrows = _.map(data1, 'entries');
+            var columns = window.coledit;
+            var arr = [];
+            _.each(allrows, function (row, i) {
+                //fill in empty subcategories
+                var allobj = _.zipObject(_.map(columns, 'property'), _.range(columns.length).map(function () {
+                    return ''
+                }));
+                _.each(row, function (cell, j) {
+                    var all = {};
+                    if (cell.columnName != 'sortnumber' && cell.columnName != 'id') {
+                        all[cell.columnName] = cell.data;
+                    } else {
+                        all[cell.columnName] = parseInt(cell.data);
+                    }
+                    all.rowIndex = parseInt(cell.rowIndex);
+                    _.extend(allobj, all)
+                });
+                arr.push(allobj);
+            });
+            
+        })
+})
 
 var promisifiedReq = function(row, i) {
     return new Promise(function (resolve, reject) {
