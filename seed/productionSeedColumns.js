@@ -6,7 +6,6 @@ var ColumnIndex = mongoose.model('ColumnIndex');
 var ColumnData = require('./columnHeaderData.js');
 
 var wipeCollections = function () {
-    var removeUsers = User.remove({});
     return Promise.all([
         ColumnIndex.remove({})
     ]);
@@ -15,13 +14,15 @@ var wipeCollections = function () {
 var seedColumnIndex = function() {
     return ColumnIndex.create(ColumnData)
         .then(function(column_indices) {
-            console.log('column_indices: ', column_indices);
-            return column_indices;
+            console.log('column_indices: ', column_indices.length);
+            return ColumnIndex.find({});
+        })
+        .then(function(columns) {
+            console.log('where are the columns?', columns);
+            return columns;
         })
         .catch(console.error)
 }
-
-
 
 connectToDb
     .then(function() {

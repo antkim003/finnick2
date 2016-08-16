@@ -71,6 +71,7 @@ export function fetchSession() {
   return function(dispatch) {
     axios.get('/api/members/session')
       .then( response => {
+        console.log('heres the response from fetch session:', response.data);
         dispatch({ type: AUTH_USER });
         localStorage.setItem('token',response.data.token);
         dispatch({ type: FETCH_SESSION, payload: response });

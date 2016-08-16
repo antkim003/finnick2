@@ -58,6 +58,7 @@ module.exports = React.createClass({
                             var allobj = _.zipObject(_.map(columns, 'property'), _.range(columns.length).map(function () {
                                 return ''
                             }));
+                            debugger;
                             _.each(row, function (cell, j) {
                                 var all = {};
                                 if (cell.columnName != 'sortnumber' && cell.columnName != 'id') {

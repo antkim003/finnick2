@@ -23,8 +23,9 @@ var scrolling = require('./scrolling.js');
 var sockets = require('./sockets.js');
 import { browserHistory } from 'react-router';
 import Loader from '../src/components/loader/loader.js';
+// import { connect } from 'react-redux';
 
-module.exports = React.createClass({
+var FullTable = React.createClass({
     displayName: 'FullTable',
     isInCollection: function(collection) {
         return window.user.collections.indexOf(collection) >= 0 ? true : false;
@@ -33,6 +34,7 @@ module.exports = React.createClass({
         var timeNow = Date.now();
         var self = this;
         scrolling();
+        console.log('current sesion: ', this.props.session);
         window.user = JSON.parse(localStorage.getItem('user'));
         window.statedata = [];
         sockets();
@@ -60,6 +62,7 @@ module.exports = React.createClass({
                         var allobj = _.zipObject(_.map(columns, 'property'), _.range(columns.length).map(function () {
                             return ''
                         }));
+                        debugger;
                         _.each(row, function (cell, j) {
                             var all = {};
                             if (cell.columnName != 'sortnumber' && cell.columnName != 'id') {
@@ -167,6 +170,11 @@ module.exports = React.createClass({
                 });
             }
         });
+    },
+    componentWillReceiveProps: function(nextProps) {
+        if (nextProps.session) {
+            console.log('nextProps.session: ', nextProps.session);
+        }
     },
 
     render() {
@@ -760,3 +768,5 @@ function find(arr, key, value) {
 function findselect(arr, key, value) {
     return arr.reduce((a, b) => a[key] === value ? a : b[key] === value && b);
 }
+
+module.exports = FullTable;

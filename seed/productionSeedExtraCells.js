@@ -79,6 +79,10 @@ var categories = [
     {
         name: "women",
         size: 50
+    },
+    {
+        name: "intlwomen",
+        size: 50
     }
 ];
 var seedCategories = function() {

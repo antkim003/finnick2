@@ -14,18 +14,28 @@ import reactpage from 'react-pagify/style.css';
 import main from './css/main.css';
 import skylight from './css/skylight.css';
 // import admin from './css/admin.css';
+import { connect } from 'react-redux';
+import * as actions from '../src/actions';
 
-module.exports = React.createClass({
+var App = React.createClass({
     displayName: 'App',
     render() {
         return (
             <div className='pure-g'>
                 <article className='pure-u-1'>
                     <section className='demonstration'>
-                        <FullTable />
+                        <FullTable session={this.props.session} />
                     </section>
                 </article>
             </div>
             );
         }
 });
+
+function mapStateToProps(state) {
+  return {
+    session: state.session
+  }
+}
+
+module.exports = connect(mapStateToProps, actions)(App);

@@ -4,8 +4,11 @@ module.exports = router;
 var _ = require('lodash');
 var Row = require('mongoose').model('Row');
 var Cell = require('mongoose').model('Cell');
+var ColumnIndex = require('mongoose').model('ColumnIndex');
 var Promise = require('bluebird');
 const http = require('http');
+const blankRow = require('./blankRowTemplate.js');
+
 var ensureAuthenticated = function (req, res, next) {
     if (req.isAuthenticated()) {
         next();
@@ -53,30 +56,29 @@ router.get('/:category', function(req,res,next) {
 });
 
 router.get('/:category/repurposed', function(req,res,next) {
-    Row.find({fob: req.params.category}).populate('entries')
-        .then(function(rows) {
-            var allrows = _.map(data1, 'entries');
-            var columns = window.coledit;
-            var arr = [];
-            _.each(allrows, function (row, i) {
-                //fill in empty subcategories
-                var allobj = _.zipObject(_.map(columns, 'property'), _.range(columns.length).map(function () {
-                    return ''
-                }));
-                _.each(row, function (cell, j) {
-                    var all = {};
-                    if (cell.columnName != 'sortnumber' && cell.columnName != 'id') {
-                        all[cell.columnName] = cell.data;
-                    } else {
-                        all[cell.columnName] = parseInt(cell.data);
-                    }
-                    all.rowIndex = parseInt(cell.rowIndex);
-                    _.extend(allobj, all)
-                });
-                arr.push(allobj);
+    var _columnIndices;
+    ColumnIndex.find().then(function(columnIndices) {
+        _columnIndices = columnIndices;
+        return Row.find({fob: req.params.category}).populate('entries');
+    }).then(function(rows) {
+        // flattening it to be just entries
+        var allrows = _.map(rows, 'entries'),
+            arr = [], allobj;
+        _.each(allrows, function (row, i) {
+            // this creates the empty objects
+            allobj = Object.assign({}, blankRow);
+            _.each(row, function (cell, j) {
+                if (cell.columnName != 'sortnumber' && cell.columnName != 'id') {
+                    allobj[cell.columnName] = cell.data || '';
+                } else {
+                    allobj[cell.columnName] = parseInt(cell.data);
+                }
+                allobj.rowIndex = parseInt(cell.rowIndex);
             });
-            
-        })
+            arr.push(allobj);
+        });
+        res.json(arr);
+    });
 })
 
 var promisifiedReq = function(row, i) {
