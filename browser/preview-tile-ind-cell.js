@@ -8,10 +8,9 @@ var isUndefined = require('lodash/isUndefined');
 
 var React = require('react');
 var update = require('react/lib/update');
-var TileInd = require('./preview-tile-ind.js');
 
 module.exports = React.createClass({
-    displayName: 'TileGrid',
+    displayName: 'TileIndCell',
     getDefaultProps() {
     return {
         data: [],
@@ -28,17 +27,14 @@ render() {
             data: undefined,
         }
     });
-//    console.log('preview.title', data)
     var query = window.location.search.split('?')[1];
-//    return <div className="tile title">{fob[query][0].fob}</div>
-//{
+
 
     return (
-        <div {...props}>
-                {data.map((fob, i) => {
-                        return <TileInd data={fob}/>
-                    }
-                )}
+        <div {...props} className="tile">
+            {data.fob}
+            {data.entries}
+            test
                 {this.props.children}
         </div>
         );
