@@ -23,6 +23,7 @@ module.exports = (attrs) => {
     render() {
         return (
             <input
+            maxLength="75"
             value={this.state.value}
             onFocus={this.onFocus}
             onChange={this.onChange}
