@@ -41,7 +41,14 @@ router.get('/combobulator', function (req, res, next) {
         _.each(obj, function(main,i){
             _.each(_rows, function(row,i) {
                 if (row.fob == Object.keys(main)[0]) {
-                    main[row.fob].push(row)
+                    _.each(row.entries, function(e, i){
+                        var newobj = {};
+                        newobj[e.columnName] = e.data;
+                        row.entries[i] = newobj;
+                        if (i == row.entries.length-1){
+                            main[row.fob].push(row)
+                        }
+                    })
                 }
             })
         })

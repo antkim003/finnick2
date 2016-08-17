@@ -33,8 +33,8 @@ render() {
     return (
         <div {...props} className="tile">
             {data.fob}
-            {data.entries}
-            test
+            {data.name}
+
                 {this.props.children}
         </div>
         );
