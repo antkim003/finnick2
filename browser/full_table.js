@@ -38,12 +38,13 @@ module.exports = React.createClass({
         sockets();
 
         if (window.location.search == '') {
-            browserHistory.push( window.location.pathname + '?' + window.user.collections[0]);
+            browserHistory.push( window.location.pathname + '?' + (window.user.collections[0] || 'women'));
         }
         var query = window.location.search.split('?')[1];
         if (!this.isInCollection(query)) {
-            browserHistory.push( window.location.pathname + '?' + window.user.collections[0]);
-            query = window.user.collections[0] ? window.user.collections[0] : '/women';
+            // not in collection
+            browserHistory.push( window.location.pathname + '?' + (window.user.collections[0] || 'women'));
+            query = window.user.collections[0] ? window.user.collections[0] : 'women';
         }
         var getdata = function(q) {
             var fob = `/${query}`;
