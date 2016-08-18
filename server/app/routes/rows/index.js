@@ -43,8 +43,18 @@ router.get('/combobulator', function (req, res, next) {
                 if (row.fob == Object.keys(main)[0]) {
                     _.each(row.entries, function(e, i){
                         var newobj = {};
+                        //which columns needed for display?
+                        //name
+                        //copy
+                        //price
+                        //image
                         newobj[e.columnName] = e.data;
+                        row.updatedAt = undefined;
+                        row.createdAt = undefined;
+                        row.__v = undefined;
+                        row.locked = undefined;
                         row.entries[i] = newobj;
+
                         if (i == row.entries.length-1){
                             main[row.fob].push(row)
                         }
