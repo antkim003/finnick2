@@ -34,7 +34,8 @@ render() {
     var filteredcopy2 = _.filter(data.entries, function(d) { return d.hasOwnProperty('tilecopy2') });
     var filteredcopy3 = _.filter(data.entries, function(d) { return d.hasOwnProperty('tilecopy3') });
     var filteredcopy4 = _.filter(data.entries, function(d) { return d.hasOwnProperty('tilecopy4') });
-
+    var filteredsortn = _.filter(data.entries, function(d) { return d.hasOwnProperty('sortnumber') });
+    var filteredid = _.filter(data.entries, function(d) { return d.hasOwnProperty('id') });
 
     var img = '';
     if (filteredimage) {
@@ -65,7 +66,7 @@ render() {
                     <a href="/#/some-link-here-to-add-to-shop-now" className="tile-btn_shop tile-btn">SHOP NOW</a>
                 </div>
             </div>
-            <div className="imageinfo">Image ID: {filteredname[0].imageid || filteredname[0].arimageid} <br/>Row: {filteredname[0].index}</div>
+            <div className="imageinfo">Image ID: {filteredname[0].imageid || filteredname[0].arimageid} <br/>Row: {filteredid[0].id} <br/>Sort: {filteredsortn[0].sortnumber}</div>
 
             {this.props.children}
         </div>
