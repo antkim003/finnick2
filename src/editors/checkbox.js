@@ -30,18 +30,6 @@ module.exports = (allOptions, referenceColumn, dat, fields={}) => {
             });
             checkboxesChecked = Array.prototype.slice.call(checkboxesChecked);
             this.props.onValue({ val: checkboxesChecked, row: window.row-1 });
-            this.gotoNextCell(e);
-        },
-        gotoNextCell(e) {
-            var currRel = $(e.target.parentElement).attr('rel');
-            var brokenDown = currRel.split('-');
-            brokenDown[2] = Number(brokenDown[2]);
-            brokenDown[2]++;
-            var nextCell = brokenDown.join('-');
-
-            setTimeout(function () {
-                $(`[rel='${nextCell}']`).click();
-            }, 10);
         },
         render() {
             var filteredSubcategories = allOptions;
