@@ -8,15 +8,23 @@ import { Router, Route, IndexRoute, browserHistory } from 'react-router';
 import ReduxThunk from 'redux-thunk';
 
 import { Provider } from 'react-redux';
-import { createStore, applyMiddleware } from 'redux';
+import { createStore, applyMiddleware, compose, combineReducers } from 'redux';
 import RequireAuth from '../src/components/auth/require_auth';
 import reducers from '../src/reducers';
 import ReduxPromise from 'redux-promise';
 import { AUTH_USER } from '../src/actions/type';
 import { fetchSession }from '../src/actions';
 
-const createStoreWithMiddleware = applyMiddleware(ReduxPromise, ReduxThunk)(createStore);
-const store = createStoreWithMiddleware(reducers);
+// const createStoreWithMiddleware = applyMiddleware(ReduxPromise, ReduxThunk)(createStore);
+// const store = createStoreWithMiddleware(reducers);
+
+const store = createStore(
+  reducers,
+  {},
+  compose(
+    applyMiddleware(ReduxPromise, ReduxThunk),
+    window.devToolsExtension ? window.devToolsExtension() : f => f
+  ));
 
 const token = localStorage.getItem('token');
 if(token) {
@@ -30,7 +38,7 @@ const Admin = require('../src/components/admin/admin.js');
 const Login = require('../src/components/auth/login.js');
 const Logout = require('../src/components/auth/logout.js');
 const Landing = require('../src/components/landing.js');
-// const Combobulator = require('../src/components/combobulator.js');
+const Combobulator = require('../src/components/combobulator.js');
 // ReactDOM.render(<App />, document.getElementById('root'));
 
 ReactDOM.render(
@@ -40,7 +48,7 @@ ReactDOM.render(
         <IndexRoute component={Landing} />
         <Route path="admin" component={RequireAuth(Admin)}/>
         <Route path="finnick" component={RequireAuth(App)} />
-        {/*<Route path="combobulator" component={Combobulator} />*/}
+        <Route path="combobulator" component={Combobulator} />
         <Route path="login" component={Login}/>
         <Route path="logout" component={Logout}/>
       </Route>

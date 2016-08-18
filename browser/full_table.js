@@ -23,6 +23,7 @@ var scrolling = require('./scrolling.js');
 var sockets = require('./sockets.js');
 import { browserHistory } from 'react-router';
 import Loader from '../src/components/loader/loader.js';
+import defaultCollections from './data/collections.js';
 
 module.exports = React.createClass({
     displayName: 'FullTable',
@@ -33,7 +34,10 @@ module.exports = React.createClass({
         var timeNow = Date.now();
         var self = this;
         scrolling();
-        window.user = JSON.parse(localStorage.getItem('user'));
+        window.user = JSON.parse(localStorage.all).user;
+        if (window.user.collections.length < 1) {
+            window.user.collections = defaultCollections;
+        }
         window.statedata = [];
         sockets();
 
