@@ -10,6 +10,7 @@ class Combobulator extends Component {
 
     return (
       <div className="home">
+          <link type="text/css" rel="stylesheet" href="//fast.fonts.net/cssapi/e5d7b59e-410f-491f-a487-9b1b2af511f7.css"/>
           <div className="container">
             <h1>Combobulator</h1>
               <Tiles/>
