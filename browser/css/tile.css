@@ -9,6 +9,7 @@
     position: relative;
     display: inline-block;
     vertical-align: top;
+    float:left;
 }
 .tile-img-wrap {
     height: 284px;
@@ -126,4 +127,15 @@
 .imageinfo {
     position:absolute;
     bottom: -32px;
+}
+.hide {
+    display: none;
+}
+.sectionwrap {
+    width: 960px;
+    margin-left: -80px;
+}
+.sectionwrap h3{
+    text-decoration: underline;
+    clear:both;
 }

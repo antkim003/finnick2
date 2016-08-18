@@ -128,3 +128,13 @@
     position:absolute;
     bottom: -32px;
 }
+.hide {
+    display: none;
+}
+.sectionwrap {
+    width: 960px;
+}
+.sectionwrap h3{
+    text-decoration: underline;
+    clear:both;
+}

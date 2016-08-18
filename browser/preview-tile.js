@@ -28,10 +28,7 @@ render() {
             data: undefined,
         }
     });
-//    console.log('preview.title', data)
     var query = window.location.search.split('?')[1];
-//    return <div className="tile title">{fob[query][0].fob}</div>
-//{
 
     return (
         <div {...props}>

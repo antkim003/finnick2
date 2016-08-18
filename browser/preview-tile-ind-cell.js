@@ -28,14 +28,22 @@ render() {
         }
     });
     var query = window.location.search.split('?')[1];
-
+    var filteredname = _.filter(data.entries, function(d) { return d.hasOwnProperty('name') });
+    var filteredcopy1 = _.filter(data.entries, function(d) { return d.hasOwnProperty('tilecopy1') });
+    var filteredcopy2 = _.filter(data.entries, function(d) { return d.hasOwnProperty('tilecopy2') });
+    var filteredcopy3 = _.filter(data.entries, function(d) { return d.hasOwnProperty('tilecopy3') });
+    var filteredcopy4 = _.filter(data.entries, function(d) { return d.hasOwnProperty('tilecopy4') });
 
     return (
-        <div {...props} className="tile">
-            {data.fob}
-            {data.name}
+        <div {...props} className={'tile'}>
 
-                {this.props.children}
+            {filteredname[0].name}
+            {filteredname[0].tilecopy1}
+            {filteredname[0].tilecopy2}
+            {filteredname[0].tilecopy3}
+            {filteredname[0].tilecopy4}
+
+            {this.props.children}
         </div>
         );
 }

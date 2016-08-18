@@ -1,5 +1,6 @@
 var React = require('react');
 var Tile = require('./preview-tile.js');
+import Loader from '../src/components/loader/loader.js';
 
 var fobs = [];
 
@@ -19,6 +20,8 @@ var Tiles = React.createClass({
                     self.setState({
                         data: t
                     });
+                    self.setState({ loaderState: false });
+
 //                    console.log(self.state)
 //                    fobs.push()
                 }
@@ -27,27 +30,16 @@ var Tiles = React.createClass({
         getdata();
 
         return {
-            data: t
+            data: t,
+            loaderState: true
         }
     },
     render(){
     var self = this;
-    console.log(self.state);
-//    _.forEach(self.state['data'], function(d) {
-//
-//    });
-//    <select>
-//    {self.state.data.map((row, i) =>
-//    <option>{Object.keys(row)}</option>
-//    )}
-//    </select>
         return (
-
-            <div>tiles
-
-                <Tile
-                    data={self.state.data}
-                    />
+            <div>
+                {self.state.loaderState ? <Loader /> : null}
+                <Tile data={self.state.data} />
             </div>
         )
     }
