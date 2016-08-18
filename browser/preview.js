@@ -38,7 +38,9 @@ var Tiles = React.createClass({
     var self = this;
         return (
             <div>
+
                 {self.state.loaderState ? <Loader /> : null}
+
                 <Tile data={self.state.data} />
             </div>
         )
