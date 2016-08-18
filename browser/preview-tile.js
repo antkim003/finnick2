@@ -57,11 +57,15 @@ render() {
         'jewelry&watches': 'Jewelry and Watches',
         'jewlery&watches': 'Jewelry and Watches',
     }
+    function display(e) {
+        console.log('CHANGED', e.target.value)
+        $('.'+e.target.value).show().siblings('.sectionwrap').hide();
+    }
     return (
         <div {...props}>
-                <select>
+                <select onChange={display.bind(this)}>
                    {data.map((fob, i) => {
-                       return <option value={Object.keys(fob)}>{mapnames[Object.keys(fob)] || Object.keys(fob)}</option>
+                       return <option value={Object.keys(fob).toString().replace('&','and')}>{mapnames[Object.keys(fob)] || Object.keys(fob)}</option>
                         }
                     )}
                 </select>

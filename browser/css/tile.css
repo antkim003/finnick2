@@ -134,6 +134,7 @@
 .sectionwrap {
     width: 960px;
     margin-left: -50px;
+    display:none;
 }
 .sectionwrap h3{
     text-decoration: underline;

@@ -55,11 +55,11 @@ render() {
         "kids": "Kids",
         "shoes": 'Shoes',
         'jewelry&watches': 'Jewelry and Watches',
-        'jewlery&watches': 'Jewelry and Watches',
+        'jewlery&watches': 'Jewelry and Watches'
     }
 
     return (
-        <div {...props} className={Object.keys(data) + ' sectionwrap'}>
+        <div {...props} className={Object.keys(data).toString().replace('&','and')+ ' sectionwrap'}>
             <h3>{mapnames[Object.keys(data)] || Object.keys(data)}</h3>
                      {data[Object.keys(data)].map((fob, i) => {
                          var filteredname = _.filter(fob.entries, function(d) { return d.hasOwnProperty('name') });
