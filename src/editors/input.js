@@ -65,19 +65,7 @@ module.exports = (attrs) => {
                 TABKEY = 9;
             if(e.keyCode === ENTERKEY || e.keyCode === TABKEY) {
                 $(e.target).blur();
-                this.gotoNextCell(e);
             }
-        },
-        gotoNextCell(e) {
-            var currRel = $(e.target.parentElement).attr('rel');
-            var brokenDown = currRel.split('-');
-            brokenDown[2] = Number(brokenDown[2]);
-            brokenDown[2]++;
-            var nextCell = brokenDown.join('-');
-
-            setTimeout(function () {
-                $(`[rel='${nextCell}']`).click();
-            }, 10);
         },
         done(e) {
 

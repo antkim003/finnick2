@@ -23,7 +23,11 @@ var scrolling = require('./scrolling.js');
 var sockets = require('./sockets.js');
 import { browserHistory } from 'react-router';
 import Loader from '../src/components/loader/loader.js';
+<<<<<<< HEAD
 // import { connect } from 'react-redux';
+=======
+import defaultCollections from './data/collections.js';
+>>>>>>> 836e8e5f1e87755e98dc4916941ff4273a81cea8
 
 var FullTable = React.createClass({
     displayName: 'FullTable',
@@ -34,18 +38,26 @@ var FullTable = React.createClass({
         var timeNow = Date.now();
         var self = this;
         scrolling();
+<<<<<<< HEAD
         console.log('current sesion: ', this.props.session);
         window.user = JSON.parse(localStorage.getItem('user'));
+=======
+        window.user = JSON.parse(localStorage.all).user;
+        if (window.user.collections.length < 1) {
+            window.user.collections = defaultCollections;
+        }
+>>>>>>> 836e8e5f1e87755e98dc4916941ff4273a81cea8
         window.statedata = [];
         sockets();
 
         if (window.location.search == '') {
-            browserHistory.push( window.location.pathname + '?' + window.user.collections[0]);
+            browserHistory.push( window.location.pathname + '?' + (window.user.collections[0] || 'women'));
         }
         var query = window.location.search.split('?')[1];
         if (!this.isInCollection(query)) {
-            browserHistory.push( window.location.pathname + '?' + window.user.collections[0]);
-            query = window.user.collections[0] ? window.user.collections[0] : '/women';
+            // not in collection
+            browserHistory.push( window.location.pathname + '?' + (window.user.collections[0] || 'women'));
+            query = window.user.collections[0] ? window.user.collections[0] : 'women';
         }
         var getdata = function(q) {
             var fob = `/${query}`;

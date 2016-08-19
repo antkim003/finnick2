@@ -16,6 +16,7 @@ import {
   FETCH_TYPES,
   FETCH_PERMISSIONS
 } from './type';
+import _ from 'lodash';
 
 export function loginUser( { username, password }) {
   // redux thunk here
@@ -24,17 +25,6 @@ export function loginUser( { username, password }) {
       .then(response => {
         dispatch({ type: AUTH_USER });
         dispatch(fetchSession());
-        localStorage.setItem('token', response.data.token);
-        localStorage.setItem('all', JSON.stringify(response.data));
-        localStorage.setItem('user',  JSON.stringify({
-              name: response.data.user.name,
-              username: username,
-              type: response.data.user.type,
-              locked: response.data.user.locked,
-              collections: response.data.user.collections,
-              lead: response.data.user.lead
-          })
-        );
         browserHistory.push('/');
       })
       .catch(response => {
@@ -74,6 +64,12 @@ export function fetchSession() {
         console.log('heres the response from fetch session:', response.data);
         dispatch({ type: AUTH_USER });
         localStorage.setItem('token',response.data.token);
+
+        var oldUser = JSON.parse(localStorage.all).user;
+        if (oldUser.updatedAt != response.data.user.updatedAt) {
+          localStorage.setItem('user', JSON.stringify(response.data.user));
+        }
+
         dispatch({ type: FETCH_SESSION, payload: response });
       })
       .catch( response => {

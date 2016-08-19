@@ -33,6 +33,7 @@ module.exports = React.createClass({
             var self = this;
             scrolling();
             window.user = JSON.parse(localStorage.getItem('user'));
+
             window.statedata = [];
             sockets();
             if (window.location.search == '') {

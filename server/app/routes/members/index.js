@@ -3,6 +3,7 @@ var router = require('express').Router();
 var User = require('mongoose').model('User');
 module.exports = router;
 var _ = require('lodash');
+var jwt = require('jwt-simple');
 
 var ensureAuthenticated = function (req, res, next) {
     if (req.isAuthenticated()) {
@@ -11,6 +12,11 @@ var ensureAuthenticated = function (req, res, next) {
         res.status(401).end();
     }
 };
+
+function tokenForUser(user) {
+  var timestamp = new Date().getTime();
+  return jwt.encode({ sub: user.id, iat: timestamp }, 'secret');
+}
 
 var findUserType = function(req, res, next) {
     User.findById(req.session.passport.user).then(function(user) {
@@ -39,7 +45,11 @@ router.get('/', findUserType, function(req, res, next) {
 
 router.get('/session', function (req, res) {
     if (req.user) {
-        res.json({ user: req.user.sanitize() });
+        var obj = {
+                    user: req.user.sanitize(),
+                    token: tokenForUser(req.user)
+                  };
+        res.json(obj);
     } else {
         res.status(401).send('No authenticated user.');
     }
