@@ -52,7 +52,8 @@ var categories = [
     {name: "intlforthehome", size: 40},
     {name: "intlkitchen&dining", size: 40},
     {name: "intlbed&bath", size: 40},
-    {name: "intlluggage&accessories", size: 40}
+    {name: "intlluggage&accessories", size: 40},
+    {name: "homepage", size: 40}
 ]
 var seedCategories = function() {
     return Promise.each(categories, function(category) {

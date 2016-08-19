@@ -209,104 +209,109 @@ module.exports =     [
     columnorder: 37
 },
 {
+    property: 'tilestyle',
+    header: 'Tile Style',
+    columnorder: 38
+},
+{
     property: 'plenti',
     header: 'Plenti Watermark',
     info: 'whether or not to show watermark on tile in sitelet',
-    columnorder: 38
+    columnorder: 39
 },
 {
     property: 'bffavorites',
     header: 'Black Friday Favorites',
-    columnorder: 39
+    columnorder: 40
 },
 {
     property: 'goingfast',
     header: 'Going Fast',
-    columnorder: 40
+    columnorder: 41
 },
 {
     property: 'alsoinpetites',
     header: 'Also in Petites',
-    columnorder: 41
+    columnorder: 42
 },
 {
     property: 'petitessavedset',
     header: 'Petites Saved Set',
-    columnorder: 42
+    columnorder: 43
 },
 {
     property: 'needsavedset',
     header: 'Need Saved Set?',
-    columnorder: 43
+    columnorder: 44
 },
 {
     property: 'linktype',
     header: 'Link Type',
     info: 'link by category id, product id, or direct url',
-    columnorder: 44
+    columnorder: 45
 },
 {
     property: 'livedate',
     header: 'Live Date',
-    columnorder: 45
+    columnorder: 46
 },
 {
     property: 'categoryid',
     header: 'Category Id linking',
     info: 'if link type is category, category id here will be used, otherwise ignored',
-    columnorder: 46
+    columnorder: 47
 },
 {
     property: 'productid',
     header: 'Product Id linking',
     info: 'if link type is product, product id here will be used, otherwise ignored',
-    columnorder: 47
+    columnorder: 48
 },
 {
     property: 'url',
     header: 'Url linking',
     info: 'if link type is url, url here will be used, otherwise ignored',
-    columnorder: 48
+    columnorder: 49
 },
 {
     property: 'petiteslinktype',
     header: 'Petites Link Type',
     info: 'if has petite, what link type; url, category id, or product id',
-    columnorder: 49
+    columnorder: 50
 },
 {
     property: 'petitescategoryid',
     header: 'Petites Category Linking',
     info: 'if petite link type is category, category id here will be used, otherwise ignored',
-    columnorder: 50
+    columnorder: 51
 },
 {
     property: 'petitesproductid',
     header: 'Petites Product Linking',
     info: 'if petite link type is product, product id here will be used, otherwise ignored',
-    columnorder: 51
+    columnorder: 52
 },
 {
     property: 'petitesurl',
     header: 'Petites Url Linking',
     info: 'if petite link type is url, url here will be used, otherwise ignored',
-    columnorder: 52
+    columnorder: 53
 },
 {
     property: 'extra',
     header: 'Extra',
-    columnorder: 53
+    columnorder: 54
 },
 {
     property: 'killedrow',
     header: 'Killed Row',
     info: 'no deleted rows, keeping here for data fidelity',
-    columnorder: 54
+    columnorder: 55
 },
 {
     property: 'lockedrow',
     header: 'Locked Row',
     info: 'no deleted rows, keeping here for data fidelity',
-    columnorder: 55
+    columnorder: 56
 }
 ]

@@ -64,6 +64,7 @@ render() {
     return (
         <div {...props}>
                 <select onChange={display.bind(this)}>
+                    <option>select fob</option>
                    {data.map((fob, i) => {
                        return <option value={Object.keys(fob).toString().replace('&','and')}>{mapnames[Object.keys(fob)] || Object.keys(fob)}</option>
                         }

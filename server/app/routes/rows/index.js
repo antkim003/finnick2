@@ -25,18 +25,85 @@ router.get('/', function (req, res, next) {
 
 //TODO: need to reduce size; currently 21 mb
 router.get('/combobulator', function (req, res, next) {
+    var start = new Date();
     var arr = [];
     var _rows;
     Row.find().populate('entries').then(function(rows) {
         var t = [];
         _rows = rows;
-        _.each(_.uniq(_.map(rows, 'fob')), function(e,i) {
-            var obj = {};
-            obj[e] = [];
-            t.push(obj);
-        });
-        arr = t;
-        return t;
+        //this seems to take too long
+//        _.each(_.uniq(_.map(rows, 'fob')), function(e,i) {
+//            var obj = {};
+//            obj[e] = [];
+//            t.push(obj);
+//        });
+
+//        var categories = [
+//            "women",
+//            "men",
+//            "kids",
+//            "shoes",
+//            "jewlery&watches",
+//            "handbags&accessories",
+//            "juniors",
+//            "beauty",
+//            "for_the_home",
+//            "kitchen&dining",
+//            "bed&bath",
+//            "luggage&accessories",
+//            "furniture&mattresses",
+//            "IntlWomen",
+//            "intlmen",
+//            "intlkids",
+//            "intlshoes",
+//            "intljewelry&Watches",
+//            "intlhandbags&Accessories",
+//            "intljuniors",
+//            "intlforthehome",
+//            "intlkitchen&dining",
+//            "intlbed&bath",
+//            "intlluggage&accessories",
+//            "homepage"
+//        ]
+
+
+        var categoriesarr = [
+            {"women": []},
+            {"men": []},
+            {"kids": []},
+            {"shoes": []},
+            {"jewlery&watches": []},
+            {"handbags&accessories": []},
+            {"juniors": []},
+            {"beauty": []},
+            {"for_the_home": []},
+            {"kitchen&dining": []},
+            {"bed&bath": []},
+            {"luggage&accessories": []},
+            {"furniture&mattresses": []},
+            {"IntlWomen": []},
+            {"intlmen": []},
+            {"intlkids": []},
+            {"intlshoes": []},
+            {"intljewelry&Watches": []},
+            {"intlhandbags&Accessories": []},
+            {"intljuniors": []},
+            {"intlforthehome": []},
+            {"intlkitchen&dining": []},
+            {"intlbed&bath": []},
+            {"intlluggage&accessories": []}
+        ]
+
+        //loop through cat== not used just create entire array based on productionSeed
+//        _.each(categories, function(e,i) {
+//            var obj = {};
+//            obj[e] = [];
+//            t.push(obj);
+//        });
+        arr = categoriesarr;
+        var keys = new Date() - start;
+        console.info("Execution keys time: %dms", keys);
+        return categoriesarr;
     }).then(function(obj) {
         _.each(obj, function(main,i){
             _.each(_rows, function(row,i) {
@@ -48,12 +115,34 @@ router.get('/combobulator', function (req, res, next) {
                         //copy
                         //price
                         //image
-                        newobj[e.columnName] = e.data;
+//                        newobj[e.columnName] = e.data;
+//                        if (e.columnName == 'bffavorites' ||
+//                            e.columnName == 'extra' ||
+//                            e.columnName == 'extraomniprojectedsales' ||
+//                            e.columnName == 'featureproductid' ||
+//                            e.columnName == 'instorespecial' ||
+//                            e.columnName == 'livedate' ||
+//                            e.columnName == 'markettointernational' ||
+//                            e.columnName == 'needsavedset' ||
+//                            e.columnName == 'notesfrombuyersimg' ||
+//                            e.columnName == 'notesfromretouchimg' ||
+//                            e.columnName == 'notesoncategory' ||
+//                            e.columnName == 'plenti' ||
+//                            e.columnName == 'projectedunits' ||
+//                            e.columnName == 'salesfor2015' ||
+//                            e.columnName == 'singleormultiple'
+//                            ) {
+//                            newobj = null;
+//                            newobj[e.columnName] = null;
+//                        } else {
+                            newobj[e.columnName] = e.data;
+                            row.entries[i] = newobj;
+
+//                        }
                         row.updatedAt = undefined;
                         row.createdAt = undefined;
                         row.__v = undefined;
                         row.locked = undefined;
-                        row.entries[i] = newobj;
 
                         if (i == row.entries.length-1){
                             main[row.fob].push(row)
@@ -62,6 +151,8 @@ router.get('/combobulator', function (req, res, next) {
                 }
             })
         })
+        var end = new Date() - start;
+        console.info("Execution time: %dms", end);
         res.json(arr);
     })
 });

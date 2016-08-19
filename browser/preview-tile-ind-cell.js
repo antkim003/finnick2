@@ -30,6 +30,8 @@ render() {
     var query = window.location.search.split('?')[1];
     var filteredname = _.filter(data.entries, function(d) { return d.hasOwnProperty('name') });
     var filteredimage = _.filter(data.entries, function(d) { return d.hasOwnProperty('imageid') });
+    var filteredarimage = _.filter(data.entries, function(d) { return d.hasOwnProperty('arimageid') });
+
     var filteredcopy = _.filter(data.entries, function(d) { return d.hasOwnProperty('tilecopy1') });
     var filteredcopy2 = _.filter(data.entries, function(d) { return d.hasOwnProperty('tilecopy2') });
     var filteredcopy3 = _.filter(data.entries, function(d) { return d.hasOwnProperty('tilecopy3') });
@@ -38,10 +40,12 @@ render() {
     var filteredid = _.filter(data.entries, function(d) { return d.hasOwnProperty('id') });
 
     var img = '';
-    if (filteredimage) {
+    if (filteredimage[0].imageid) {
         img = '<img src="http://slimages.macys.com/is/image/MCY/products/6/optimized/'+filteredimage[0].imageid+'_fpx.tif?bgc=255,255,255&amp;wid=228&amp;qlt=90,0&amp;fmt=jpeg" className="tile-img"/>'
     }else {
-        img = '<img src="/'+filteredname[0].arimageid+'.jpeg" className="tile-img"/>'
+//        img = '<img src="file:///Volumes/MDS_COMMUNICATIONS/bf2016arconvertedimages/'+filteredarimage[0].arimageid+'.jpg" className="tile-img"/>'
+        img = '<img src="/api/combobulator/img/'+filteredarimage[0].arimageid+'.jpg" class="tile-img"/>'
+
     }
 //    <img src="http://slimages.macys.com/is/image/MCY/products/6/optimized/3149862_fpx.tif?bgc=255,255,255&amp;wid=228&amp;qlt=90,0&amp;fmt=jpeg" className="tile-img"/>
     function createMarkup() { return {__html: img}; };
@@ -66,7 +70,7 @@ render() {
                     <a href="/#/some-link-here-to-add-to-shop-now" className="tile-btn_shop tile-btn">SHOP NOW</a>
                 </div>
             </div>
-            <div className="imageinfo">Image ID: {filteredname[0].imageid || filteredname[0].arimageid} <br/>Row: {filteredid[0].id} <br/>Sort: {filteredsortn[0].sortnumber}</div>
+            <div className="imageinfo">Image ID: {filteredimage[0].imageid || filteredarimage[0].arimageid} <br/>Row: {filteredid[0].id} <br/>Sort: {filteredsortn[0].sortnumber}</div>
 
             {this.props.children}
         </div>
