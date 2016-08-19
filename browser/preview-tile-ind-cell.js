@@ -57,8 +57,8 @@ render() {
                 </a>
             </div>
             <div className="tile-content">
-                <span className="tile-title_1 tile-title">{filteredname[0].name}</span>
-                <span className="tile-title_2 tile-title">{filteredcopy[0].tilecopy1}</span>
+                <span className="tile-title_1 tile-title">{filteredname[0].tilecopy1}</span>
+                <span className="tile-title_2 tile-title">{filteredcopy[0].tilecopy2}</span>
                 <p className="tile-desc">
                     <span className="tile-desc-line_1 tile-desc-line">{filteredcopy2[0].tilecopy2}</span>
                     <span className="tile-desc-line_2 tile-desc-line">{filteredcopy3[0].tilecopy3}</span>
@@ -71,7 +71,6 @@ render() {
                 </div>
             </div>
             <div className="imageinfo">Image ID: {filteredimage[0].imageid || filteredarimage[0].arimageid} <br/>Row: {filteredid[0].id} <br/>Sort: {filteredsortn[0].sortnumber}</div>
-
             {this.props.children}
         </div>
         );

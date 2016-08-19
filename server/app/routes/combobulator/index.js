@@ -33,12 +33,7 @@ function base64Image(src) {
 
 
 router.get('/img/:img', ensureAuthenticated, function (req, res, next) {
-    var t = fs.readFileSync('/Volumes/MDS_COMMUNICATIONS/bf2016arconvertedimages/'+req.params.img)
-//    console.log(t);
-//    console.log('test')
+
+    var t = fs.readFileSync('/Volumes/MDS_COMMUNICATIONS/bf2016arconvertedimages/'+req.params.img);
     res.send(t);
-//    http.get('', function(im) {
-//        var dataUri = base64Image(im);
-//        console.log(dataUri);
-//    });
 });
