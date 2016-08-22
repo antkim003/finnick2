@@ -9,6 +9,7 @@
     position: relative;
     display: inline-block;
     vertical-align: top;
+    float:left;
 }
 .tile-img-wrap {
     height: 284px;
@@ -50,7 +51,6 @@
     clear: both;
     text-align: center;
     padding: 15px 10px 0 10px;
-
     font-family: "arial", sans-serif;
     font-size: 13px;
     line-height: 15px;
@@ -63,7 +63,7 @@
     display: inline-block;
 }
 .tile-title_1 {
-    font-family: "Avenir LT W01 95 Black";
+    font-family: "Avenir LT W01 95 Black", 'Avenir LT W01_95 Black_1475562', arial, sans-serif;
     font-size: 17px;
     line-height: 1.1
 }
@@ -71,7 +71,7 @@
     padding: 0 25px;
 }
 .tile-title_2 {
-    font-family: "Avenir LT W01 95 Black";
+    font-family: "Avenir LT W01 95 Black", 'Avenir LT W01_95 Black_1475562', arial, sans-serif;
     font-size: 30px;
     line-height: 25px;
 }
@@ -126,4 +126,19 @@
 .imageinfo {
     position:absolute;
     bottom: -32px;
+}
+.hide {
+    display: none;
+}
+.sectionwrap {
+    width: 960px;
+    margin-left: -50px;
+    display:none;
+}
+.sectionwrap h4{
+    text-decoration: underline;
+    clear:both;
+}
+.tile-img {
+    max-width: 100%;
 }
