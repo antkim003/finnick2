@@ -64,6 +64,7 @@ router.get('/combobulator', function (req, res, next) {
         _.each(obj, function(main,i){
             _.each(_rows, function(row,i) {
                 if (row.fob == Object.keys(main)[0]) {
+                    var newentries = [];
                     _.each(row.entries, function(e, i){
                         var newobj = {};
                         //which columns needed for display?
@@ -72,37 +73,72 @@ router.get('/combobulator', function (req, res, next) {
                         //price
                         //image
 //                        newobj[e.columnName] = e.data;
-//                        if (e.columnName == 'bffavorites' ||
-//                            e.columnName == 'extra' ||
-//                            e.columnName == 'extraomniprojectedsales' ||
-//                            e.columnName == 'featureproductid' ||
-//                            e.columnName == 'instorespecial' ||
-//                            e.columnName == 'livedate' ||
-//                            e.columnName == 'markettointernational' ||
-//                            e.columnName == 'needsavedset' ||
-//                            e.columnName == 'notesfrombuyersimg' ||
-//                            e.columnName == 'notesfromretouchimg' ||
-//                            e.columnName == 'notesoncategory' ||
-//                            e.columnName == 'plenti' ||
-//                            e.columnName == 'projectedunits' ||
-//                            e.columnName == 'salesfor2015' ||
-//                            e.columnName == 'singleormultiple'
-//                            ) {
-//                            newobj = null;
-//                            newobj[e.columnName] = null;
-//                        } else {
-                            newobj[e.columnName] = e.data;
-                            row.entries[i] = newobj;
+                        if (Object.keys(main)[0] != 'women' && Object.keys(main)[0] != 'IntlWomen'){
+                            if (e.columnName == 'bffavorites' ||
+                                e.columnName == 'extra' ||
+                                e.columnName == 'extraomniprojectedsales' ||
+                                e.columnName == 'featureproductid' ||
+                                e.columnName == 'instorespecial' ||
+                                e.columnName == 'livedate' ||
+                                e.columnName == 'markettointernational' ||
+                                e.columnName == 'needsavedset' ||
+                                e.columnName == 'notesfrombuyersimg' ||
+                                e.columnName == 'notesfromretouchimg' ||
+                                e.columnName == 'notesoncategory' ||
+                                e.columnName == 'plenti' ||
+                                e.columnName == 'projectedunits' ||
+                                e.columnName == 'salesfor2015' ||
+                                e.columnName == 'singleormultiple' ||
+                                e.columnName == 'savedsetid' ||
+                                e.columnName == 'pricingcomments' ||
+                                e.columnName == 'alsoinpetites' ||
+                                e.columnName == 'petitescategoryid' ||
+                                e.columnName == 'petiteslinktype' ||
+                                e.columnName == 'petitesproductid' ||
+                                e.columnName == 'petitessavedset' ||
+                                e.columnName == 'petitesurl'
+                                ) {
+                                delete row.entries[i];
+                            } else {
+                                newobj[e.columnName] = e.data;
+                                row.entries[i] = newobj;
+                            }
+                        } else {
+                            if (e.columnName == 'bffavorites' ||
+                                e.columnName == 'extra' ||
+                                e.columnName == 'extraomniprojectedsales' ||
+                                e.columnName == 'featureproductid' ||
+                                e.columnName == 'instorespecial' ||
+                                e.columnName == 'livedate' ||
+                                e.columnName == 'markettointernational' ||
+                                e.columnName == 'needsavedset' ||
+                                e.columnName == 'notesfrombuyersimg' ||
+                                e.columnName == 'notesfromretouchimg' ||
+                                e.columnName == 'notesoncategory' ||
+                                e.columnName == 'plenti' ||
+                                e.columnName == 'projectedunits' ||
+                                e.columnName == 'salesfor2015' ||
+                                e.columnName == 'singleormultiple' ||
+                                e.columnName == 'savedsetid' ||
+                                e.columnName == 'pricingcomments'
 
-//                        }
+                                ) {
+                                delete row.entries[i];
+                            } else {
+                                newobj[e.columnName] = e.data;
+                                row.entries[i] = newobj;
+                            }
+                        }
+
                         row.updatedAt = undefined;
                         row.createdAt = undefined;
                         row.__v = undefined;
                         row.locked = undefined;
-
-
                         if (i == row.entries.length-1){
-                            main[row.fob].push(row)
+                            row.entries = _.compact(row.entries);
+                            if (row.entries.killedrow != 'true') {
+                                main[row.fob].push(row)
+                            }
                         }
                     })
                 }
