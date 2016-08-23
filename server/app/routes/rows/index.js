@@ -100,6 +100,7 @@ router.get('/combobulator', function (req, res, next) {
                         row.__v = undefined;
                         row.locked = undefined;
 
+
                         if (i == row.entries.length-1){
                             main[row.fob].push(row)
                         }
@@ -107,6 +108,7 @@ router.get('/combobulator', function (req, res, next) {
                 }
             })
         })
+    }).then(function() {
         var end = new Date() - start;
         console.info("Execution time: %dms", end);
         res.json(arr);
@@ -114,7 +116,7 @@ router.get('/combobulator', function (req, res, next) {
 });
 
 router.get('/:category', function(req,res,next) {
-    Row.find({fob: req.params.category}).populate('entries').then(function (rows) {
+    Row.find({fob: req.params.category}).lean().populate('entries').then(function (rows) {
         res.json(rows);
     });
 });
