@@ -5,7 +5,7 @@ import '../../../browser/css/loader.css';
 class Loader extends Component {
   static defaultProps = {
     loader: false,
-    loaderMsg: 'test'
+    loaderMsg: ''
   }
   static propTypes = {
     loader: PropTypes.bool.isRequired

@@ -70,12 +70,68 @@ render() {
 
     function createMarkup() { return {__html: img}; };
 
+    var mapnames = {
+        'intlWomen' : "International Women",
+        'IntlWomen' : "International Women",
+        'intljuniors': "International Juniors",
+        'intlforthehome': 'International For the Home',
+        'intlkitchen&dining': 'International Kitchen and Dining',
+        'intlbed&bath': 'International Bed and Bath',
+        'intlluggage&accessories': 'International Luggage and Accessories',
+        'handbags&accessories': 'Handbags and Accessories',
+        'juniors': 'Juniors',
+        'beauty': 'Beauty',
+        'for_the_home': 'For the Home',
+        'kitchen&dining': 'Kitchen and Dining',
+        'bed&bath': 'Bed and Bath',
+        'luggage&accessories': 'Luggage and Accessories',
+        'furniture&mattresses': "Furniture and Mattresses",
+        'intlmen': 'International Men',
+        'intlkids': 'International Kids',
+        'intlshoes': "International Shoes",
+        "intljewelry&Watches": 'International Jewelry and Watches',
+        "intlhandbags&Accessories": 'International Handbags and Accessories',
+        'women': "Women",
+        "men": "Men",
+        "kids": "Kids",
+        "shoes": 'Shoes',
+        'jewelry&watches': 'Jewelry and Watches',
+        'jewlery&watches': 'Jewelry and Watches'
+    }
+
     return (
         <div {...props}>
                 <form id="test" onSubmit={gettile}>
                     <select onChange={setfob}>
                         <option>select fob</option>
                         <option value="women">women</option>
+                        <option value="IntlWomen">International Women</option>
+                        <option value="intljuniors">International Juniors</option>
+                        <option value="intlforthehome">International For the Home</option>
+                        <option value="intlkitchen&dining">International Kitchen and Dining</option>
+                        <option value="intlbed&bath">International Bed and Bath</option>
+                        <option value="intlluggage&accessories">International Luggage and Accessories</option>
+                        <option value="handbags&accessories">Handbags and Accessories</option>
+                        <option value="juniors">Juniors</option>
+                        <option value="beauty">Beauty</option>
+                        <option value="for_the_home">For the Home</option>
+                        <option value="kitchen&dining">Kitchen and Dining</option>
+                        <option value="bed&bath">Bed and Bath</option>
+                        <option value="luggage&accessories">Luggage and Accessories</option>
+                        <option value="furniture&mattresses">Furniture and Mattress</option>
+                        <option value="intlmen">International Men</option>
+                        <option value="intlkids">International Kids</option>
+                        <option value="intlshoes">International Shoes</option>
+                        <option value="intljewelry&Watches">International Jewelry and Watches</option>
+                        <option value="intlhandbags&Accessories">International Handbag and Accessories</option>
+                        <option value="women">Women</option>
+                        <option value="men">Men</option>
+                        <option value="kids">Kids</option>
+                        <option value="shoes">Shoes</option>
+                        <option value="jewlery&watches">Jewelry and Watches</option>
+
+
+
                     </select>
                     <input className="tiletoshow" onChange={setrow} placeholder="row number"/>
                     <button type="submit">Submit</button>

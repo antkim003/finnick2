@@ -15,11 +15,6 @@ var Tiles = React.createClass({
                 type: "GET",
                 url: '/api/rows/combobulator',
                 success: function (datacomb) {
-//                    console.log(datacomb, 'tests')
-//                    t = _.sortBy(datacomb, function (el) {
-//                        console.log(el)
-//                        return el;
-//                    });
                     t = datacomb;
                     self.setState({
                         data: t
@@ -43,7 +38,7 @@ var Tiles = React.createClass({
         return (
             <div>
 
-                {self.state.loaderState ? <Loader loaderMsg={'please be patient, we are creating all tiles for preview'} /> : null}
+                {self.state.loaderState ? <Loader loaderMsg={'please be patient, creating all tiles for all FOB'} /> : null}
 
                 <Tile data={self.state.data} />
             </div>
