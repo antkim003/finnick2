@@ -28,45 +28,8 @@ router.get('/combobulator', function (req, res, next) {
     var start = new Date();
     var arr = [];
     var _rows;
-    Row.find().populate('entries').then(function(rows) {
-        var t = [];
+    Row.find().lean().populate('entries').then(function(rows) {
         _rows = rows;
-        //this seems to take too long
-//        _.each(_.uniq(_.map(rows, 'fob')), function(e,i) {
-//            var obj = {};
-//            obj[e] = [];
-//            t.push(obj);
-//        });
-
-//        var categories = [
-//            "women",
-//            "men",
-//            "kids",
-//            "shoes",
-//            "jewlery&watches",
-//            "handbags&accessories",
-//            "juniors",
-//            "beauty",
-//            "for_the_home",
-//            "kitchen&dining",
-//            "bed&bath",
-//            "luggage&accessories",
-//            "furniture&mattresses",
-//            "IntlWomen",
-//            "intlmen",
-//            "intlkids",
-//            "intlshoes",
-//            "intljewelry&Watches",
-//            "intlhandbags&Accessories",
-//            "intljuniors",
-//            "intlforthehome",
-//            "intlkitchen&dining",
-//            "intlbed&bath",
-//            "intlluggage&accessories",
-//            "homepage"
-//        ]
-
-
         var categoriesarr = [
             {"women": []},
             {"men": []},
@@ -93,13 +56,6 @@ router.get('/combobulator', function (req, res, next) {
             {"intlbed&bath": []},
             {"intlluggage&accessories": []}
         ]
-
-        //loop through cat== not used just create entire array based on productionSeed
-//        _.each(categories, function(e,i) {
-//            var obj = {};
-//            obj[e] = [];
-//            t.push(obj);
-//        });
         arr = categoriesarr;
         var keys = new Date() - start;
         console.info("Execution keys time: %dms", keys);
