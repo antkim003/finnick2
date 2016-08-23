@@ -154,7 +154,12 @@ render() {
                         <div className="tile-btns">
                         </div>
                     </div>
-                    <div className="imageinfo">Image ID: {this.state.data.imageid || this.state.data.arimageid} <br/>Row: {this.state.data.id} <br/>Sort: {this.state.data.sortnumber}</div>
+                    <div className="imageinfo">
+                        <div className="imageinfo-hover">i</div>
+                        <div className="imageinfo-hidden">
+                            {this.state.data.imageid? '' : 'AR '}Image ID: {this.state.data.imageid || this.state.data.arimageid}<br/>Row: {this.state.data.id} <br/>Sort: {this.state.data.sortnumber}
+                        </div>
+                    </div>
 
                 </div>
                 {this.props.children}

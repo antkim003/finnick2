@@ -66,7 +66,13 @@ render() {
                 <div className="tile-btns">
                 </div>
             </div>
-            <div className="imageinfo">Image ID: {filteredimage[0].imageid || filteredarimage[0].arimageid} <br/>Row: {filteredid[0].id} <br/>Sort: {filteredsortn[0].sortnumber}</div>
+
+            <div className="imageinfo">
+                <div className="imageinfo-hover">i</div>
+                <div className="imageinfo-hidden">
+                    {filteredimage[0].imageid ? '' : 'AR '}Image ID: {filteredimage[0].imageid || filteredarimage[0].arimageid} <br/>Row: {filteredid[0].id} <br/>Sort: {filteredsortn[0].sortnumber}
+                </div>
+            </div>
             {this.props.children}
         </div>
         );

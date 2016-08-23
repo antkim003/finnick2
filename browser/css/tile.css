@@ -125,14 +125,29 @@
 }
 .imageinfo {
     position:absolute;
-    bottom: -32px;
+    bottom: 0px;
+}
+.imageinfo-hover {
+    border: 1px solid #000;
+    background: #ffd000;
+    height: 20px;
+    width:20px;
+    text-align: center;
+    line-height: 20px;
+}
+.imageinfo-hidden {
+    display: none;
+}
+.imageinfo:hover .imageinfo-hidden{
+    z-index: 1000;
+    display: block;
 }
 .hide {
     display: none;
 }
 .sectionwrap {
     width: 960px;
-    margin-left: -50px;
+    margin-left: -30px;
     display:none;
 }
 .sectionwrap h4{
