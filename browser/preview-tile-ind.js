@@ -63,7 +63,9 @@ render() {
             <h4>{mapnames[Object.keys(data)] || Object.keys(data)}</h4>
                      {data[Object.keys(data)].map((fob, i) => {
                          var filteredname = _.filter(fob.entries, function(d) { return d.hasOwnProperty('name') });
+
                          if(filteredname[0].name != null) {
+
                             return <TileIndCell data={fob}/>
                          }
                         }

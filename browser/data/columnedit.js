@@ -368,7 +368,7 @@ window.coledit =     [
     header: 'AR Image Id',
     cell: [
     app.editable({
-        editor: editors.input(_.filter(validations, function(v) { return v.name == 'numerical'})),
+        editor: editors.input(),
     }),
     app.highlighter('arimageid')],
     columnorder: 27
@@ -463,13 +463,22 @@ window.coledit =     [
     columnorder: 37
 },
 {
+    property: 'tilestyle',
+        header: 'Tile Style',
+    info: 'what style',
+    cell: [app.editable({
+    editor: editors.dropdown([{name:'1', value:'1'},{name:'2', value:'2'}, {name:'3', value:'3'},{name:'4', value:'4'}]),
+}), app.highlighter('tilestyle')],
+    columnorder: 38
+},
+{
     property: 'plenti',
     header: 'Plenti Watermark',
     info: 'whether or not to show watermark on tile in sitelet',
     cell: [app.editable({
     editor: editors.dropdown([{name:'true', value:'true'},{name:'false', value:'false'}]),
     }), app.highlighter('plenti')],
-    columnorder: 38
+    columnorder: 39
 },
 {
     property: 'bffavorites',
@@ -477,7 +486,7 @@ window.coledit =     [
     cell: [app.editable({
     editor: editors.dropdown([{name:'true', value:'true'},{name:'false', value:'false'}]),
     }), app.highlighter('bffavorites')   ],
-    columnorder: 39
+    columnorder: 40
 },
 {
     property: 'goingfast',
@@ -485,7 +494,7 @@ window.coledit =     [
     cell: [app.editable({
     editor: editors.dropdown([{name:'true', value:'true'},{name:'false', value:'false'}]),
     }), app.highlighter('goingfast')],
-    columnorder: 40
+    columnorder: 41
 },
 {
     property: 'alsoinpetites',
@@ -493,7 +502,7 @@ window.coledit =     [
     cell: [app.editable({
     editor: editors.dropdown([{name:'true', value:'true'},{name:'false', value:'false'}]),
     }), app.highlighter('alsoinpetites')],
-    columnorder: 41
+    columnorder: 42
 },
 {
     property: 'petitessavedset',
@@ -501,7 +510,7 @@ window.coledit =     [
     cell: [app.editable({
     editor: editors.input(_.filter(validations, function(v) { return v.name == 'numerical'})),
     }), app.highlighter('petitessavedset')],
-    columnorder: 42
+    columnorder: 43
 },
 {
     property: 'needsavedset',
@@ -509,7 +518,7 @@ window.coledit =     [
     cell: [app.editable({
     editor: editors.dropdown([{name:'true', value:'true'},{name:'false', value:'false'}]),
     }), app.highlighter('needsavedset')],
-    columnorder: 43
+    columnorder: 44
 },
 {
     property: 'linktype',
@@ -518,7 +527,7 @@ window.coledit =     [
     cell: [app.editable({
     editor: editors.dropdown([{name:'url (u)', value:'url (u)'},{name:'category (c)', value:'category (c)'},{name:'product (p)', value:'product (p)'}]),
     }), app.highlighter('linktype')],
-    columnorder: 44
+    columnorder: 45
 },
 {
     property: 'livedate',
@@ -526,7 +535,7 @@ window.coledit =     [
     cell: [app.editable({
     editor: editors.input(),
     }), app.highlighter('livedate')],
-    columnorder: 45
+    columnorder: 46
 },
 {
     property: 'categoryid',
@@ -535,7 +544,7 @@ window.coledit =     [
     cell: [app.editable({
     editor: editors.input(_.filter(validations, function(v) { return v.name == 'numerical'})),
     }), app.highlighter('categoryid')],
-    columnorder: 46
+    columnorder: 47
 },
 {
     property: 'productid',
@@ -544,7 +553,7 @@ window.coledit =     [
     cell: [app.editable({
     editor: editors.input(_.filter(validations, function(v) { return v.name == 'numerical'})),
     })],
-    columnorder: 47
+    columnorder: 48
 },
 {
     property: 'url',
@@ -553,7 +562,7 @@ window.coledit =     [
     cell: [app.editable({
     editor: editors.input(),
     }), app.highlighter('url')],
-    columnorder: 48
+    columnorder: 49
 },
 {
     property: 'petiteslinktype',
@@ -562,7 +571,7 @@ window.coledit =     [
     cell: [app.editable({
     editor: editors.dropdown([{name:'url (u)', value:'url (u)'},{name:'category (c)', value:'category (c)'},{name:'product (p)', value:'product (p)'}]),
     }), app.highlighter('petiteslinktype')],
-    columnorder: 49
+    columnorder: 50
 },
 {
     property: 'petitescategoryid',
@@ -571,7 +580,7 @@ window.coledit =     [
     cell: [app.editable({
     editor: editors.input(_.filter(validations, function(v) { return v.name == 'numerical'})),
     }), app.highlighter('petitescategoryid')],
-    columnorder: 50
+    columnorder: 51
 },
 {
     property: 'petitesproductid',
@@ -580,7 +589,7 @@ window.coledit =     [
     cell: [app.editable({
     editor: editors.input(_.filter(validations, function(v) { return v.name == 'numerical'})),
     }), app.highlighter('petitesproductid')],
-    columnorder: 51
+    columnorder: 52
 },
 {
     property: 'petitesurl',
@@ -589,7 +598,7 @@ window.coledit =     [
     cell: [app.editable({
     editor: editors.input(),
     }), app.highlighter('petitesurl')],
-    columnorder: 52
+    columnorder: 53
 },
 {
     property: 'extra',
@@ -597,7 +606,7 @@ window.coledit =     [
     cell: [app.editable({
     editor: editors.input(),
     }), app.highlighter('Extra')],
-    columnorder: 53
+    columnorder: 54
 },
 {
     property: 'killedrow',
@@ -606,16 +615,16 @@ window.coledit =     [
     cell: [app.editable({
     editor: editors.dropdown([{name:'true', value:'true'},{name:'false', value:'false'}]),
     }), app.highlighter('killedrow')],
-    columnorder: 54
+    columnorder: 55
 },
 {
     property: 'lockedrow',
-        header: 'Locked Row',
+    header: 'Locked Row',
     info: 'no deleted rows, keeping here for data fidelity',
     cell: [app.editable({
     editor: editors.dropdown([{name:'true', value:'true'},{name:'false', value:'false'}]),
 }), app.highlighter('lockedrow')],
-    columnorder: 55
+    columnorder: 56
 }
 ]
 

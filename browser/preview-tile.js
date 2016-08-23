@@ -71,7 +71,15 @@ render() {
                     )}
                 </select>
                 {data.map((fob, i) => {
-                        return <TileInd data={fob}/>
+                    var sorted = {};
+                    sorted[Object.keys(fob)] = _.sortBy(fob[Object.keys(fob)], function(e){
+                        var t;
+                        _.each(e.entries,function(el,i){
+                            if (el.hasOwnProperty('sortnumber')) {t=i;}
+                        })
+                        return e.entries[t].sortnumber;
+                    })
+                        return <TileInd data={sorted}/>
                     }
                 )}
                 {this.props.children}

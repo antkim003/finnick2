@@ -44,7 +44,7 @@ render() {
         img = '<img src="http://slimages.macys.com/is/image/MCY/products/6/optimized/'+filteredimage[0].imageid+'_fpx.tif?bgc=255,255,255&amp;wid=228&amp;qlt=90,0&amp;fmt=jpeg" className="tile-img"/>'
     }else {
 //        img = '<img src="file:///Volumes/MDS_COMMUNICATIONS/bf2016arconvertedimages/'+filteredarimage[0].arimageid+'.jpg" className="tile-img"/>'
-        img = '<img src="/api/combobulator/img/'+filteredarimage[0].arimageid+'.jpg" class="tile-img"/>'
+        img = '<img src="http://storage.googleapis.com/imp-projects/finnick/arimages/'+filteredarimage[0].arimageid+'.jpg" class="tile-img"/>'
 
     }
 //    <img src="http://slimages.macys.com/is/image/MCY/products/6/optimized/3149862_fpx.tif?bgc=255,255,255&amp;wid=228&amp;qlt=90,0&amp;fmt=jpeg" className="tile-img"/>
@@ -52,12 +52,11 @@ render() {
     return (
         <div {...props} className={'tile'}>
             <div className="tile-img-wrap">
-                <a href="" className="tile-img-link">
+
                     <div dangerouslySetInnerHTML={createMarkup()} />
-                </a>
             </div>
             <div className="tile-content">
-                <span className="tile-title_1 tile-title">{filteredname[0].tilecopy1}</span>
+                <span className="tile-title_1 tile-title">{filteredcopy[0].tilecopy1}</span>
                 <span className="tile-title_2 tile-title">{filteredcopy[0].tilecopy2}</span>
                 <p className="tile-desc">
                     <span className="tile-desc-line_1 tile-desc-line">{filteredcopy2[0].tilecopy2}</span>
@@ -65,9 +64,6 @@ render() {
                     <span className="tile-desc-line tile-desc-line_3">{filteredcopy4[0].tilecopy4}</span>
                 </p>
                 <div className="tile-btns">
-                    <a href="/#/some-link-here-to-add-to-your-list" className="tile-btn_add tile-btn tile-btn_addToList">ADD TO LIST</a>
-                    <a href="#" className="tile-btn_added tile-btn">ADDED</a>
-                    <a href="/#/some-link-here-to-add-to-shop-now" className="tile-btn_shop tile-btn">SHOP NOW</a>
                 </div>
             </div>
             <div className="imageinfo">Image ID: {filteredimage[0].imageid || filteredarimage[0].arimageid} <br/>Row: {filteredid[0].id} <br/>Sort: {filteredsortn[0].sortnumber}</div>

@@ -4,7 +4,8 @@ import '../../../browser/css/loader.css';
 
 class Loader extends Component {
   static defaultProps = {
-    loader: false
+    loader: false,
+    loaderMsg: 'test'
   }
   static propTypes = {
     loader: PropTypes.bool.isRequired
@@ -29,7 +30,7 @@ class Loader extends Component {
               <div className="centered btn btn-lg btn-warning">
                 <span className="glyphicon glyphicon-refresh spinning">
                 </span>
-                <span style={loading}> Loading... </span>
+                <span style={loading}> Loading... {this.props.loaderMsg} </span>
               </div>
             </div>
         </div>
