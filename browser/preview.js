@@ -43,7 +43,7 @@ var Tiles = React.createClass({
         return (
             <div>
 
-                {self.state.loaderState ? <Loader loaderMsg={'tests'} /> : null}
+                {self.state.loaderState ? <Loader loaderMsg={'please be patient, we are creating all tiles for preview'} /> : null}
 
                 <Tile data={self.state.data} />
             </div>

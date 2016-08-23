@@ -19,6 +19,18 @@ router.get('/:id', function (req, res, next) {
     Cell.findById(req.params.id).then(function(cell) {
         res.json(cell);
     });
+    next()
+});
+router.get('/:fob/:row', function (req, res, next) {
+    Cell.find({ fob: req.params.fob , rowIndex: req.params.row-1 }).then(function(cell) {
+        var newobj = {};
+        _.each(cell, function(entry, i) {
+            newobj[entry.columnName] = entry.data;
+        })
+        return newobj;
+    }).then(function(newobj){
+        res.json(newobj);
+    });
 });
 
 router.put('/', function(req,res,next) {

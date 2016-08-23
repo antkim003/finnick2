@@ -39,6 +39,8 @@ const Login = require('../src/components/auth/login.js');
 const Logout = require('../src/components/auth/logout.js');
 const Landing = require('../src/components/landing.js');
 const Combobulator = require('../src/components/combobulator.js');
+const TilePreview = require('../src/components/singletilepreview.js');
+
 // ReactDOM.render(<App />, document.getElementById('root'));
 
 ReactDOM.render(
@@ -49,6 +51,7 @@ ReactDOM.render(
         <Route path="admin" component={RequireAuth(Admin)}/>
         <Route path="finnick" component={RequireAuth(App)} />
         <Route path="combobulator" component={Combobulator} />
+        <Route path="combobulator/tile" component={TilePreview} />
         <Route path="login" component={Login}/>
         <Route path="logout" component={Logout}/>
       </Route>
