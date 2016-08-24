@@ -8,6 +8,7 @@ var Cell = mongoose.model('Cell');
 var Row = mongoose.model('Row');
 var ColumnIndex = mongoose.model('ColumnIndex');
 var devFakeData = require('./devFakeData.js').entries;
+var faker = require('faker');
 
 var wipeCollections = function () {
     return Promise.all([
@@ -99,25 +100,35 @@ var seedRowData = function(name, size) {
         for (var j = 0; j < columnsTemplate.length; j++) {
             // console.log('what is row', fakeRowData[i]);
             obj = {};
-            if (columnsTemplate[j] === "id") {
-                obj['data'] = i+1;
-            } else if (columnsTemplate[j] === "category") {
-                obj['data'] = name;
-            } else if (columnsTemplate[j] === "sortnumber") {
-                obj['data'] = i+1;
-            } else {
-                var fakeData;
-                devFakeData.forEach((entry) => {
-                    if (entry.columnName === columnsTemplate[j]) {
-                        console.log(`it came in here... \n we have ${columnsTemplate[j]} and data is ${entry.data} and the type is ${typeof entry.data}`)
-                        fakeData = entry.data;
-
-                        return;
-                    }
-                });
-                console.log('fake data is... ', fakeData);
-                // if (obj['data'] === '2847203') console.log('this is good', obj['data']);
-                obj['data'] = fakeData;
+            switch (columnsTemplate[j]) {
+                case "id":
+                    obj['data'] = i+1;
+                    break;
+                case "category":
+                    obj['data'] = name;
+                    break;
+                case "sortnumber":
+                    obj['data'] = i+1;
+                case "arimageid":
+                    obj['data'] = "2847203";
+                    break;
+                case "tilecopy1":
+                    obj['data'] = faker.commerce.productName().toString();
+                    break;
+                case "tilecopy2":
+                    obj['data'] = "$" + faker.commerce.price().toString();
+                    break;
+                case "tilecopy3":
+                    obj['data'] = faker.commerce.productAdjective().toString();
+                    break;
+                case "tilecopy4":
+                    obj['data'] = faker.commerce.productAdjective().toString();;
+                    break;
+                case "tilestyle":
+                    obj['data'] = "1";
+                    break;
+                default:
+                    obj['data'] = null;
             }
 
             obj['columnName'] = columnsTemplate[j];
