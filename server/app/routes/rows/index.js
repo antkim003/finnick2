@@ -61,8 +61,8 @@ router.get('/combobulator', function (req, res, next) {
         console.info("Execution keys time: %dms", keys);
         return categoriesarr;
     }).then(function(obj) {
-        _.each(obj, function(main,i){
-            _.each(_rows, function(row,i) {
+        _.each(obj, function(main,idx){
+            _.each(_rows, function(row,idx2) {
                 if (row.fob == Object.keys(main)[0]) {
                     var newentries = [];
                     _.each(row.entries, function(e, i){
@@ -125,6 +125,12 @@ router.get('/combobulator', function (req, res, next) {
                                 ) {
                                 delete row.entries[i];
                             } else {
+//                                if (e.columnName == 'doubleexposure') {
+//                                    row.doubleexposure = e.data;
+//                                }
+//                                if (e.columnName == 'doubleexposure2') {
+//                                    row.doubleexposure2 = e.data;
+//                                }
                                 newobj[e.columnName] = e.data;
                                 row.entries[i] = newobj;
                             }
@@ -134,11 +140,44 @@ router.get('/combobulator', function (req, res, next) {
                         row.createdAt = undefined;
                         row.__v = undefined;
                         row.locked = undefined;
+
                         if (i == row.entries.length-1){
                             row.entries = _.compact(row.entries);
+
                             if (row.entries.killedrow != 'true') {
                                 main[row.fob].push(row)
                             }
+
+                            _.each(_.map(row.entries, 'doubleexposure'), function(val,i) {
+                                if (val) {
+                                    var result = arr.filter(function( obj ) {
+                                        return obj[val];
+                                    });
+                                    _.map(result, val)[0].push(row);
+                                    console.log(_.map(result, val)[0].length)
+                                }
+                            })
+
+                            _.each(_.map(row.entries, 'doubleexposure2'), function(val,i) {
+                                if (val) {
+                                    var result = arr.filter(function( obj ) {
+                                        return obj[val];
+                                    });
+                                    _.map(result, val)[0].push(row);
+                                    console.log(_.map(result, val)[0].length)
+                                }
+                            })
+
+                            _.each(_.map(row.entries, 'doubleexposure3'), function(val,i) {
+                                if (val) {
+                                    var result = arr.filter(function( obj ) {
+                                        return obj[val];
+                                    });
+                                    _.map(result, val)[0].push(row);
+                                    console.log(_.map(result, val)[0].length)
+                                }
+                            })
+
                         }
                     })
                 }
