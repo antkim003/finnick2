@@ -141,12 +141,31 @@ router.get('/combobulator', function (req, res, next) {
                         row.__v = undefined;
                         row.locked = undefined;
 
+                        if (e.columnName == 'killedrow') {
+                            if (e.data == 'true') {
+                                 row.killed = 'KILLED';
+                            }
+                        }
+
                         if (i == row.entries.length-1){
                             row.entries = _.compact(row.entries);
 
-                            if (row.entries.killedrow != 'true') {
-                                main[row.fob].push(row)
+
+                            //pushing row to fob array
+                            if (row.killed != 'KILLED') {
+                                main[row.fob].push(row);
                             }
+
+
+                            //delete if killed?
+//                            _.find(_.map(row.entries, 'killedrow'), function(val) {
+//                                if (val == 'true') {
+//                                    console.log(val);
+//                                } else {
+//                                    main[row.fob].push(row);
+//                                }
+//                            });
+
 
                             _.each(_.map(row.entries, 'doubleexposure'), function(val,i) {
                                 if (val) {
@@ -154,7 +173,7 @@ router.get('/combobulator', function (req, res, next) {
                                         return obj[val];
                                     });
                                     _.map(result, val)[0].push(row);
-                                    console.log(_.map(result, val)[0].length)
+//                                    console.log(_.map(result, val)[0].length)
                                 }
                             })
 
@@ -164,7 +183,7 @@ router.get('/combobulator', function (req, res, next) {
                                         return obj[val];
                                     });
                                     _.map(result, val)[0].push(row);
-                                    console.log(_.map(result, val)[0].length)
+//                                    console.log(_.map(result, val)[0].length)
                                 }
                             })
 
@@ -174,7 +193,7 @@ router.get('/combobulator', function (req, res, next) {
                                         return obj[val];
                                     });
                                     _.map(result, val)[0].push(row);
-                                    console.log(_.map(result, val)[0].length)
+//                                    console.log(_.map(result, val)[0].length)
                                 }
                             })
 
@@ -184,6 +203,7 @@ router.get('/combobulator', function (req, res, next) {
             })
         })
     }).then(function() {
+
         var end = new Date() - start;
         console.info("Execution time: %dms", end);
         res.json(arr);
