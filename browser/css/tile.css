@@ -146,8 +146,8 @@
     display: none;
 }
 .sectionwrap {
-    width: 960px;
-    margin-left: -30px;
+    width: 100vw;
+    /*margin-left: -30px;*/
     display:none;
 }
 .sectionwrap h4{

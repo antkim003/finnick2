@@ -8,30 +8,29 @@ var Tiles = React.createClass({
     displayName: 'Tiles',
     getInitialState: function() {
         var self = this;
-        var t;
+//        var t;
+        return {
+            data: [],
+            loaderState: true
+        }
+    },
+    componentWillMount() {
+        var self = this;
         var getdata = function(q) {
 //            var fob = `/${query}`;
             $.ajax({
                 type: "GET",
                 url: '/api/rows/combobulator',
                 success: function (datacomb) {
-                    t = datacomb;
+                    var t = datacomb;
                     self.setState({
                         data: t
                     });
                     self.setState({ loaderState: false });
-
-//                    console.log(self.state)
-//                    fobs.push()
                 }
             })
         }
         getdata();
-
-        return {
-            data: t,
-            loaderState: true
-        }
     },
     render(){
     var self = this;
