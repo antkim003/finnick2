@@ -77,7 +77,7 @@ render() {
                         _.each(e.entries,function(el,i){
                             if (el.hasOwnProperty('sortnumber')) {t=i;}
                         })
-                        return e.entries[t].sortnumber;
+                        return parseInt(e.entries[t].sortnumber);
                     })
                         return <TileInd data={sorted}/>
                     }
