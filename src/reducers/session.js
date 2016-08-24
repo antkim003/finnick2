@@ -7,7 +7,8 @@ const INITIAL_STATE = { user: null };
 export default function(state = INITIAL_STATE, action) {
   switch (action.type) {
     case FETCH_SESSION:
-      return { ...state, user: action.payload.data.user };
+      var obj = { ...state, user: action.payload.data.user };
+      return obj
     default:
       return state;
   }
