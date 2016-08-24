@@ -65,10 +65,26 @@ render() {
         img = '<img src="http://slimages.macys.com/is/image/MCY/products/6/optimized/'+this.state.data.imageid+'_fpx.tif?bgc=255,255,255&amp;wid=228&amp;qlt=90,0&amp;fmt=jpeg" className="tile-img"/>'
     } else if (this.state.data.arimageid != null) {
         img = '<img src="http://storage.googleapis.com/imp-projects/finnick/arimages/'+this.state.data.arimageid+'.jpg" class="tile-img"/>'
-
     }
 
-    function createMarkup() { return {__html: img}; };
+
+    var alsoinpetite = '';
+    if (this.state.data.alsoinpetites) {
+        alsoinpetite = "also in petite"
+    }
+
+
+    var tileclass = 'tile-title_1 tile-title';
+    if( this.state.data.tilestyle == 2 || this.state.data.tilestyle == 4 ) {
+        tileclass = 'tile-title_1 tile-title narrow';
+    }
+    var pretext = '';
+    if ( this.state.data.tilestyle == 4 ) {
+        pretext =  this.state.data.category
+    }
+
+
+    function createMarkup(html) { return {__html: html}; };
 
     var mapnames = {
         'intlWomen' : "International Women",
@@ -141,15 +157,16 @@ render() {
 
                 <div className={'tile'}>
                     <div className="tile-img-wrap">
-                        <div dangerouslySetInnerHTML={createMarkup()} />
+                        <div dangerouslySetInnerHTML={createMarkup(img)} />
                     </div>
                     <div className="tile-content">
-                        <span className="tile-title_1 tile-title">{this.state.data.tilecopy1}</span>
+                        <div className="pretext" dangerouslySetInnerHTML={createMarkup(pretext)} />
+                        <span className={tileclass}>{this.state.data.tilecopy1}</span>
                         <span className="tile-title_2 tile-title">{this.state.data.tilecopy2}</span>
                         <p className="tile-desc">
                             <span className="tile-desc-line_1 tile-desc-line">{this.state.data.tilecopy3}</span>
                             <span className="tile-desc-line_2 tile-desc-line">{this.state.data.tilecopy4}</span>
-                            <span className="tile-desc-line tile-desc-line_3">{this.state.data.tilecopy4}</span>
+                            <span className="tile-desc-line tile-desc-line_3">{alsoinpetite}</span>
                         </p>
                         <div className="tile-btns">
                         </div>
@@ -157,7 +174,10 @@ render() {
                     <div className="imageinfo">
                         <div className="imageinfo-hover">i</div>
                         <div className="imageinfo-hidden">
-                            {this.state.data.imageid? '' : 'AR '}Image ID: {this.state.data.imageid || this.state.data.arimageid}<br/>Row: {this.state.data.id} <br/>Sort: {this.state.data.sortnumber}
+                            {this.state.data.imageid ? '' : 'AR '}Image ID: {this.state.data.imageid || this.state.data.arimageid} <br/>
+                            Row: {this.state.data.id} <br/>
+                            Sort: {this.state.data.sortnumber} <br/>
+                            Style: {this.state.data.tilestyle}
                         </div>
                     </div>
 
