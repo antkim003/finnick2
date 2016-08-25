@@ -54,7 +54,7 @@ module.exports = React.createClass({
                 {isFunction(columnNames) ? columnNames(columns) : <thead><ColumnNames config={columnNames} columns={columns} /></thead>}
                 <tbody>
                     {data.map((row, i) => <tr
-                    data-id={_.sortBy(window.data, 'index')[i]._id}
+                    data-id={_.sortBy(this.props.data, 'index')[i]._id}
                     key={(row[rowKey] || i) + '-row'}
                     data-killed={row['killedrow']}
                     data-locked={row['lockedrow']}
@@ -97,7 +97,7 @@ module.exports = React.createClass({
                             var values = {};
 
                             var rowid = parseInt(row.id-1);
-                            var entryId = _.find(_.sortBy(window.data, 'index')[rowid].entries, function(entry){
+                            var entryId = _.find(_.sortBy(this.props.data, 'index')[rowid].entries, function(entry){
                                         if( entry.columnName == property) {
                                             return entry;
                                         }
@@ -108,7 +108,7 @@ module.exports = React.createClass({
                                 entryId = null;
                             }
 
-                            return <td data-id={entryId} data-parent-id={_.sortBy(window.data, 'index')[i]._id} data-property={property} data-edit={column.cell.length == 0 ? 'noedit' : 'editor'} data-cell={rowid+'-'+property} data-active={content.props.activeEdit}
+                            return <td data-id={entryId} data-parent-id={_.sortBy(this.props.data, 'index')[i]._id} data-property={property} data-edit={column.cell.length == 0 ? 'noedit' : 'editor'} data-cell={rowid+'-'+property} data-active={content.props.activeEdit}
                             rel={`js-cell-${j}-${row[rowKey] || i}`}
                             className={`cellblock cell-${j} ${(row[rowKey] || i)}-${property}`} key={j + '-cell'} {...content.props} >{content.value}</td>;
                         }

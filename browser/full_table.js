@@ -50,53 +50,19 @@ module.exports = React.createClass({
             browserHistory.push( window.location.pathname + '?' + (window.user.collections[0] || 'women'));
             query = window.user.collections[0] ? window.user.collections[0] : 'women';
         }
-        var getdata = function(q) {
-            var fob = `/${query}`;
-            $.ajax({
-                type: "GET",
-                url: '/api/rows' + fob,
-                success: function (data1) {
-                    var allrows = _.map(data1, 'entries');
-                    var columns = window.coledit;
-                    window.data = data1;
-                    var arr = [];
-                    _.each(allrows, function (row, i) {
-                        //fill in empty subcategories
-                        var allobj = _.zipObject(_.map(columns, 'property'), _.range(columns.length).map(function () {
-                            return ''
-                        }));
-                        _.each(row, function (cell, j) {
-                            var all = {};
-                            if (cell.columnName != 'sortnumber' && cell.columnName != 'id') {
-                                all[cell.columnName] = cell.data;
-                            } else {
-                                all[cell.columnName] = parseInt(cell.data);
-                            }
-                            all.rowIndex = parseInt(cell.rowIndex);
-                            _.extend(allobj, all)
-                        });
-                        arr.push(allobj);
-                    });
-                    window.statedata = _.sortBy(arr, 'rowIndex');
-
-                    self.setState({
-                        data: _.sortBy(arr, 'rowIndex')
-                    });
-
-                    self.setState({ loaderState: false });
-
-                }
-            })
-        }
-        $.when(columnstoedit(self)).done(function( ) {
-            getdata()
-        });
 
         window.hiding = [];
 
+
+        $.when(columnstoedit(self)).done(function( ) {
+            console.log('initial state done');
+        });
+
+
+
         return {
             editedCell: null,
-            data: statedata,
+            data: [],
             formatters: null,
             search: {
                 column: '',
@@ -156,6 +122,31 @@ module.exports = React.createClass({
             );
     },
 
+    componentWillMount() {
+        var self = this;
+        var query = window.location.search.split('?')[1];
+        var getdata = function(q) {
+            var fob = `/${query}`;
+            $.ajax({
+                type: "GET",
+                url: '/api/rows/repurposed' + fob,
+                success: function (data1) {
+                    console.log('will mount cat')
+                    var arr = data1;
+                    window.statedata = _.sortBy(arr, 'rowIndex');
+                    self.setState({
+                        data: _.sortBy(arr, 'rowIndex')
+                    });
+                    self.setState({ loaderState: false });
+                }
+            })
+        }
+        $.when(columnstoedit(self)).done(function( ) {
+            getdata()
+        });
+
+    },
+
     componentDidMount() {
         var self = this;
         // modified for loop to just replace the current array instead of creating a new one with map.
@@ -169,7 +160,7 @@ module.exports = React.createClass({
                     });
                 });
                 self.setState({
-                    data: window.statedata
+                    data: this.state.data
                 });
             }
         });
@@ -554,21 +545,15 @@ module.exports = React.createClass({
                 contentType: "application/json",
                 success: function() {
                     window.socket.emit('my other event', { val: value, row: window.row-1 });
-    //                window.datainterval;
-    //                window.location.reload(true);
                     _.each(cellsincol, function(cell, i) {
                         self.state.data[cell.rowIndex-1][column] = value;
                         if (i == cellsincol.length-1) {
-    //                        setTimeout(function(){
                                 self.setState({
                                     data: query ? _.filter(_.sortBy(statedata, 'rowIndex'), function(d) { return d.category == query}) : statedata
                                 });
                                 self.refs.modal.hide();
-    //                        }, 1000)
                         }
                     })
-
-    //
                 }
 
             })
