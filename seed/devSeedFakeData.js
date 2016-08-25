@@ -109,8 +109,12 @@ var seedRowData = function(name, size) {
                     break;
                 case "sortnumber":
                     obj['data'] = i+1;
+                    break;
                 case "arimageid":
                     obj['data'] = "2847203";
+                    break;
+                case "name":
+                    obj['data'] = faker.commerce.productName().toString();
                     break;
                 case "tilecopy1":
                     obj['data'] = faker.commerce.productName().toString();
