@@ -151,18 +151,22 @@ module.exports = React.createClass({
         var self = this;
         // modified for loop to just replace the current array instead of creating a new one with map.
         window.socket.on('new data', function(data) {
-            if (window.statedata[0].category === data[0].fob) {
-                window.statedata.forEach(function(row, rowIdx){
-                    data.forEach(function(cell, cellIdx){
-                        if (row.rowIndex === cell.rowIndex) {
-                            row[cell.columnName] = cell.data;
-                        }
-                    });
-                });
-                self.setState({
-                    data: this.state.data
-                });
+            var getdata = function(q) {
+                var fob = window.statedata[0].category;
+                $.ajax({
+                    type: "GET",
+                    url: '/api/rows/repurposed/' + fob,
+                    success: function (data) {
+                        var arr = data;
+                        window.statedata = _.sortBy(arr, 'rowIndex');
+                        self.setState({
+                            data: _.sortBy(arr, 'rowIndex')
+                        });
+                        self.setState({ loaderState: false });
+                    }
+                })
             }
+            getdata();
         });
     },
 

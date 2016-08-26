@@ -102,13 +102,14 @@ module.exports = React.createClass({
                                             return entry;
                                         }
                                     })
+                            var id = rowid-1;
                             if (typeof entryId != 'undefined') {
                                 entryId = entryId._id;
                             } else {
                                 entryId = null;
                             }
 
-                            return <td data-id={entryId} data-parent-id={_.sortBy(this.props.data, 'index')[i]._id} data-property={property} data-edit={column.cell.length == 0 ? 'noedit' : 'editor'} data-cell={rowid+'-'+property} data-active={content.props.activeEdit}
+                            return <td data-id={entryId} data-parent-id={_.sortBy(this.props.data, 'index')[i]._id} data-property={property} data-edit={column.cell.length == 0 ? 'noedit' : 'editor'} data-cell={id+'-'+property} data-active={content.props.activeEdit}
                             rel={`js-cell-${j}-${row[rowKey] || i}`}
                             className={`cellblock cell-${j} ${(row[rowKey] || i)}-${property}`} key={j + '-cell'} {...content.props} >{content.value}</td>;
                         }
