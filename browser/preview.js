@@ -8,16 +8,35 @@ var Tiles = React.createClass({
     displayName: 'Tiles',
     getInitialState: function() {
         var self = this;
-//        var t;
+
         return {
             data: [],
-            loaderState: true
+            loaderState: true,
+            img: false
         }
     },
     componentWillMount() {
         var self = this;
+        var d = new Date();
+
+        var getProductionVarPreview = function() {
+            $.ajax({
+                type: "GET",
+                url: '//storage.googleapis.com/imp-projects/finnick/previewvar.js?'+d.getTime(),
+                dataType: 'json',
+                success: function (datavar) {
+                    var t = datavar.onlytileimageload;
+                    self.setState({
+                        img: t
+                    });
+                },
+                error: function (req, status, err) {
+                    console.log('Something went wrong', status, err);
+                }
+            })
+        }
+        getProductionVarPreview();
         var getdata = function(q) {
-//            var fob = `/${query}`;
             $.ajax({
                 type: "GET",
                 url: '/api/rows/combobulator',
@@ -39,7 +58,7 @@ var Tiles = React.createClass({
 
                 {self.state.loaderState ? <Loader loaderMsg={'please be patient, creating all tiles for all FOB'} /> : null}
 
-                <Tile data={self.state.data} />
+                <Tile data={self.state.data} img={self.state.img}/>
             </div>
         )
     }

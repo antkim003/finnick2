@@ -15,6 +15,7 @@ module.exports = React.createClass({
     getDefaultProps() {
     return {
         data: [],
+        img: false
     };
 },
 
@@ -79,7 +80,7 @@ render() {
                         })
                         return parseInt(e.entries[t].sortnumber);
                     })
-                        return <TileInd data={sorted}/>
+                        return <TileInd data={sorted} img={this.props.img}/>
                     }
                 )}
                 {this.props.children}

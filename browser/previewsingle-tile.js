@@ -18,8 +18,31 @@ module.exports = React.createClass({
     },
 getInitialState: function() {
     return {
-        data: []
+        data: [],
+        img: false
     }
+},
+
+componentWillMount() {
+    var d = new Date();
+    var self = this;
+    var getProductionVarPreview = function() {
+        $.ajax({
+            type: "GET",
+            url: '//storage.googleapis.com/imp-projects/finnick/previewvar.js?'+d.getTime(),
+            dataType: 'json',
+            success: function (datavar) {
+                var t = datavar.onlytileimageload;
+                self.setState({
+                    img: t
+                });
+            },
+            error: function (req, status, err) {
+                console.log('Something went wrong', status, err);
+            }
+        })
+    }
+    getProductionVarPreview();
 },
 
 render() {
@@ -32,6 +55,9 @@ render() {
             data: undefined,
         }
     });
+
+
+
 
     function gettile(e) {
         e.preventDefault();
@@ -60,11 +86,22 @@ render() {
         })
     }
 
+    var filtertileimage = (this.state.data.tileimage != null && this.state.data.tileimage != "") || this.state.img;
+    var imgsrc = '';
+    if (filtertileimage) {
+        imgsrc = this.state.data.tileimage;
+    } else {
+        if (this.state.data.imageid != null && this.state.data.imageid != "") {
+            imgsrc = this.state.data.imageid;
+        } else if (this.state.data.arimageid != null) {
+            imgsrc = this.state.data.arimageid;
+        }
+    }
     var img = '';
     if (this.state.data.imageid != null && this.state.data.imageid != "") {
-        img = '<img src="http://slimages.macys.com/is/image/MCY/products/6/optimized/'+this.state.data.imageid+'_fpx.tif?bgc=255,255,255&amp;wid=228&amp;qlt=90,0&amp;fmt=jpeg" className="tile-img"/>'
+        img = '<img src="http://slimages.macys.com/is/image/MCY/products/6/optimized/'+imgsrc+'_fpx.tif?bgc=255,255,255&amp;wid=228&amp;qlt=90,0&amp;fmt=jpeg" className="tile-img"/>'
     } else if (this.state.data.arimageid != null) {
-        img = '<img src="http://storage.googleapis.com/imp-projects/finnick/arimages/'+this.state.data.arimageid+'.jpg" class="tile-img"/>'
+        img = '<img src="http://storage.googleapis.com/imp-projects/finnick/arimages/'+imgsrc+'.jpg" class="tile-img"/>'
     }
 
 

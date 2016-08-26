@@ -15,6 +15,7 @@ module.exports = React.createClass({
     getDefaultProps() {
     return {
         data: [],
+        img: false
     };
 },
 
@@ -62,15 +63,9 @@ render() {
         <div {...props} className={Object.keys(data).toString().replace('&','and')+ ' sectionwrap'}>
             <h4>{mapnames[Object.keys(data)] || Object.keys(data)}</h4>
                      {data[Object.keys(data)].map((fob, i) => {
-                         var filteredname = _.filter(fob.entries, function(d) { return d.hasOwnProperty('name') });
-
-                         if(filteredname[0].name != 'null' && filteredname[0].name && filteredname[0].name != '') {
-                            return <TileIndCell data={fob}/>
-                         }
+                            return <TileIndCell data={fob} img={this.props.img}/>
                         }
                      )}
-
-
                 {this.props.children}
         </div>
         );

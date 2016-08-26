@@ -22,10 +22,12 @@ router.get('/:id', function (req, res, next) {
     next()
 });
 router.get('/:fob/:row', function (req, res, next) {
-    Cell.find({ fob: req.params.fob , rowIndex: req.params.row-1 }).then(function(cell) {
+    Cell.find({ fob: req.params.fob , rowIndex: req.params.row-1 }).lean().then(function(cell) {
         var newobj = {};
         _.each(cell, function(entry, i) {
-            newobj[entry.columnName] = entry.data;
+            if (!newobj[entry.columnName]) {
+                newobj[entry.columnName] = entry.data;
+            }
         })
         return newobj;
     }).then(function(newobj){

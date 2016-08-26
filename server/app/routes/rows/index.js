@@ -108,7 +108,6 @@ router.get('/combobulator', function (req, res, next) {
                                 e.columnName == 'extra' ||
                                 e.columnName == 'extraomniprojectedsales' ||
                                 e.columnName == 'featureproductid' ||
-                                e.columnName == 'instorespecial' ||
                                 e.columnName == 'livedate' ||
                                 e.columnName == 'markettointernational' ||
                                 e.columnName == 'needsavedset' ||

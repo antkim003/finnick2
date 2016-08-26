@@ -14,6 +14,7 @@ module.exports = React.createClass({
     getDefaultProps() {
     return {
         data: [],
+        img: false
     };
 },
 
@@ -32,6 +33,10 @@ render() {
     var filteredcategory = _.filter(entries, function(d) { return d.hasOwnProperty('category') });
     var filteredimage = _.filter(entries, function(d) { return d.hasOwnProperty('imageid') });
     var filteredarimage = _.filter(entries, function(d) { return d.hasOwnProperty('arimageid') });
+    var filtertileimage = _.filter(entries, function(d) { return d.hasOwnProperty('tileimage') });
+    var tileimagear = filtertileimage[0].tileimage || this.props.img ? filtertileimage[0].tileimage : filteredarimage[0].arimageid;
+    var tileimage = filtertileimage[0].tileimage || this.props.img ? filtertileimage[0].tileimage : filteredimage[0].imageid;
+
     var filteredcopy = _.filter(entries, function(d) { return d.hasOwnProperty('tilecopy1') });
     var filteredcopy2 = _.filter(entries, function(d) { return d.hasOwnProperty('tilecopy2') });
     var filteredcopy3 = _.filter(entries, function(d) { return d.hasOwnProperty('tilecopy3') });
@@ -46,12 +51,11 @@ render() {
         alsoinpetite = "also in petite"
     }
 
-
     var img = '';
     if (filteredimage[0].imageid) {
-        img = '<img src="http://slimages.macys.com/is/image/MCY/products/6/optimized/'+filteredimage[0].imageid+'_fpx.tif?bgc=255,255,255&amp;wid=228&amp;qlt=90,0&amp;fmt=jpeg" className="tile-img"/>'
+        img = '<img src="http://slimages.macys.com/is/image/MCY/products/6/optimized/'+tileimage+'_fpx.tif?bgc=255,255,255&amp;wid=228&amp;qlt=90,0&amp;fmt=jpeg" className="tile-img"/>'
     }else {
-        img = '<img src="http://storage.googleapis.com/imp-projects/finnick/arimages/'+filteredarimage[0].arimageid+'.jpg" class="tile-img"/>'
+        img = '<img src="http://storage.googleapis.com/imp-projects/finnick/arimages/'+tileimagear+'.jpg" class="tile-img"/>'
     }
     var tileclass = 'tile-title_1 tile-title';
     if( tilestyle[0].tilestyle == 2 || tilestyle[0].tilestyle == 4 ) {
