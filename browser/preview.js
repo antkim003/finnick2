@@ -19,23 +19,23 @@ var Tiles = React.createClass({
         var self = this;
         var d = new Date();
 
-        var getProductionVarPreview = function() {
-            $.ajax({
-                type: "GET",
-                url: '//storage.googleapis.com/imp-projects/finnick/previewvar.js?'+d.getTime(),
-                dataType: 'json',
-                success: function (datavar) {
-                    var t = datavar.onlytileimageload;
-                    self.setState({
-                        img: t
-                    });
-                },
-                error: function (req, status, err) {
-                    console.log('Something went wrong', status, err);
-                }
-            })
-        }
-        getProductionVarPreview();
+//        var getProductionVarPreview = function() {
+//            $.ajax({
+//                type: "GET",
+//                url: '//storage.googleapis.com/imp-projects/finnick/previewvar.js?'+d.getTime(),
+//                dataType: 'json',
+//                success: function (datavar) {
+//                    var t = datavar.onlytileimageload;
+//                    self.setState({
+//                        img: t
+//                    });
+//                },
+//                error: function (req, status, err) {
+//                    console.log('Something went wrong', status, err);
+//                }
+//            })
+//        }
+//        getProductionVarPreview();
         var getdata = function(q) {
             $.ajax({
                 type: "GET",
