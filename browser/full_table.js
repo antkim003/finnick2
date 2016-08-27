@@ -124,31 +124,36 @@ module.exports = React.createClass({
 
     componentWillMount() {
         var self = this;
-        var query = window.location.search.split('?')[1];
-        var getdata = function(q) {
-            var fob = `/${query}`;
-            $.ajax({
-                type: "GET",
-                url: '/api/rows/repurposed' + fob,
-                success: function (data1) {
-                    console.log('will mount cat')
-                    var arr = data1;
-                    window.statedata = _.sortBy(arr, 'rowIndex');
-                    self.setState({
-                        data: _.sortBy(arr, 'rowIndex')
-                    });
-                    self.setState({ loaderState: false });
-                }
-            })
-        }
-        $.when(columnstoedit(self)).done(function( ) {
-            getdata()
-        });
+
 
     },
 
     componentDidMount() {
         var self = this;
+
+
+    var query = window.location.search.split('?')[1];
+    var getdata = function(q) {
+        var fob = `/${query}`;
+        $.ajax({
+            type: "GET",
+            url: '/api/rows/repurposed' + fob,
+            success: function (data1) {
+                console.log('will mount cat')
+                var arr = data1;
+                window.statedata = _.sortBy(arr, 'rowIndex');
+                self.setState({
+                    data: _.sortBy(arr, 'rowIndex')
+                });
+                self.setState({ loaderState: false });
+            }
+        })
+    }
+    $.when(columnstoedit(self)).done(function( ) {
+        getdata()
+    });
+
+
         // modified for loop to just replace the current array instead of creating a new one with map.
         window.socket.on('new data', function(data) {
             var getdata = function(q) {
