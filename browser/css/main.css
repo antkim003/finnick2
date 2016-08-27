@@ -534,3 +534,9 @@ input[type="checkbox"] {
     padding-left: 0;
     padding-right: 0;
 }
+[data-photoprogress="yellow"] {
+    background: #fff000;
+}
+[data-photoprogress="green"] {
+    background: #14ff0c;
+}

@@ -39,6 +39,7 @@ export function logoutUser() {
       .then(response => {
         dispatch({ type: UNAUTH_USER});
         localStorage.removeItem('token');
+        localStorage.removeItem('all');
         localStorage.removeItem('user');
         return { type: UNAUTH_USER };
       })
@@ -63,9 +64,11 @@ export function fetchSession() {
       .then( response => {
         dispatch({ type: AUTH_USER });
         localStorage.setItem('token',response.data.token);
+        localStorage.setItem('all', JSON.stringify(response.data));
 
         var oldUser = JSON.parse(localStorage.all).user;
         if (oldUser.updatedAt != response.data.user.updatedAt) {
+          localStorage.setItem('all', JSON.stringify(response.data));
           localStorage.setItem('user', JSON.stringify(response.data.user));
         }
 
@@ -74,6 +77,7 @@ export function fetchSession() {
       .catch( response => {
         dispatch({ type: UNAUTH_USER });
         localStorage.removeItem('token');
+        localStorage.removeItem('all');
         localStorage.removeItem('user');
 })
   }

@@ -1,3 +1,4 @@
+"use strict";
 const mongoose = require('mongoose');
 const Promise = require('bluebird');
 const chalk = require('chalk');
@@ -13,7 +14,7 @@ const wipeCollections = function () {
     ]);
 };
 
-seedPermissions = function() {
+var seedPermissions = function() {
     return Permission.create(permissionsArr);
 }
 

@@ -9,9 +9,12 @@ class NavBar extends Component {
         [<li className="nav-item" key="n1">
           <Link className="nav-link" to="/admin" key="n1-1">Admin</Link>
         </li>,
-        // <li className="nav-item" key="n3">
-        //   <Link className="nav-link" to="/combobulator" key="n1-1">Combobulator</Link>
-        // </li>,
+        <li className="nav-item" key="n3">
+           <Link className="nav-link" to="/combobulator" key="n1-1">Preview FOB</Link>
+        </li>,
+        <li className="nav-item" key="n4">
+            <Link className="nav-link" to="/combobulator/tile" key="n1-1">Preview Single Tile</Link>
+        </li>,
         <li className="nav-item" key="n2">
           <Link className="nav-link" to="/logout" key="n2-1">Log Out</Link>
         </li>]

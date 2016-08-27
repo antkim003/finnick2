@@ -14,7 +14,14 @@ var ensureAuthenticated = function (req, res, next) {
 };
 
 router.get('/', ensureAuthenticated, function (req, res, next) {
-    Cell.find().then(function(cells) {
-        res.json(cells);
-    });
+//    Cell.find().then(function(cells) {
+        res.send('');
+//    });
+});
+
+router.get('/tile', ensureAuthenticated, function (req, res, next) {
+    res.send('');
+//    Cell.find().then(function(cells) {
+//        res.json(cells);
+//    });
 });

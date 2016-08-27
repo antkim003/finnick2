@@ -26,6 +26,7 @@ module.exports = (attrs) => {
             }, 10);
             return (
                 <input
+                    maxLength="75"
                     ref="jsInputField"
                     rel="js-input-field"
                     className="form-control"

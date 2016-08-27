@@ -7,6 +7,10 @@ module.exports =
             permission: ['subcategories','notesoncategory','doubleexposure','doubleexposuresubcategory','doubleexposure2','doubleexposuresubcategory2','doubleexposure3','mcomspecialprice', 'doubleexposuresubcategory3','instorespecial','storeregularprice','storespecialprice','mcomspecial','pricinginfo','mcomregprice','pricingcomments','markettointernational','projectedunits','projectedsales','notesfrombuyersimg','salesfor2015','imageid','arimageid','singleormultiple','featureproductid','alsoinpetites','livedate','omniprojectedsales','extraomniprojectedsales','typeofspecial']
         },
         {
+            type: 'buyer',
+            permission: ['subcategories','notesoncategory','doubleexposure','doubleexposuresubcategory','doubleexposure2','doubleexposuresubcategory2','doubleexposure3','mcomspecialprice', 'doubleexposuresubcategory3','instorespecial','storeregularprice','storespecialprice','mcomspecial','pricinginfo','mcomregprice','pricingcomments','markettointernational','projectedunits','projectedsales','notesfrombuyersimg','salesfor2015','imageid','arimageid','singleormultiple','featureproductid','alsoinpetites','livedate','omniprojectedsales','extraomniprojectedsales','typeofspecial']
+        },
+        {
             type: 'admin',
             permission: ['all']
         },
