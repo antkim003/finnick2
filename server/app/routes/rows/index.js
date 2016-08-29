@@ -210,10 +210,13 @@ router.get('/combobulator', function (req, res, next) {
 });
 
 router.get('/:category', function(req,res,next) {
-    Row.find({fob: req.params.category}).lean().populate('entries').then(function (rows) {
-        res.json(rows);
-    });
-    next();
+    if (req.params.category != 'combobulator') {
+        Row.find({fob: req.params.category}).lean().populate('entries').then(function (rows) {
+            res.json(rows);
+        });
+    } else {
+        next();
+    }
 });
 
 router.post('/boost', function(req,res,next) {
