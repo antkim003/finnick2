@@ -213,6 +213,7 @@ router.get('/:category', function(req,res,next) {
     Row.find({fob: req.params.category}).lean().populate('entries').then(function (rows) {
         res.json(rows);
     });
+    next();
 });
 
 router.post('/boost', function(req,res,next) {
