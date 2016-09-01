@@ -61,6 +61,7 @@ router.get('/combobulator', function (req, res, next) {
         console.info("Execution keys time: %dms", keys);
         return categoriesarr;
     }).then(function(obj) {
+        res.writeContinue();
         _.each(obj, function(main,idx){
             _.each(_rows, function(row,idx2) {
                 if (row.fob == Object.keys(main)[0]) {
