@@ -1,6 +1,7 @@
 var React = require('react');
 var Tile = require('./preview-tile.js');
 import Loader from '../src/components/loader/loader.js';
+var sockets = require('./sockets.js');
 
 var fobs = [];
 
@@ -18,7 +19,7 @@ var Tiles = React.createClass({
     componentWillMount() {
         var self = this;
         var d = new Date();
-
+        sockets();
 //        var getProductionVarPreview = function() {
 //            $.ajax({
 //                type: "GET",
@@ -49,7 +50,21 @@ var Tiles = React.createClass({
                 }
             })
         }
-        getdata();
+
+        var getdata1 = function(q) {
+            setTimeout(function(){
+                window.socket.emit('getcombo', []);
+            }, 1000)
+        }
+        getdata1();
+
+    window.socket.on('donegetcombo', function (data) {
+        self.setState({
+            data: data
+        });
+        self.setState({ loaderState: false });
+    });
+
     },
     render(){
     var self = this;

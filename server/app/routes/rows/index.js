@@ -8,7 +8,10 @@ var ColumnIndex = require('mongoose').model('ColumnIndex');
 var Promise = require('bluebird');
 const http = require('http');
 //const blankRow = require('./blankRowTemplate.js');
+var socketio = require('socket.io');
+var io = null;
 
+var socket = require('../../../io');
 var ensureAuthenticated = function (req, res, next) {
     if (req.isAuthenticated()) {
         next();
@@ -28,6 +31,8 @@ router.get('/combobulator', function (req, res, next) {
     var start = new Date();
     var arr = [];
     var _rows;
+//    console.log(socket.testserver);
+
     Row.find().lean().populate('entries').then(function(rows) {
         _rows = rows;
         var categoriesarr = [
@@ -61,7 +66,6 @@ router.get('/combobulator', function (req, res, next) {
         console.info("Execution keys time: %dms", keys);
         return categoriesarr;
     }).then(function(obj) {
-        res.writeContinue();
         _.each(obj, function(main,idx){
             _.each(_rows, function(row,idx2) {
                 if (row.fob == Object.keys(main)[0]) {
@@ -203,12 +207,17 @@ router.get('/combobulator', function (req, res, next) {
             })
         })
     }).then(function() {
-
+        socket.testserver.on('connection', function (socket1) {
+            console.log('connected')
+            socket1.emit('test', {});
+        });
         var end = new Date() - start;
         console.info("Execution time: %dms", end);
         res.json(arr);
     })
 });
+
+
 
 router.get('/:category', function(req,res,next) {
     if (req.params.category != 'combobulator') {
@@ -378,3 +387,5 @@ router.post('/moverow', function(req,resp,next){
 
 
 });
+
+

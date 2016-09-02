@@ -187,7 +187,7 @@ window.coledit =     [
     header: 'Double Exposure',
     info: 'additional category/fob for product',
     cell: [app.editable({
-        editor: editors.checkbox(categoriesandsub)
+        editor: editors.dropdown(categoriesandsub)
     }), app.highlighter('doubleexposure')],
     columnorder: 6
 },
@@ -205,7 +205,7 @@ window.coledit =     [
     header: 'Double Exposure 2',
     info: 'additional category/fob for product',
     cell: [app.editable({
-    editor: editors.checkbox(categoriesandsub3)
+    editor: editors.dropdown(categoriesandsub3)
 }), app.highlighter('doubleexposure2')],
     columnorder: 8
 },
@@ -223,7 +223,7 @@ window.coledit =     [
         header: 'Double Exposure 3',
     info: 'additional category/fob for product',
     cell: [app.editable({
-    editor: editors.checkbox(categoriesandsub)
+    editor: editors.dropdown(categoriesandsub)
 }), app.highlighter('doubleexposure3')],
     columnorder: 10
 },
