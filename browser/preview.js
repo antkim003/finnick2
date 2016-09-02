@@ -9,17 +9,48 @@ var Tiles = React.createClass({
     displayName: 'Tiles',
     getInitialState: function() {
         var self = this;
-        window.dataset = [];
+        window.datlength = []
+        window.dataset = [
+            {"women": []},
+            {"men": []},
+            {"kids": []},
+            {"shoes": []},
+            {"jewlery&watches": []},
+            {"handbags&accessories": []},
+            {"juniors": []},
+            {"beauty": []},
+            {"for_the_home": []},
+            {"kitchen&dining": []},
+            {"bed&bath": []},
+            {"luggage&accessories": []},
+            {"furniture&mattresses": []},
+            {"IntlWomen": []},
+            {"intlmen": []},
+            {"intlkids": []},
+            {"intlshoes": []},
+            {"intljewelry&Watches": []},
+            {"intlhandbags&Accessories": []},
+            {"intljuniors": []},
+            {"intlforthehome": []},
+            {"intlkitchen&dining": []},
+            {"intlbed&bath": []},
+            {"intlluggage&accessories": []}
+        ];
         return {
-            data: [],
+            data: window.dataset,
             loaderState: true,
-            img: false
+            img: false,
+            dataset: []
         }
     },
     componentWillMount() {
         var self = this;
         var d = new Date();
         sockets();
+
+
+
+
 //        var getProductionVarPreview = function() {
 //            $.ajax({
 //                type: "GET",
@@ -71,11 +102,56 @@ var Tiles = React.createClass({
                 type: "GET",
                 url: '/api/rows/combobulator/'+q,
                 success: function (datacomb) {
-                    var t = window.dataset.push(datacomb[0]);
-//                    console.log(window.dassss)
+                    window.datlength.push(datacomb[0]);
+//                    var t = window.dataset.filter(function( obj ) {
+//                        return obj[Object.keys(datacomb[0])];
+//                    });
+
+//                    window.dataset.filter(function( obj ) {
+//                        return obj[Object.keys(datacomb[0])];
+//                    })[0][Object.keys(datacomb[0])].push(datacomb[0][Object.keys(datacomb[0])]);
+//                    console.log(
+                    window.dataset.filter(function( obj ) {
+                        return obj[Object.keys(datacomb[0])];
+                    })[0][Object.keys(datacomb[0])] =
+                        window.dataset.filter(function( obj ) {
+                        return obj[Object.keys(datacomb[0])];
+                        })[0][Object.keys(datacomb[0])].concat(datacomb[0][Object.keys(datacomb[0])])
+//                    );
+                    _.each(datacomb[0][Object.keys(datacomb[0])], function(row, i) {
+                            _.each(_.map(row.entries, 'doubleexposure'), function(val,i) {
+                                if (val) {
+                                    var result =  window.dataset.filter(function( obj ) {
+                                        return obj[val];
+                                    });
+                                    result = result[0][val].push(row);
+                                }
+                            })
+                            _.each(_.map(row.entries, 'doubleexposure2'), function(val,i) {
+                                if (val) {
+                                    var result =  window.dataset.filter(function( obj ) {
+                                        return obj[val];
+                                    });
+                                    result = result[0][val].push(row);
+                                }
+                            })
+                            _.each(_.map(row.entries, 'doubleexposure3'), function(val,i) {
+                                if (val) {
+                                    var result =  window.dataset.filter(function( obj ) {
+                                        return obj[val];
+                                    });
+                                    result = result[0][val].push(row);
+                                }
+                            })
+                    })
+
+
+
+
                     if (
-                        window.dataset.length == Object.keys(mapnames).length
-                        ) {
+                        window.datlength.length == Object.keys(mapnames).length
+                    ) {
+//                        console.log(window.dataset, 'last');
                         self.setState({
                             data: window.dataset
                         });
