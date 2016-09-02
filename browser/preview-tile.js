@@ -29,6 +29,7 @@ render() {
             data: undefined,
         }
     });
+//    console.log(data);
     var query = window.location.search.split('?')[1];
     var mapnames = {
         'intlWomen' : "International Women",

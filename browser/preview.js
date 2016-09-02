@@ -9,7 +9,7 @@ var Tiles = React.createClass({
     displayName: 'Tiles',
     getInitialState: function() {
         var self = this;
-
+        window.dataset = [];
         return {
             data: [],
             loaderState: true,
@@ -37,26 +37,65 @@ var Tiles = React.createClass({
 //            })
 //        }
 //        getProductionVarPreview();
+    var mapnames = {
+        'IntlWomen' : "International Women",
+        'intljuniors': "International Juniors",
+        'intlforthehome': 'International For the Home',
+        'intlkitchen&dining': 'International Kitchen and Dining',
+        'intlbed&bath': 'International Bed and Bath',
+        'intlluggage&accessories': 'International Luggage and Accessories',
+        'handbags&accessories': 'Handbags and Accessories',
+        'juniors': 'Juniors',
+        'beauty': 'Beauty',
+        'for_the_home': 'For the Home',
+        'kitchen&dining': 'Kitchen and Dining',
+        'bed&bath': 'Bed and Bath',
+        'luggage&accessories': 'Luggage and Accessories',
+        'furniture&mattresses': "Furniture and Mattresses",
+        'intlmen': 'International Men',
+        'intlkids': 'International Kids',
+        'intlshoes': "International Shoes",
+        "intljewelry&Watches": 'International Jewelry and Watches',
+        "intlhandbags&Accessories": 'International Handbags and Accessories',
+        'women': "Women",
+        "men": "Men",
+        "kids": "Kids",
+        "shoes": 'Shoes',
+        'jewlery&watches': 'Jewelry and Watches',
+    }
+
+
+
         var getdata = function(q) {
             $.ajax({
                 type: "GET",
-                url: '/api/rows/combobulator',
+                url: '/api/rows/combobulator/'+q,
                 success: function (datacomb) {
-                    var t = datacomb;
-                    self.setState({
-                        data: t
-                    });
-                    self.setState({ loaderState: false });
+                    var t = window.dataset.push(datacomb[0]);
+//                    console.log(window.dassss)
+                    if (
+                        window.dataset.length == Object.keys(mapnames).length
+                        ) {
+                        self.setState({
+                            data: window.dataset
+                        });
+                        self.setState({ loaderState: false });
+                    }
+//                    self.setState({
+//                        data: []
+//                    });
                 }
             })
         }
-
-        var getdata1 = function(q) {
-            setTimeout(function(){
-                window.socket.emit('getcombo', []);
-            }, 1000)
-        }
-        getdata1();
+    _.each(mapnames, function(name, i) {
+        getdata(i)
+    })
+//        var getdata1 = function(q) {
+//            setTimeout(function(){
+//                window.socket.emit('getcombo', []);
+//            }, 1000)
+//        }
+//        getdata1();
 
     window.socket.on('donegetcombo', function (data) {
         self.setState({

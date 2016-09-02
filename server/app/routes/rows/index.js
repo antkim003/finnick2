@@ -218,6 +218,141 @@ router.get('/combobulator', function (req, res, next) {
 });
 
 
+router.get('/combobulator/:category', function (req, res, next) {
+    var start = new Date();
+    var arr = [];
+    var _rows;
+    Row.find({fob: req.params.category}).lean().populate('entries').then(function(rows) {
+        _rows = rows;
+        var obj = {};
+        obj[req.params.category] = [];
+        var categoriesarr = obj;
+        arr = [categoriesarr];
+        var keys = new Date() - start;
+        console.info("Execution keys time: %dms", keys);
+        return categoriesarr;
+    }).then(function(obj) {
+        _.each(_rows, function(row,idx2) {
+            if (row.fob == req.params.category) {
+                _.each(row.entries, function(e, i){
+                    var newobj = {};
+                    if (req.params.category != 'women' && req.params.category != 'IntlWomen'){
+                        if (e.columnName == 'bffavorites' ||
+                            e.columnName == 'extra' ||
+                            e.columnName == 'extraomniprojectedsales' ||
+                            e.columnName == 'featureproductid' ||
+                            e.columnName == 'instorespecial' ||
+                            e.columnName == 'livedate' ||
+                            e.columnName == 'markettointernational' ||
+                            e.columnName == 'needsavedset' ||
+                            e.columnName == 'notesfrombuyersimg' ||
+                            e.columnName == 'notesfromretouchimg' ||
+                            e.columnName == 'notesoncategory' ||
+                            e.columnName == 'plenti' ||
+                            e.columnName == 'projectedunits' ||
+                            e.columnName == 'salesfor2015' ||
+                            e.columnName == 'singleormultiple' ||
+                            e.columnName == 'savedsetid' ||
+                            e.columnName == 'pricingcomments' ||
+                            e.columnName == 'alsoinpetites' ||
+                            e.columnName == 'petitescategoryid' ||
+                            e.columnName == 'petiteslinktype' ||
+                            e.columnName == 'petitesproductid' ||
+                            e.columnName == 'petitessavedset' ||
+                            e.columnName == 'petitesurl'
+                            ) {
+                            delete row.entries[i];
+                        } else {
+                            newobj[e.columnName] = e.data;
+                            row.entries[i] = newobj;
+                        }
+                    } else {
+                        if (e.columnName == 'bffavorites' ||
+                            e.columnName == 'extra' ||
+                            e.columnName == 'extraomniprojectedsales' ||
+                            e.columnName == 'featureproductid' ||
+                            e.columnName == 'livedate' ||
+                            e.columnName == 'markettointernational' ||
+                            e.columnName == 'needsavedset' ||
+                            e.columnName == 'notesfrombuyersimg' ||
+                            e.columnName == 'notesfromretouchimg' ||
+                            e.columnName == 'notesoncategory' ||
+                            e.columnName == 'plenti' ||
+                            e.columnName == 'projectedunits' ||
+                            e.columnName == 'salesfor2015' ||
+                            e.columnName == 'singleormultiple' ||
+                            e.columnName == 'savedsetid' ||
+                            e.columnName == 'pricingcomments'
+
+                            ) {
+                            delete row.entries[i];
+                        } else {
+                            newobj[e.columnName] = e.data;
+                            row.entries[i] = newobj;
+                        }
+                    }
+                    delete row.updatedAt;
+                    delete row.createdAt;
+                    delete row.__v;
+                    delete row.locked;
+
+                    if (e.columnName == 'killedrow') {
+                        if (e.data == 'true') {
+                            row.killed = 'KILLED';
+                        }
+                    }
+
+                    if (i == row.entries.length-1) {
+                        row.entries = _.compact(row.entries);
+//                            console.log(row);
+                        if (row.killed != 'KILLED') {
+                            arr[0][req.params.category].push(row)
+                        }
+
+//                            _.each(_.map(row.entries, 'doubleexposure'), function(val,i) {
+//                                if (val) {
+//                                    var result = arr.filter(function( obj ) {
+//                                        return obj[val];
+//                                    });
+//                                    _.map(result, val)[0].push(row);
+//                                }
+//                            })
+//
+//                            _.each(_.map(row.entries, 'doubleexposure2'), function(val,i) {
+//                                if (val) {
+//                                    var result = arr.filter(function( obj ) {
+//                                        return obj[val];
+//                                    });
+//                                    _.map(result, val)[0].push(row);
+////                                    console.log(_.map(result, val)[0].length)
+//                                }
+//                            })
+//
+//                            _.each(_.map(row.entries, 'doubleexposure3'), function(val,i) {
+//                                if (val) {
+//                                    var result = arr.filter(function( obj ) {
+//                                        return obj[val];
+//                                    });
+//                                    _.map(result, val)[0].push(row);
+////                                    console.log(_.map(result, val)[0].length)
+//                                }
+//                            })
+
+                    }
+
+                })
+            }
+        })
+        return obj;
+
+    }).then(function(obj) {
+        var end = new Date() - start;
+        console.info("Execution time: %dms", end);
+        res.json(arr);
+    })
+});
+
+
 
 router.get('/:category', function(req,res,next) {
     if (req.params.category != 'combobulator') {
