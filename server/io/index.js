@@ -14,22 +14,6 @@ var url = require('url');
 var isDeveloping = process.env.NODE_ENV !== 'production';
 var isTestingServer = process.env.TESTING === 'testing';
 
-// only enable redis cache layer when it's deployed
-// if (!isDeveloping) {
-//   var redisURL = url.parse(process.env.REDISCLOUD_URL || 'localhost:6379' );
-//
-//   var pub = redis.createClient(redisURL.port, redisURL.hostname, {return_buffers: true});
-//   var sub = redis.createClient(redisURL.port, redisURL.hostname, {return_buffers: true});
-//   pub.auth(redisURL.auth.split(":")[1]);
-//   sub.auth(redisURL.auth.split(":")[1]);
-//   var redisOptions = {
-//     pubClient: pub,
-//     subClient: sub,
-//     host: redisURL.hostname,
-//     port: redisURL.port
-//   };
-// }
-
 module.exports = function (server) {
 
     if (io) return io;
@@ -282,4 +266,3 @@ module.exports = function (server) {
     return io;
 
 };
-

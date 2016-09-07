@@ -77,7 +77,7 @@ var columnsTemplate = [
 
 var categories = [
     {
-        name: "women",
+        name: "for_the_home",
         size: 50
     }
 ];
@@ -95,7 +95,7 @@ var seedCategories = function() {
 }
 
 var findCount = function() {
-    return Row.count({fob: 'women'})
+    return Row.count({fob: 'for_the_home'})
         .then(function(count) {
             console.log('heres the count : ', count);
             return count;
@@ -135,7 +135,7 @@ var seedRowData = function(name, size, count) {
     return Promise.map(outerArray, function(row) {
         console.log('heres each row: ', row);
         return Cell.create(row)
-            .then(function(createdrow) {
+            .then(function (createdrow) {
                 // console.log('created row: ', createdrow[0].rowIndex)
                 return Row.create({
                     entries: createdrow,
