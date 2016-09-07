@@ -46,6 +46,9 @@ render() {
     var filteredpetites = _.filter(entries, function(d) { return d.hasOwnProperty('alsoinpetites') });
     var tilestyle = _.filter(entries, function(d) { return d.hasOwnProperty('tilestyle') });
 
+    var instorespecial = _.filter(entries, function(d) { return d.hasOwnProperty('instorespecial') });
+
+
     var alsoinpetite = '';
     if (filteredpetites[0] ? filteredpetites[0].alsoinpetites : '') {
         alsoinpetite = "also in petite"
@@ -93,7 +96,8 @@ render() {
                     {filteredimage[0].imageid ? '' : 'AR '}Image ID: {filteredimage[0].imageid || filteredarimage[0].arimageid} <br/>
                     Row: {filteredid[0].id} <br/>
                     Sort: {filteredsortn[0].sortnumber} <br/>
-                    Style: {tilestyle[0].tilestyle}
+                    Style: {tilestyle[0].tilestyle}<br/>
+                    In Store: {instorespecial[0] ? instorespecial[0].instorespecial : ''}
                 </div>
             </div>
             {this.props.children}

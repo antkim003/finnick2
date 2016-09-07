@@ -26,23 +26,23 @@ getInitialState: function() {
 componentWillMount() {
     var d = new Date();
     var self = this;
-    var getProductionVarPreview = function() {
-        $.ajax({
-            type: "GET",
-            url: '//storage.googleapis.com/imp-projects/finnick/previewvar.js?'+d.getTime(),
-            dataType: 'json',
-            success: function (datavar) {
-                var t = datavar.onlytileimageload;
-                self.setState({
-                    img: t
-                });
-            },
-            error: function (req, status, err) {
-                console.log('Something went wrong', status, err);
-            }
-        })
-    }
-    getProductionVarPreview();
+//    var getProductionVarPreview = function() {
+//        $.ajax({
+//            type: "GET",
+//            url: '//storage.googleapis.com/imp-projects/finnick/previewvar.js?'+d.getTime(),
+//            dataType: 'json',
+//            success: function (datavar) {
+//                var t = datavar.onlytileimageload;
+//                self.setState({
+//                    img: t
+//                });
+//            },
+//            error: function (req, status, err) {
+//                console.log('Something went wrong', status, err);
+//            }
+//        })
+//    }
+//    getProductionVarPreview();
 },
 
 render() {
