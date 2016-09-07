@@ -3,6 +3,7 @@ var router = require('express').Router();
 module.exports = router;
 var _ = require('lodash');
 var User = require('mongoose').model('User');
+var Permission = require('mongoose').model('Permission');
 var Promise = require('bluebird');
 
 var ensureAuthenticated = function (req, res, next) {
@@ -27,10 +28,10 @@ var isLeadOrAdmin = function(req, res, next) {
 };
 
 router.get('/types', function(req, res, next) {
-    User.find({})
-        .then(function(users) {
-            const types = users.map(function(user) {
-                return user.type;
+    Permission.find({})
+        .then(function(permissions) {
+            const types = permissions.map(function(permissions) {
+                return permissions.type;
             });
             let uniqueTypes = _.uniq(types);
             uniqueTypes = uniqueTypes.filter( n => {
