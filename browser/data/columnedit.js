@@ -4,9 +4,9 @@ var editors = require('../../src/editors');
 var Search = require('../../src/search');
 var highlight = require('../../src/formatters/highlight');
 var categoriesandsub = require('./categoriesandsub.js');
-var categoriesandsub1 = categoriesandsub;
-var categoriesandsub2 = categoriesandsub;
-var categoriesandsub3 = categoriesandsub;
+var categoriesandsub1 = _.cloneDeep(categoriesandsub);
+var categoriesandsub2 = _.cloneDeep(categoriesandsub);
+var categoriesandsub3 = _.cloneDeep(categoriesandsub);
 var categoriesandsub4 = categoriesandsub;
 var categoriesandsub5 = categoriesandsub;
 var categoriesandsub6 = categoriesandsub;
@@ -196,7 +196,7 @@ window.coledit =     [
     header: 'Double Exposure Subcategory',
     info: 'subcategories specific to double exposed category',
     cell: [app.editable({
-        editor: editors.checkbox(categoriesandsub1, 'doubleexposure', app)
+        editor: editors.checkboxSub(categoriesandsub1, 'doubleexposure', app)
     }), app.highlighter('doubleexposuresubcategory')],
     columnorder: 7
 },
@@ -214,7 +214,7 @@ window.coledit =     [
         header: 'Double Exposure Subcategory 2',
     info: 'subcategories specific to double exposed category',
     cell: [app.editable({
-    editor: editors.checkbox(categoriesandsub, 'doubleexposure2', app)
+    editor: editors.checkboxSub(categoriesandsub, 'doubleexposure2', app)
 }), app.highlighter('doubleexposuresubcategory2')],
     columnorder: 9
 },
@@ -232,7 +232,7 @@ window.coledit =     [
         header: 'Double Exposure Subcategory 3',
     info: 'subcategories specific to double exposed category',
     cell: [app.editable({
-    editor: editors.checkbox(categoriesandsub1, 'doubleexposure3', app)
+    editor: editors.checkboxSub(categoriesandsub1, 'doubleexposure3', app)
 }), app.highlighter('doubleexposuresubcategory3')],
     columnorder: 11
 },
