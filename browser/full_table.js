@@ -229,7 +229,8 @@ module.exports = React.createClass({
         if (window.user.type == 'photography' || window.user.type == 'admin') { //photography
             buttons.push(<button key="button2" onClick={this.leadSheetHelper}>Lead Sheet Helper</button>)
         }
-        buttons.push(<button key="button-url" onClick={this.checkURL}>Check URLs</button>);
+        var query = window.location.search.split('?')[1];
+        buttons.push(<button key="button-export"><a href={"/api/rows/combobulator/"+query+"/export"}>Export to Excel</a></button>);
 
         var thisuserspermissions = _.filter(userpermissions, function(users) {
             return users.type == user.type
