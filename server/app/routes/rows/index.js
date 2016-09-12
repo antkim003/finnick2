@@ -11,7 +11,7 @@ const http = require('http');
 var socketio = require('socket.io');
 var io = null;
 var fs = require('fs');
-
+var col = require('./columnnamesmap.js')
 //var jsonXlsx = require('icg-json-to-xlsx');
 //var filename = "./output.xlsx";
 
@@ -384,9 +384,13 @@ router.get('/combobulator/:category/export', function(req, res, next) {
                 row.all = {};
                 _.each(row.entries, function(e, i){
                     var newobj = {};
-                    newobj[e.columnName] = e.data;
+                    if (e.columnName != 'id' && e.columnName != 'sortnumber' && e.columnName != 'mcomprojectedsales') {
+                        newobj[col[e.columnName]] = e.data;
+                    } else {
+                        newobj[col[e.columnName]] = parseFloat(e.data);
+                    }
 //                    row.entries[i] = newobj;
-                    row.all = _.extend(row.all, newobj)
+                    row.all = _.extend(row.all, newobj);
                     delete row.updatedAt;
                     delete row.createdAt;
                     delete row.__v;
