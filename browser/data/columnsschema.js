@@ -128,6 +128,10 @@ module.exports =
         forWho: ["admin","copywriter"],
     },
     {
+        property: 'tilestyle',
+        forWho: ["admin","copywriter","copy"],
+    },
+    {
         property: 'plenti',
         forWho: ["admin"],
     },
