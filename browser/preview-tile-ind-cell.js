@@ -45,6 +45,7 @@ render() {
     var filteredid = _.filter(entries, function(d) { return d.hasOwnProperty('id') });
     var filteredpetites = _.filter(entries, function(d) { return d.hasOwnProperty('alsoinpetites') });
     var tilestyle = _.filter(entries, function(d) { return d.hasOwnProperty('tilestyle') });
+    var filteredfob = _.filter(entries, function(d) { return d.hasOwnProperty('category') });
 
     var instorespecial = _.filter(entries, function(d) { return d.hasOwnProperty('instorespecial') });
 
@@ -79,7 +80,7 @@ render() {
             <div className="tile-content">
 
                 <div className="pretext" dangerouslySetInnerHTML={createMarkup(pretext)} />
-                <span className={tileclass}>{filteredcopy[0].tilecopy1}</span>
+                <span className={tileclass}>{tilestyle[0].tilestyle == 1 ? 'DOORBUSTER' : filteredcopy[0].tilecopy1}</span>
                 <span className="tile-title_2 tile-title">{filteredcopy2[0].tilecopy2}</span>
                 <p className="tile-desc">
                     <span className="tile-desc-line_1 tile-desc-line">{filteredcopy3[0].tilecopy3}</span>
@@ -97,7 +98,9 @@ render() {
                     Row: {filteredid[0].id} <br/>
                     Sort: {filteredsortn[0].sortnumber} <br/>
                     Style: {tilestyle[0].tilestyle}<br/>
-                    In Store: {instorespecial[0] ? instorespecial[0].instorespecial : ''}
+                    In Store: {instorespecial[0] ? instorespecial[0].instorespecial : ''}<br/>
+                    orig FOB: {filteredfob[0] ? filteredfob[0].category : ''}
+
                 </div>
             </div>
             {this.props.children}
