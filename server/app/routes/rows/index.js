@@ -223,101 +223,104 @@ router.get('/combobulator', function (req, res, next) {
         });
         var end = new Date() - start;
         console.info("Execution time: %dms", end);
-        res.json(arr);
+//        res.json(arr);
+        fs.writeFileSync('./dist/all-finnick-data.json', JSON.stringify(arr));
+        res.download('./dist/all-finnick-data.json');
     })
 });
 
 
 router.get('/combobulator/:category', function (req, res, next) {
-    var start = new Date();
-    var arr = [];
-    var _rows;
-    Row.find({fob: req.params.category}).lean().populate('entries').then(function(rows) {
-        _rows = rows;
-        var obj = {};
-        obj[req.params.category] = [];
-        var categoriesarr = obj;
-        arr = [categoriesarr];
-        var keys = new Date() - start;
-        console.info("Execution keys time: %dms", keys);
-        return categoriesarr;
-    }).then(function(obj) {
-        _.each(_rows, function(row,idx2) {
-            if (row.fob == req.params.category) {
-                _.each(row.entries, function(e, i){
-                    var newobj = {};
-                    if (req.params.category != 'women' && req.params.category != 'IntlWomen'){
-                        if (e.columnName == 'bffavorites' ||
-                            e.columnName == 'extra' ||
-                            e.columnName == 'extraomniprojectedsales' ||
-                            e.columnName == 'featureproductid' ||
-                            e.columnName == 'instorespecial' ||
-                            e.columnName == 'livedate' ||
-                            e.columnName == 'markettointernational' ||
-                            e.columnName == 'needsavedset' ||
-                            e.columnName == 'notesfrombuyersimg' ||
-                            e.columnName == 'notesfromretouchimg' ||
-                            e.columnName == 'notesoncategory' ||
-                            e.columnName == 'plenti' ||
-                            e.columnName == 'projectedunits' ||
-                            e.columnName == 'salesfor2015' ||
-                            e.columnName == 'singleormultiple' ||
-                            e.columnName == 'savedsetid' ||
-                            e.columnName == 'pricingcomments' ||
-                            e.columnName == 'alsoinpetites' ||
-                            e.columnName == 'petitescategoryid' ||
-                            e.columnName == 'petiteslinktype' ||
-                            e.columnName == 'petitesproductid' ||
-                            e.columnName == 'petitessavedset' ||
-                            e.columnName == 'petitesurl'
-                            ) {
-                            delete row.entries[i];
+    if (req.params.category != 'exportall') {
+        var start = new Date();
+        var arr = [];
+        var _rows;
+        Row.find({fob: req.params.category}).lean().populate('entries').then(function(rows) {
+            _rows = rows;
+            var obj = {};
+            obj[req.params.category] = [];
+            var categoriesarr = obj;
+            arr = [categoriesarr];
+            var keys = new Date() - start;
+            console.info("Execution keys time: %dms", keys);
+            return categoriesarr;
+        }).then(function(obj) {
+            _.each(_rows, function(row,idx2) {
+                if (row.fob == req.params.category) {
+                    _.each(row.entries, function(e, i){
+                        var newobj = {};
+                        if (req.params.category != 'women' && req.params.category != 'IntlWomen'){
+                            if (e.columnName == 'bffavorites' ||
+                                e.columnName == 'extra' ||
+                                e.columnName == 'extraomniprojectedsales' ||
+                                e.columnName == 'featureproductid' ||
+                                e.columnName == 'instorespecial' ||
+                                e.columnName == 'livedate' ||
+                                e.columnName == 'markettointernational' ||
+                                e.columnName == 'needsavedset' ||
+                                e.columnName == 'notesfrombuyersimg' ||
+                                e.columnName == 'notesfromretouchimg' ||
+                                e.columnName == 'notesoncategory' ||
+                                e.columnName == 'plenti' ||
+                                e.columnName == 'projectedunits' ||
+                                e.columnName == 'salesfor2015' ||
+                                e.columnName == 'singleormultiple' ||
+                                e.columnName == 'savedsetid' ||
+                                e.columnName == 'pricingcomments' ||
+                                e.columnName == 'alsoinpetites' ||
+                                e.columnName == 'petitescategoryid' ||
+                                e.columnName == 'petiteslinktype' ||
+                                e.columnName == 'petitesproductid' ||
+                                e.columnName == 'petitessavedset' ||
+                                e.columnName == 'petitesurl'
+                                ) {
+                                delete row.entries[i];
+                            } else {
+                                newobj[e.columnName] = e.data;
+                                row.entries[i] = newobj;
+                            }
                         } else {
-                            newobj[e.columnName] = e.data;
-                            row.entries[i] = newobj;
-                        }
-                    } else {
-                        if (e.columnName == 'bffavorites' ||
-                            e.columnName == 'extra' ||
-                            e.columnName == 'extraomniprojectedsales' ||
-                            e.columnName == 'featureproductid' ||
-                            e.columnName == 'livedate' ||
-                            e.columnName == 'markettointernational' ||
-                            e.columnName == 'needsavedset' ||
-                            e.columnName == 'notesfrombuyersimg' ||
-                            e.columnName == 'notesfromretouchimg' ||
-                            e.columnName == 'notesoncategory' ||
-                            e.columnName == 'plenti' ||
-                            e.columnName == 'projectedunits' ||
-                            e.columnName == 'salesfor2015' ||
-                            e.columnName == 'singleormultiple' ||
-                            e.columnName == 'savedsetid' ||
-                            e.columnName == 'pricingcomments'
+                            if (e.columnName == 'bffavorites' ||
+                                e.columnName == 'extra' ||
+                                e.columnName == 'extraomniprojectedsales' ||
+                                e.columnName == 'featureproductid' ||
+                                e.columnName == 'livedate' ||
+                                e.columnName == 'markettointernational' ||
+                                e.columnName == 'needsavedset' ||
+                                e.columnName == 'notesfrombuyersimg' ||
+                                e.columnName == 'notesfromretouchimg' ||
+                                e.columnName == 'notesoncategory' ||
+                                e.columnName == 'plenti' ||
+                                e.columnName == 'projectedunits' ||
+                                e.columnName == 'salesfor2015' ||
+                                e.columnName == 'singleormultiple' ||
+                                e.columnName == 'savedsetid' ||
+                                e.columnName == 'pricingcomments'
 
-                            ) {
-                            delete row.entries[i];
-                        } else {
-                            newobj[e.columnName] = e.data;
-                            row.entries[i] = newobj;
+                                ) {
+                                delete row.entries[i];
+                            } else {
+                                newobj[e.columnName] = e.data;
+                                row.entries[i] = newobj;
+                            }
                         }
-                    }
-                    delete row.updatedAt;
-                    delete row.createdAt;
-                    delete row.__v;
-                    delete row.locked;
+                        delete row.updatedAt;
+                        delete row.createdAt;
+                        delete row.__v;
+                        delete row.locked;
 
-                    if (e.columnName == 'killedrow') {
-                        if (e.data == 'true') {
-                            row.killed = 'KILLED';
+                        if (e.columnName == 'killedrow') {
+                            if (e.data == 'true') {
+                                row.killed = 'KILLED';
+                            }
                         }
-                    }
 
-                    if (i == row.entries.length-1) {
-                        row.entries = _.compact(row.entries);
+                        if (i == row.entries.length-1) {
+                            row.entries = _.compact(row.entries);
 //                            console.log(row);
-                        if (row.killed != 'KILLED') {
-                            arr[0][req.params.category].push(row)
-                        }
+                            if (row.killed != 'KILLED') {
+                                arr[0][req.params.category].push(row)
+                            }
 
 //                            _.each(_.map(row.entries, 'doubleexposure'), function(val,i) {
 //                                if (val) {
@@ -348,18 +351,22 @@ router.get('/combobulator/:category', function (req, res, next) {
 //                                }
 //                            })
 
-                    }
+                        }
 
-                })
-            }
+                    })
+                }
+            })
+            return obj;
+
+        }).then(function(obj) {
+            var end = new Date() - start;
+            console.info("Execution time: %dms", end);
+            res.json(arr);
         })
-        return obj;
+    } else {
+        next();
+    }
 
-    }).then(function(obj) {
-        var end = new Date() - start;
-        console.info("Execution time: %dms", end);
-        res.json(arr);
-    })
 });
 
 
@@ -426,6 +433,94 @@ router.get('/combobulator/:category/export', function(req, res, next) {
 
     })
 })
+
+
+
+
+
+router.get('/combobulator/exportall', function (req, res, next) {
+    console.log('all')
+    var start = new Date();
+    var arr = [];
+    var _rows;
+    Row.find().lean().populate('entries').then(function(rows) {
+        _rows = rows;
+        var categoriesarr = [
+            {"women": []},
+            {"men": []},
+            {"kids": []},
+            {"shoes": []},
+            {"jewlery&watches": []},
+            {"handbags&accessories": []},
+            {"juniors": []},
+            {"beauty": []},
+            {"for_the_home": []},
+            {"kitchen&dining": []},
+            {"bed&bath": []},
+            {"luggage&accessories": []},
+            {"furniture&mattresses": []},
+            {"IntlWomen": []},
+            {"intlmen": []},
+            {"intlkids": []},
+            {"intlshoes": []},
+            {"intljewelry&Watches": []},
+            {"intlhandbags&Accessories": []},
+            {"intljuniors": []},
+            {"intlforthehome": []},
+            {"intlkitchen&dining": []},
+            {"intlbed&bath": []},
+            {"intlluggage&accessories": []}
+        ];
+//        arr = categoriesarr;
+        var keys = new Date() - start;
+        console.info("Execution keys time: %dms", keys);
+        return categoriesarr;
+    }).then(function(obj) {
+        _.each(obj, function(main,idx){
+            _.each(_rows, function(row,idx2) {
+                if (row.fob == Object.keys(main)[0]) {
+                    var newentries = [];
+                    _.each(row.entries, function(e, i){
+                        var newobj = {};
+                        if (e.columnName != 'id' && e.columnName != 'sortnumber' && e.columnName != 'mcomprojectedsales') {
+                            newobj[col[e.columnName]] = e.data;
+                        } else {
+                            newobj[col[e.columnName]] = parseFloat(e.data);
+                        }
+//                    row.entries[i] = newobj;
+                        row.all = _.extend(row.all, newobj);
+                        delete row.updatedAt;
+                        delete row.createdAt;
+                        delete row.__v;
+                        delete row.locked;
+                        if (e.columnName == 'killedrow') {
+                            if (e.data == 'true') {
+                                row.killed = 'KILLED';
+                            }
+                        }
+
+                        if (i == row.entries.length-1) {
+                            row.entries = _.compact(row.entries);
+                            if (row.killed != 'KILLED') {
+                                arr.push(row.all);
+                            }
+                        }
+
+
+                    })
+                }
+            })
+        })
+    }).then(function() {
+        var end = new Date() - start;
+        console.info("Execution time: %dms", end);
+        var jsonfeed = arr;
+//        console.log(arr);
+        var xls = json2xls(jsonfeed);
+        fs.writeFileSync('./dist/all-finnick-data.xlsx', xls, 'binary');
+        res.download('./dist/all-finnick-data.xlsx');
+    })
+});
 
 
 
