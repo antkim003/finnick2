@@ -6,17 +6,17 @@ module.exports =
             type: 'buying',
             permission: ['subcategories','notesoncategory','doubleexposure','doubleexposuresubcategory','doubleexposure2','doubleexposuresubcategory2','doubleexposure3','mcomspecialprice', 'doubleexposuresubcategory3','instorespecial','storeregularprice','storespecialprice','mcomspecial','pricinginfo','mcomregprice','pricingcomments','markettointernational','projectedunits','projectedsales','notesfrombuyersimg','salesfor2015','imageid','arimageid','singleormultiple','featureproductid','alsoinpetites','livedate','omniprojectedsales','extraomniprojectedsales','typeofspecial']
         },
-        {
-            type: 'buyer',
-            permission: ['subcategories','notesoncategory','doubleexposure','doubleexposuresubcategory','doubleexposure2','doubleexposuresubcategory2','doubleexposure3','mcomspecialprice', 'doubleexposuresubcategory3','instorespecial','storeregularprice','storespecialprice','mcomspecial','pricinginfo','mcomregprice','pricingcomments','markettointernational','projectedunits','projectedsales','notesfrombuyersimg','salesfor2015','imageid','arimageid','singleormultiple','featureproductid','alsoinpetites','livedate','omniprojectedsales','extraomniprojectedsales','typeofspecial']
-        },
+        // {
+        //     type: 'buyer',
+        //     permission: ['subcategories','notesoncategory','doubleexposure','doubleexposuresubcategory','doubleexposure2','doubleexposuresubcategory2','doubleexposure3','mcomspecialprice', 'doubleexposuresubcategory3','instorespecial','storeregularprice','storespecialprice','mcomspecial','pricinginfo','mcomregprice','pricingcomments','markettointernational','projectedunits','projectedsales','notesfrombuyersimg','salesfor2015','imageid','arimageid','singleormultiple','featureproductid','alsoinpetites','livedate','omniprojectedsales','extraomniprojectedsales','typeofspecial']
+        // },
         {
             type: 'admin',
             permission: ['all']
         },
         {
             type: 'photography',
-            permission: ['arimageid','tileimage']
+            permission: ['arimageid','tileimage', 'notesfromretouchimg', 'photoprogress']
         },
         {
             type: 'site_merch',
@@ -28,10 +28,10 @@ module.exports =
         },
         {
             type: 'copywriter',
-            permission: ['tilecopy1','tilecopy2','tilecopy3','tilecopy4']
+            permission: ['tilecopy1','tilecopy2','tilecopy3','tilecopy4','tilestyle']
         },
         {
             type: 'copy',
-            permission: ['tilecopy1','tilecopy2','tilecopy3','tilecopy4']
+            permission: ['tilecopy1','tilecopy2','tilecopy3','tilecopy4','tilestyle']
         }
     ]
