@@ -65,11 +65,13 @@ render() {
     if( tilestyle[0].tilestyle == 2 || tilestyle[0].tilestyle == 4 ) {
         tileclass = 'tile-title_1 tile-title narrow';
     }
+
+    var tilecop1 = filteredcopy[0].tilecopy1 ? filteredcopy[0].tilecopy1.split('|').map(function(item) {return (<div>{item}</div>)}) : filteredcopy[0].tilecopy1;
+
     var pretext = '';
     if ( tilestyle[0].tilestyle == 4 ) {
         pretext = filteredcategory[0].category
     }
-
 
     function createMarkup(html) { return {__html: html}; };
     return (
@@ -80,11 +82,11 @@ render() {
             <div className="tile-content">
 
                 <div className="pretext" dangerouslySetInnerHTML={createMarkup(pretext)} />
-                <span className={tileclass}>{tilestyle[0].tilestyle == 1 ? 'DOORBUSTER' : filteredcopy[0].tilecopy1}</span>
-                <span className="tile-title_2 tile-title">{filteredcopy2[0].tilecopy2}</span>
+                <span className={tileclass}>{tilestyle[0].tilestyle == 1 ? 'DOORBUSTER' : tilecop1}</span>
+                <span className="tile-title_2 tile-title">{filteredcopy2[0].tilecopy2 ? filteredcopy2[0].tilecopy2.split('|').map(function(item) {return (<div>{item}</div>)}) : filteredcopy2[0].tilecopy2}</span>
                 <p className="tile-desc">
-                    <span className="tile-desc-line_1 tile-desc-line">{filteredcopy3[0].tilecopy3}</span>
-                    <span className="tile-desc-line_2 tile-desc-line">{filteredcopy4[0].tilecopy4}</span>
+                    <span className="tile-desc-line_1 tile-desc-line">{filteredcopy3[0].tilecopy3 ? filteredcopy3[0].tilecopy3.split('|').map(function(item) {return (<div>{item}</div>)}) : filteredcopy3[0].tilecopy3}</span>
+                    <span className="tile-desc-line_2 tile-desc-line">{filteredcopy4[0].tilecopy4 ? filteredcopy4[0].tilecopy4.split('|').map(function(item) {return (<div>{item}</div>)}) : filteredcopy4[0].tilecopy4}</span>
                     <span className="tile-desc-line tile-desc-line_3">{filteredpetites[0] ? alsoinpetite : ''}</span>
                 </p>
                 <div className="tile-btns">
