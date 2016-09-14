@@ -231,6 +231,7 @@ module.exports = React.createClass({
         }
         var query = window.location.search.split('?')[1];
         buttons.push(<button key="button-export"><a href={"/api/rows/combobulator/"+query+"/export"}>Export to Excel</a></button>);
+        buttons.push(<button key="button-exportall"><a href={"/api/rows/combobulator/exportall"}>Export All Excel</a></button>);
 
         var thisuserspermissions = _.filter(userpermissions, function(users) {
             return users.type == user.type
