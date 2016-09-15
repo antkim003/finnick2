@@ -77,8 +77,8 @@ var columnsTemplate = [
 
 var categories = [
     {
-        name: "for_the_home",
-        size: 50
+        name: "homepage",
+        size: 100
     }
 ];
 var seedCategories = function() {
@@ -95,7 +95,7 @@ var seedCategories = function() {
 }
 
 var findCount = function() {
-    return Row.count({fob: 'for_the_home'})
+    return Row.count({fob: 'homepage'})
         .then(function(count) {
             console.log('heres the count : ', count);
             return count;
