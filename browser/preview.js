@@ -188,7 +188,7 @@ var Tiles = React.createClass({
 
                 {self.state.loaderState ? <Loader loaderMsg={'please be patient, creating all tiles for all FOB'} /> : null}
 
-                <Tile data={self.state.data} img={self.state.img}/>
+                <Tile data={self.state.data} img={true}/>
             </div>
         )
     }
