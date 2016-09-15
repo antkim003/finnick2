@@ -11,6 +11,9 @@
     vertical-align: top;
     float:left;
 }
+.clearspan {
+    display: block;
+}
 .tile-img-wrap {
     height: 284px;
     width: 100%;
@@ -51,9 +54,9 @@
     clear: both;
     text-align: left;
     padding: 15px 10px 0 10px;
-    font-family: "arial", sans-serif;
+    font-family: "Helvetica Neue LT W01_55 Roman", sans-serif;
     font-size: 13px;
-    line-height: 15px;
+    line-height: 17px;
 }
 .tile-title {
     color: #d10000;
@@ -63,16 +66,16 @@
     display: inline-block;
 }
 .tile-title_1 {
-    font-family: "Avenir LT W01 95 Black", 'Avenir LT W01_95 Black1475556', arial, sans-serif;
-    font-size: 17px;
-    line-height: 1.1
+    font-family: "Helvetica Neue LT W01_71488914", 'Avenir LT W01_95 Black1475556', arial, sans-serif;
+    font-size: 14px;
+    line-height: 1.1;
 }
 .narrow {
     padding: 0 50px 0 0;
 }
 .tile-title_2 {
-    font-family: "Avenir LT W01 95 Black", 'Avenir LT W01_95 Black1475556', arial, sans-serif;
-    font-size: 30px;
+    font-family: "Helvetica Neue LT W01_71488914", 'Avenir LT W01_95 Black1475556', arial, sans-serif;
+    font-size: 28px;
     line-height: 25px;
 }
 .tile-desc {
