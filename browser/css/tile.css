@@ -161,3 +161,12 @@
 .tile-img {
     max-width: 100%;
 }
+
+.id {
+    position: absolute;
+    bottom: -35px;
+    line-height: 13px;
+    font-size: 10px;
+    height: 35px;
+    vertical-align: top;
+}

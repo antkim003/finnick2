@@ -102,8 +102,11 @@ render() {
                     Style: {tilestyle[0].tilestyle}<br/>
                     In Store: {instorespecial[0] ? instorespecial[0].instorespecial : ''}<br/>
                     orig FOB: {filteredfob[0] ? filteredfob[0].category : ''}
-
                 </div>
+            </div>
+            <div className="id">
+                <span className="left">{filteredimage[0].imageid ? '' : 'AR '}Image ID: {filteredimage[0].imageid || filteredarimage[0].arimageid}</span>
+                <span className="right"> - {filteredfob[0] ? filteredfob[0].category : ''} -  Row: {filteredid[0].id}</span>
             </div>
             {this.props.children}
         </div>
