@@ -280,7 +280,8 @@ module.exports = React.createClass({
                     },
                     onMouseEnter: (e) => {
                         //check image
-                        if ((e.target.getAttribute('data-property') == 'tileimage') || (e.target.getAttribute('data-property') == 'imageid')) {
+//                        console.log()
+                        if ((e.target.getAttribute('data-property') == 'tileimage' && $(e.target).parent().find('[data-property="imageid"]').text() != '') || (e.target.getAttribute('data-property') == 'imageid')) {
                             var parts = $(e.target).text().split('').reverse().join('') || '';
                             parts = parts.match(/[\s\S]{1,2}/g) || [];
                             var withslash = '';
