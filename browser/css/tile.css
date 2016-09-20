@@ -78,6 +78,9 @@
     font-size: 28px;
     line-height: 25px;
 }
+.smaller.tile-title_2 {
+    font-size: 25px;
+}
 .tile-desc {
     color: #000;
     margin: 4px 0 0 0;
