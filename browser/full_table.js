@@ -281,34 +281,34 @@ module.exports = React.createClass({
                     onMouseEnter: (e) => {
                         //check image
 //                        console.log()
-                        if ((e.target.getAttribute('data-property') == 'tileimage' && $(e.target).parent().find('[data-property="imageid"]').text() != '') || (e.target.getAttribute('data-property') == 'imageid')) {
-                            var parts = $(e.target).text().split('').reverse().join('') || '';
-                            parts = parts.match(/[\s\S]{1,2}/g) || [];
-                            var withslash = '';
-                            if (parts.length > 0) {
-                                if (parts.length == 4) {
-                                    if (parts[parts.length-1].length < 2) {
-                                        parts[parts.length-1] = parts[parts.length-1]+'0';
-                                        withslash = parts.join('/').split('').reverse().join('');
-                                    } else {
-                                        withslash = parts.join('/').split('').reverse().join('');
-                                    }
-                                } else {
-                                    parts[3] = '00';
-                                    withslash = parts.join('/').split('').reverse().join('');
-                                }
-                            }
-                            var url = 'https://stars.macys.com/preview/'+withslash+'/final/'+$(e.target).text()+'-214x261.jpg';
-                            $(e.target).append('<img class="imagehover" src="'+url+'" onerror="this.onerror=null;this.src=\'https://stars.macys.com/UI/Common/Graphics/Main/product-image-not-available.jpeg\';"/>')
-                        }
+//                        if ((e.target.getAttribute('data-property') == 'tileimage' && $(e.target).parent().find('[data-property="imageid"]').text() != '') || (e.target.getAttribute('data-property') == 'imageid')) {
+//                            var parts = $(e.target).text().split('').reverse().join('') || '';
+//                            parts = parts.match(/[\s\S]{1,2}/g) || [];
+//                            var withslash = '';
+//                            if (parts.length > 0) {
+//                                if (parts.length == 4) {
+//                                    if (parts[parts.length-1].length < 2) {
+//                                        parts[parts.length-1] = parts[parts.length-1]+'0';
+//                                        withslash = parts.join('/').split('').reverse().join('');
+//                                    } else {
+//                                        withslash = parts.join('/').split('').reverse().join('');
+//                                    }
+//                                } else {
+//                                    parts[3] = '00';
+//                                    withslash = parts.join('/').split('').reverse().join('');
+//                                }
+//                            }
+//                            var url = 'https://stars.macys.com/preview/'+withslash+'/final/'+$(e.target).text()+'-214x261.jpg';
+//                            $(e.target).append('<img class="imagehover" src="'+url+'" onerror="this.onerror=null;this.src=\'https://stars.macys.com/UI/Common/Graphics/Main/product-image-not-available.jpeg\';"/>')
+//                        }
 
                         //check link
-                        if ((e.target.getAttribute('data-property') == 'url')) {
+//                        if ((e.target.getAttribute('data-property') == 'url')) {
 
-                        }
+//                        }
                     },
                     onMouseLeave: (e) => {
-                        $(e.target).parent().find('img').replaceWith('');
+//                        $(e.target).parent().find('img').replaceWith('');
                     },
                     dataRow: d.id,
                 };

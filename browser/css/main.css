@@ -540,3 +540,11 @@ input[type="checkbox"] {
 [data-photoprogress="green"] {
     background: #14ff0c;
 }
+[data-property="imageid"] img,
+[data-property="tileimage"] img {
+    display: none;
+}
+[data-property="imageid"]:hover img,
+[data-property="tileimage"]:hover img {
+    display: block;
+}

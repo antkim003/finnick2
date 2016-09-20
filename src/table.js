@@ -68,6 +68,8 @@ module.exports = React.createClass({
 
                             cell = isFunction(cell) ? [cell] : cell;
 
+                            var imgsrc = '';
+
                             var tet = '';
                             content = reduce(cell, (v, fn) => {
                                 if(React.isValidElement(v.value)) {
@@ -93,6 +95,7 @@ module.exports = React.createClass({
                                 };
                             }, {value: value, props: {}});
 
+
                             content = content || {};
                             var values = {};
 
@@ -108,9 +111,36 @@ module.exports = React.createClass({
                                 entryId = null;
                             }
 
+                            var img = ""
+                            if (property == 'imageid' || property == 'tileimage') {
+                                if (value && row['imageid'] != '' && row['imageid'] != null ) {
+                                    var parts = value.split('').reverse().join('') || '';
+                                    parts = parts.match(/[\s\S]{1,2}/g) || [];
+                                    var withslash = '';
+                                    if (parts.length > 0) {
+                                    if (parts.length == 4) {
+                                    if (parts[parts.length-1].length < 2) {
+                                    parts[parts.length-1] = parts[parts.length-1]+'0';
+                                    withslash = parts.join('/').split('').reverse().join('');
+                                    } else {
+                                    withslash = parts.join('/').split('').reverse().join('');
+                                    }
+                                    } else {
+                                    parts[3] = '00';
+                                    withslash = parts.join('/').split('').reverse().join('');
+                                    }
+                                    }
+                                    var url = 'https://stars.macys.com/preview/'+withslash+'/final/'+value+'-214x261.jpg';
+                                    img = <img className="imagehover" src={url} onerror="this.onerror=null;this.src=\'https://stars.macys.com/UI/Common/Graphics/Main/product-image-not-available.jpeg\';"/>
+                                }
+                            }
+
                             return <td data-id={entryId} data-parent-id={_.sortBy(window.data, 'index')[i]._id} data-property={property} data-edit={column.cell.length == 0 ? 'noedit' : 'editor'} data-cell={rowid+'-'+property} data-active={content.props.activeEdit}
                             rel={`js-cell-${j}-${row[rowKey] || i}`}
-                            className={`cellblock cell-${j} ${(row[rowKey] || i)}-${property}`} key={j + '-cell'} {...content.props} >{content.value}</td>;
+                            className={`cellblock cell-${j} ${(row[rowKey] || i)}-${property}`} key={j + '-cell'} {...content.props} >
+                            {content.value}
+                            {img}
+                            </td>;
                         }
                     )}</tr>)}
                 </tbody>
