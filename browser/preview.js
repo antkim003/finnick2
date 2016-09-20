@@ -121,6 +121,7 @@ var Tiles = React.createClass({
                     _.each(datacomb[0][Object.keys(datacomb[0])], function(row, i) {
                             _.each(_.map(row.entries, 'doubleexposure'), function(val,i) {
                                 if (val) {
+                                    val = val.split(',')[0]
                                     var result =  window.dataset.filter(function( obj ) {
                                         return obj[val];
                                     });
@@ -129,6 +130,7 @@ var Tiles = React.createClass({
                             })
                             _.each(_.map(row.entries, 'doubleexposure2'), function(val,i) {
                                 if (val) {
+                                    val = val.split(',')[0]
                                     var result =  window.dataset.filter(function( obj ) {
                                         return obj[val];
                                     });
@@ -137,6 +139,7 @@ var Tiles = React.createClass({
                             })
                             _.each(_.map(row.entries, 'doubleexposure3'), function(val,i) {
                                 if (val) {
+                                    val = val.split(',')[0]
                                     var result =  window.dataset.filter(function( obj ) {
                                         return obj[val];
                                     });
