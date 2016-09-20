@@ -128,8 +128,9 @@
 }
 .imageinfo {
     position:absolute;
-    bottom: 0;
+    bottom: -22px;
     background: rgba(255,255,200,0.8);
+    z-index: 10;
 }
 .imageinfo-hover {
     border: 1px solid #000;
@@ -169,4 +170,5 @@
     font-size: 10px;
     height: 35px;
     vertical-align: top;
+    left: 30px;
 }
