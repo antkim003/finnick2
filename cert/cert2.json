@@ -1,0 +1,12 @@
+{
+    "type": "service_account",
+    "project_id": "mcomny-test-infrastructure",
+    "private_key_id": "81a868a0ab7db7b1a5050ed8817cac8f66bd6fc0",
+    "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvwIBADANBgkqhkiG9w0BAQEFAASCBKkwggSlAgEAAoIBAQDKADE/RjBVIryz\nJbdC3w8BirB79v+5vQvf9XFYWqwe3ywuV2LbXrtCb+rQCLw1p2IvBcs1bAzyYSdY\nTPdzrhYMFMiiwrd9fSI+5hblmHdDlR58il1zjWDAzd0BByxFJJIdP6AGnQlvOxLB\nK7u7lrz73MeK+HZeFE1YH50mQULC75ASwxXRBvoG6+GPSF1xul3o48j/D/k2dhK2\no2CtCRz0QPTjsQWWzIpupqWilOjnq1NWaohTnEXCmQZfMlxnke8Ua5waHGoGp/VH\nSxr/FUmI+sljHjuJjscXuHF1fuh1UA/G9A66cJaX+jssl5hFYFiPbd6Q+yPkBlhu\nEtEyI419AgMBAAECggEBALz8BRcPkbR09Vod1SCpE577pDW2VnXtWijDtrFU02dm\noC0S8JgQPt3fWy4angsMeJ1JrF5kopA5ONgx2ejOXC4dW8B6r7Sl195E4fMX+6ys\n3ILj6J5tDLIVZ8jIbzCZEGJw3kSRsvvvppI3WkIcut5gJgfsgMFv+RSTLzFVKSK5\n16WgYAZ8290NV4FkxbS9uxo7ppNXhU5haC1LH7XxvnWNxw60/KVIalDtfL+/RANy\nWyTAmn7hhJkQbYo1m15W1qJKyzh8Uw39a5+0wpbYo5vo6RbZFZLYQXbGGVtoef0+\nRAkjY8QxnZZf9f1JJkHe+08X0vaRAA3NgOE9kzaZ0jkCgYEA9bw2Zi/nyexeyg0V\nSvRHvNScuyW1wC8YWnV75+D7pg2J7JdeDigsqVt0KyFEfBTrmMyeCYs0MGWah9rn\n07uLUo4qGd/6A2X65wJq9uzBtbhaXLOfhyrB0PXsLxScJClXZelENvZUecKQLhsX\nloSNvG7XpIenKuQ1dbaF6k/g5VsCgYEA0nBNYfdtsGisSWywA/qded+7u08X7yLP\nomX/0/rItqSpb3Dj+7kfdYyDcihqRVByZIHZqKEPJRfU0qljL6oniqQx1kCdwXq0\nWOi6BROKXweHXFP2/+Ad1ZgmmBCHsNuqOw7QpeP4KjHFr/0rletjXlVmE+X0pCe/\n7EiUSkdSWAcCgYEAp5B1A89s3hspM9wiBd93P4M3cMIxImC62Yw9NowK7VtUDpnV\nEBBDDCUJnRNtULMvSB1XMqjSqKHP8w3JgW7kfSHmAYjiQgj7QyU57TDakmCodYgi\noxf729KmACCsrFfoedzLoDLuvax3hokA16mBwNlQgKfjzPKapa8VuAZKE/sCgYAC\n5XTLMmKaGPa2E/7gLyTXtpKY41/K9MmyzICW5E665M1IMV+R6Vxbe9GbUp8T0SWh\n6H+caIsS0Z8mPxqUX10n9VaSQlVpgkzVJG7a/wfagvoD9Uvi/ayrceqmESQs9PkE\n0xFgFyElQ4YbA/sDlzfI5pf/Eh0p3ToxAFa6Jv0lJQKBgQDAXz8BlDr4p+ct6sCS\n9/88XHYkCNNn8+Qn3aP++w/XkzZyRVyOYPqMF5Tb1LIBGJ5y+XYB7O17ouB7L4Cs\n7MxRDjw37G9Dl0wC0PX0r6m1gCnI0GZ/Za6JtUECRp1yd1iMdC+rfegshJ/BgNag\na8bzXX75EO08RDXTbztu0eARhw==\n-----END PRIVATE KEY-----\n",
+    "client_email": "social-team-key@mcomny-test-infrastructure.iam.gserviceaccount.com",
+    "client_id": "115034811136626731906",
+    "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+    "token_uri": "https://accounts.google.com/o/oauth2/token",
+    "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+    "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/social-team-key%40mcomny-test-infrastructure.iam.gserviceaccount.com"
+}
