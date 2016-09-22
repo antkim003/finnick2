@@ -432,7 +432,7 @@ window.coledit =     [
     info: 'image used for product tile in sitelet',
     cell: [
     app.editable({
-        editor: editors.input(_.filter(validations, function(v) { return v.name == 'numerical'})),
+        editor: editors.input(),
     }),
     app.highlighter('tileimage'),
 ],
