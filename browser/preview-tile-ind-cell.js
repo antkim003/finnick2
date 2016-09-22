@@ -61,11 +61,18 @@ render() {
     }else {
         img = '<img src="http://storage.googleapis.com/imp-projects/finnick/arimages/'+tileimagear+'.jpg" class="tile-img"/>'
     }
+    var bigtiletext = '';
     var tileclass = 'tile-title_1 tile-title';
     if( tilestyle[0].tilestyle == 2 || tilestyle[0].tilestyle == 4 ) {
         tileclass = 'tile-title_1 tile-title narrow';
+    } else if (tilestyle[0].tilestyle == 5 || tilestyle[0].tilestyle == 6 ) {
+//        tileclass = 'tile-title_1 tile-title narrow';
+        bigtiletext = 'smaller';
     }
-
+    var bolder = '';
+    if (tilestyle[0].tilestyle == 5) {
+        bolder = 'bolder'
+    }
     var tilecop1 = filteredcopy[0].tilecopy1 ? filteredcopy[0].tilecopy1.split('|').map(function(item) {return (<div>{item}</div>)}) : filteredcopy[0].tilecopy1;
 
     var pretext = '';
@@ -82,10 +89,10 @@ render() {
             <div className="tile-content">
 
                 <div className="pretext" dangerouslySetInnerHTML={createMarkup(pretext)} />
-                <span className={tileclass}>{tilestyle[0].tilestyle == 1 ? 'DOORBUSTER' : tilecop1}</span>
-                <span className="tile-title_2 tile-title">{filteredcopy2[0].tilecopy2 ? filteredcopy2[0].tilecopy2.split('|').map(function(item) {return (<div>{item}</div>)}) : filteredcopy2[0].tilecopy2}</span>
+                <span className={tileclass}>{tilestyle[0].tilestyle == 1 || tilestyle[0].tilestyle == 5 || tilestyle[0].tilestyle == 6 ? 'DOORBUSTER' : tilecop1}</span>
+                <span className={"tile-title_2 tile-title "+bigtiletext}>{filteredcopy2[0].tilecopy2 ? filteredcopy2[0].tilecopy2.split('|').map(function(item) {return (<div>{item}</div>)}) : filteredcopy2[0].tilecopy2}</span>
                 <p className="tile-desc">
-                    <span className="tile-desc-line_1 tile-desc-line">{filteredcopy3[0].tilecopy3 ? filteredcopy3[0].tilecopy3.split('|').map(function(item) {return (<span className="clearspan">{item}</span>)}) : filteredcopy3[0].tilecopy3}</span>
+                    <span className={"tile-desc-line_1 tile-desc-line "+bolder}>{filteredcopy3[0].tilecopy3 ? filteredcopy3[0].tilecopy3.split('|').map(function(item) {return (<span className="clearspan">{item}</span>)}) : filteredcopy3[0].tilecopy3}</span>
                     <span className="tile-desc-line_2 tile-desc-line">{filteredcopy4[0].tilecopy4 ? filteredcopy4[0].tilecopy4.split('|').map(function(item) {return (<span className="clearspan">{item}</span>)}) : filteredcopy4[0].tilecopy4}</span>
                     <span className="tile-desc-line tile-desc-line_3">{filteredpetites[0] ? alsoinpetite : ''}</span>
                 </p>
