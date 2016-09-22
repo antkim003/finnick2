@@ -75,28 +75,33 @@ var HomepageComponent = React.createClass({
         </div>\
         <div id="home-page">\
             <div id="tile-container">\
-        <% _.each(rows, function(row, idx) { %> \
-            <div class="tile home-tile style<%=row.entries[35]["tilestyle"]%>" fob="<%=row.entries[3]["doubleexposure"]%>" tall="<%=row.entries[9]["goingfast"]%>">\
-                <h6><%=mapnames[row.entries[3]["doubleexposure"]]%></h6>\
-                <div class="image-wrap">\
-                    <img class="product-image mobile-image" src="http://storage.googleapis.com/imp-projects/finnick/homepagepreview/uploads/<%=row.entries[3]["doubleexposure"]%>-mobile<%=intl ? "-international" : ""%>.jpg?<%=d%>"/>\
-                    <img class="product-image desktop-image" src="http://storage.googleapis.com/imp-projects/finnick/homepagepreview/uploads/<%=row.entries[3]["doubleexposure"]%><%=intl ? "-international" : ""%>.jpg?<%=d%>"/>\
-                    <span class="share-pinterest"><img src="http://storage.googleapis.com/imp-projects/finnick/homepagepreview/images/mobile-icon-pinterest.png"/></span>\
-                </div>\
-                <% if (row.entries[35]["tilestyle"] == "2") { %>\
-                    <div class="circle">\
-                        <p class="line-1"><%=row.entries[30]["tilecopy1"]%></p>\
-                        <p class="line-2"><%=row.entries[31]["tilecopy2"]%></p>\
+            <% _.each(fob, function(rows, idx) { %> \
+                <div class="tile home-tile style<%=rows[0].entries[58]["tilestyle"]%>" fob="<%=rows[0].entries[5]["doubleexposure"]%>" tall="<%=rows[0].entries[14]["goingfast"]%>">\
+                    <h6><%=mapnames[rows[0].entries[5]["doubleexposure"]]%></h6>\
+                <% _.each(rows, function(row, idx) { %> \
+                    <div class="tile-wrap <%= row.entries[48]["sortnumber"] %>">\
+                        <div class="image-wrap">\
+                            <img class="product-image mobile-image mobile-image" src="http://storage.googleapis.com/imp-projects/finnick/homepagepreview/uploads/<%=row.entries[5]["doubleexposure"]%>-mobile<%=intl ? "-international" : ""%><%= row.entries[48]["sortnumber"] %>.jpg?<%=d%>"/>\
+                            <img class="product-image desktop-image desktop-image1" src="http://storage.googleapis.com/imp-projects/finnick/homepagepreview/uploads/<%=row.entries[5]["doubleexposure"]%><%=intl ? "-international" : ""%><%= row.entries[48]["sortnumber"] %>.jpg?<%=d%>"/>\
+                            \
+                            <span class="share-pinterest"><img src="http://storage.googleapis.com/imp-projects/finnick/homepagepreview/images/mobile-icon-pinterest.png"/></span>\
+                        </div>\
+                        <% if (row.entries[58]["tilestyle"] == "2") { %>\
+                            <div class="circle">\
+                                <p class="line-1"><%=row.entries[53]["tilecopy1"]%></p>\
+                                <p class="line-2"><%=row.entries[54]["tilecopy2"]%></p>\
+                            </div>\
+                        <% } %>\
+                        <div class="copy-wrap <%= row.entries[48]["sortnumber"] %>">\
+                            <p class="line-1"><%=row.entries[53]["tilecopy1"]%></p>\
+                            <p class="line-2"><%=row.entries[54]["tilecopy2"]%></p>\
+                            <p class="line-3"><%=row.entries[55]["tilecopy3"]%></p>\
+                            <p class="price"><%=row.entries[56]["tilecopy4"]%></p>\
+                        </div>\
                     </div>\
-                <% } %>\
-                <div class="copy-wrap">\
-                    <p class="line-1"><%=row.entries[30]["tilecopy1"]%></p>\
-                    <p class="line-2"><%=row.entries[31]["tilecopy2"]%></p>\
-                    <p class="line-3"><%=row.entries[32]["tilecopy3"]%></p>\
-                    <p class="price"><%=row.entries[33]["tilecopy4"]%></p>\
+                <% }) %>\
                 </div>\
-            </div>\
-        <% }) %>\
+            <% }) %>\
             </div>\
         </div>\
         <div><%= c %></div>\
@@ -115,14 +120,21 @@ var HomepageComponent = React.createClass({
                 window.testingdata = data[0]["homepage"];
 
                 var filledoutrows = _.filter(self.state.data, function(row) {
-//                    console.log(row.entries[3])
-                    return row.entries[3]['doubleexposure'] != ''
+                    return row.entries[5]['doubleexposure'] != ''
                 });
+                var group = _.groupBy(filledoutrows, function(row) {
+                    return row.entries[5]['doubleexposure']
+                });
+                group = _.each(group, function(fob, i) {
+                    fob = _.sortBy(fob, function(f) {
+                        return f.entries[48]['sortnumber'];
+                    })
+                });
+
 
                 setTimeout(function() {
                     $('#iframeforhome').trigger('resize');
-                    $('#iframeforhome').width('100%')
-
+                    $('#iframeforhome').width('100%');
                 },1000)
 
                 setTimeout(function() {
@@ -140,7 +152,7 @@ var HomepageComponent = React.createClass({
                 var templateCompile = _.template(template)({
                     c: content,
                     title: "Black&nbsp;Friday",
-                    rows: filledoutrows,
+                    fob: group,
                     mapnames: mapnames,
                     d: d.getTime(),
                     intl: window.location.search == '?intl'

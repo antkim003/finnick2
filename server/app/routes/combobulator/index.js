@@ -49,6 +49,11 @@ var storage = multer.diskStorage({
         if (req.body.international == 'true') {
             filename += '-international'
         }
+        if (req.body.order == '2' || req.body.order == '3') {
+            filename += req.body.order
+        } else {
+            filename += '1'
+        }
         cb(null, filename+'.jpg')
     }
 })
@@ -62,6 +67,11 @@ router.post('/upload', upload.single('displayImage'), function(req, res, next) {
     }
     if (req.body.international == 'true') {
         filename += '-international'
+    }
+    if (req.body.order == '2' || req.body.order == '3') {
+        filename += req.body.order
+    } else {
+        filename += '1'
     }
     console.log(req.body.fob);
     if (!req.file) {

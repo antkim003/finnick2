@@ -78,6 +78,12 @@ class HomepagePreview extends Component {
                         <option value="false">no</option>
                         <option value="true">yes</option>
                     </select>
+                    which image order (1,2,3)
+                    <select name="order">
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                    </select>
                     <input type="file" name="displayImage"/>
                     <input type="submit"/>
                 </form>

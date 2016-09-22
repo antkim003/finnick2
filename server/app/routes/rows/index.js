@@ -388,46 +388,9 @@ router.get('/preview/:category', function (req, res, next) {
                 if (row.fob == req.params.category) {
                     _.each(row.entries, function(e, i){
                         var newobj = {};
-                        if (req.params.category != 'women' && req.params.category != 'IntlWomen'){
-                            if (e.columnName == 'bffavorites' ||
-                                e.columnName == 'extra' ||
-                                e.columnName == 'extraomniprojectedsales' ||
-                                e.columnName == 'featureproductid' ||
-                                e.columnName == 'instorespecial' ||
-                                e.columnName == 'livedate' ||
-                                e.columnName == 'markettointernational' ||
-                                e.columnName == 'needsavedset' ||
-                                e.columnName == 'notesfrombuyersimg' ||
-                                e.columnName == 'notesfromretouchimg' ||
-                                e.columnName == 'notesoncategory' ||
-                                e.columnName == 'plenti' ||
-                                e.columnName == 'projectedunits' ||
-                                e.columnName == 'salesfor2015' ||
-                                e.columnName == 'singleormultiple' ||
-                                e.columnName == 'savedsetid' ||
-                                e.columnName == 'pricingcomments' ||
-                                e.columnName == 'alsoinpetites' ||
-                                e.columnName == 'petitescategoryid' ||
-                                e.columnName == 'petiteslinktype' ||
-                                e.columnName == 'petitesproductid' ||
-                                e.columnName == 'petitessavedset' ||
-                                e.columnName == 'petitesurl'
-                                ) {
-                                delete row.entries[i];
-                            } else {
-                                newobj[e.columnName] = e.data;
-                                row.entries[i] = newobj;
-                            }
-                        } else {
-                            if (
-                                e.columnName == 'livedate'
-                                ) {
-                                delete row.entries[i];
-                            } else {
-                                newobj[e.columnName] = e.data;
-                                row.entries[i] = newobj;
-                            }
-                        }
+                        newobj[e.columnName] = e.data;
+                        row.entries[i] = newobj;
+
                         delete row.updatedAt;
                         delete row.createdAt;
                         delete row.__v;
