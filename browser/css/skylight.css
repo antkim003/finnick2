@@ -1,5 +1,5 @@
 .skylight-dialog {
-    width: 50%;
+    width: 80%;
     height: 400px;
     position: fixed;
     top: 50%;
@@ -27,4 +27,8 @@
     height: 100%;
     z-index: 99;
     background-color: rgba(0,0,0,0.3);
+}
+
+.skylight-wrapper > div:nth-child(2) {
+    width: 90%;
 }
