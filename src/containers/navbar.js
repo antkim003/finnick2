@@ -15,9 +15,9 @@ class NavBar extends Component {
         <li className="nav-item" key="n4">
             <Link className="nav-link" to="/combobulator/tile" key="n1-1">Preview Single Tile</Link>
         </li>,
-        <li className="nav-item" key="n10">
-            <Link className="nav-link" to="/homepagepreview" key="n1-5">HompagePreview</Link>
-        </li>,
+        //<li className="nav-item" key="n10">
+          //  <Link className="nav-link" to="/homepagepreview" key="n1-5">Homepage Preview</Link>
+        //</li>,
         <li className="nav-item" key="n2">
           <Link className="nav-link" to="/logout" key="n2-1">Log Out</Link>
         </li>]

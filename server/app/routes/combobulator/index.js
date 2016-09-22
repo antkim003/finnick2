@@ -43,8 +43,11 @@ var storage = multer.diskStorage({
     },
     filename: function (req, file, cb) {
         var filename = req.body.fob;
-        if (req.body.mobile) {
+        if (req.body.mobile == 'true') {
             filename += '-mobile'
+        }
+        if (req.body.international == 'true') {
+            filename += '-international'
         }
         cb(null, filename+'.jpg')
     }
@@ -54,8 +57,11 @@ var upload = multer({ storage: storage });
 
 router.post('/upload', upload.single('displayImage'), function(req, res, next) {
     var filename = req.body.fob;
-    if (req.body.mobile) {
+    if (req.body.mobile == 'true') {
         filename += '-mobile'
+    }
+    if (req.body.international == 'true') {
+        filename += '-international'
     }
     console.log(req.body.fob);
     if (!req.file) {

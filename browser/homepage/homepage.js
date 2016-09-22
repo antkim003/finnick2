@@ -48,7 +48,13 @@ var HomepageComponent = React.createClass({
 
 
 
-    var content = 'test sdfsdfsfs sdf';
+    var content = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec tincidunt purus et lorem egestas, non dictum eros molestie. Morbi ligula sem, pulvinar vitae magna sit amet, porttitor convallis purus. Donec laoreet vel ligula vitae faucibus. Nam sollicitudin pharetra viverra. Nunc congue commodo mauris id suscipit. Morbi nulla dolor, rhoncus non rutrum vel, pellentesque quis nunc. Morbi sit amet tristique purus.\
+\
+    Cras accumsan felis ac sem interdum, id tempus est varius. Vestibulum sodales mi elit, vel feugiat nisl eleifend nec. Mauris sed justo non eros dictum viverra. Quisque efficitur molestie sem eu tristique. Ut vestibulum diam tellus, sed rutrum mauris pulvinar in. Phasellus in nisl sed quam aliquet molestie eu vel ligula. Phasellus vestibulum orci a ligula finibus, id semper dolor ultricies. Integer scelerisque posuere augue, quis imperdiet nulla egestas id. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Phasellus eget diam in ligula bibendum porta ut a enim.\
+\
+        Pellentesque dapibus diam et dignissim congue. Curabitur malesuada euismod finibus. Vestibulum malesuada dignissim risus, eget volutpat arcu ultrices at. Vivamus ultricies nibh ut dolor finibus tincidunt. Maecenas scelerisque, sem et imperdiet euismod, dolor diam suscipit purus, nec elementum nunc lacus eu dolor. Praesent id vehicula lectus, tristique sollicitudin urna. Curabitur at blandit arcu. In egestas auctor turpis, sit amet congue quam tincidunt ac.\
+\
+        Pellentesque luctus urna et tellus accumsan, ac laoreet diam ornare. Ut tristique tempor arcu, a euismod nulla cursus eu. Nulla ut elit diam. Aliquam faucibus mollis orci ac bibendum. Sed lorem tortor, pharetra consectetur condimentum in, consequat ut felis. Donec diam dui, venenatis vel aliquet sit amet, tincidunt nec dui. Morbi leo felis, elementum in tincidunt nec, ultrices ac lacus. Vestibulum venenatis nisl non sagittis mollis. Integer nec hendrerit ligula. Pellentesque eget diam non est feugiat volutpat et sit amet leo. Quisque tempor at urna.';
     var d = new Date;
 
         var template = '\
@@ -70,13 +76,19 @@ var HomepageComponent = React.createClass({
         <div id="home-page">\
             <div id="tile-container">\
         <% _.each(rows, function(row, idx) { %> \
-            <div class="tile home-tile" fob="<%=mapnames[row.entries[3]["doubleexposure"]]%>" tall="true">\
+            <div class="tile home-tile style<%=row.entries[35]["tilestyle"]%>" fob="<%=row.entries[3]["doubleexposure"]%>" tall="<%=row.entries[9]["goingfast"]%>">\
                 <h6><%=mapnames[row.entries[3]["doubleexposure"]]%></h6>\
                 <div class="image-wrap">\
-                    <img class="product-image mobile-image" src="http://storage.googleapis.com/imp-projects/finnick/homepagepreview/uploads/<%=row.entries[3]["doubleexposure"]%>-mobile.jpg?<%=d%>"/>\
-                    <img class="product-image desktop-image" src="http://storage.googleapis.com/imp-projects/finnick/homepagepreview/uploads/<%=row.entries[3]["doubleexposure"]%>.jpg?<%=d%>"/>\
+                    <img class="product-image mobile-image" src="http://storage.googleapis.com/imp-projects/finnick/homepagepreview/uploads/<%=row.entries[3]["doubleexposure"]%>-mobile<%=intl ? "-international" : ""%>.jpg?<%=d%>"/>\
+                    <img class="product-image desktop-image" src="http://storage.googleapis.com/imp-projects/finnick/homepagepreview/uploads/<%=row.entries[3]["doubleexposure"]%><%=intl ? "-international" : ""%>.jpg?<%=d%>"/>\
                     <span class="share-pinterest"><img src="http://storage.googleapis.com/imp-projects/finnick/homepagepreview/images/mobile-icon-pinterest.png"/></span>\
                 </div>\
+                <% if (row.entries[35]["tilestyle"] == "2") { %>\
+                    <div class="circle">\
+                        <p class="line-1"><%=row.entries[30]["tilecopy1"]%></p>\
+                        <p class="line-2"><%=row.entries[31]["tilecopy2"]%></p>\
+                    </div>\
+                <% } %>\
                 <div class="copy-wrap">\
                     <p class="line-1"><%=row.entries[30]["tilecopy1"]%></p>\
                     <p class="line-2"><%=row.entries[31]["tilecopy2"]%></p>\
@@ -87,6 +99,7 @@ var HomepageComponent = React.createClass({
         <% }) %>\
             </div>\
         </div>\
+        <div><%= c %></div>\
         ';
 
 
@@ -94,7 +107,7 @@ var HomepageComponent = React.createClass({
 
         $.ajax({
             type: "GET",
-            url: '/api/rows/combobulator/' + 'homepage',
+            url: '/api/rows/preview/homepage',
             success: function (data) {
                 self.setState({
                     data: data[0]["homepage"]
@@ -107,15 +120,30 @@ var HomepageComponent = React.createClass({
                 });
 
                 setTimeout(function() {
-                    $('iframeforhome').trigger('resize');
-                })
+                    $('#iframeforhome').trigger('resize');
+                    $('#iframeforhome').width('100%')
+
+                },1000)
+
+                setTimeout(function() {
+                    $('#iframeforhome').width('100%')
+                },5000)
+
+                setTimeout(function() {
+                    $('#iframeforhome').width('100%')
+                },10000)
+
+                setTimeout(function() {
+                    $('#iframeforhome').width('100%')
+                },15000)
 
                 var templateCompile = _.template(template)({
                     c: content,
                     title: "Black&nbsp;Friday",
                     rows: filledoutrows,
                     mapnames: mapnames,
-                    d: d.getTime()
+                    d: d.getTime(),
+                    intl: window.location.search == '?intl'
                 });
 
                 var newcontent = $("<div></div>").html(templateCompile).html();
@@ -135,9 +163,8 @@ var HomepageComponent = React.createClass({
                     '\';document.close();})();";' +
                     'document.write("<head>" + script.outerHTML + "</head><body></body>");})())';
                 iframe.contentWindow.document.write(
-                        '<link rel="stylesheet" type="text/css" href="http://storage.googleapis.com/imp-projects/finnick/homepagepreview/styles.' +
-                        'css"/>'+
-                        '<link rel="stylesheet" type="text/css" href="http://storage.googleapis.com/imp-projects/finnick/homepagepreview/styles2.css"/>'+
+                        '<link rel="stylesheet" type="text/css" href="http://localhost:8080/macys-bf-flow/previewstyles.' +
+                        'css?sffs"/>'+
                         '<script src="http://storage.googleapis.com/imp-projects/finnick/homepagepreview/jQuery.js"></sc'+'ript>'+
                         '<script src="http://storage.googleapis.com/imp-projects/finnick/homepagepreview/imagesloaded.pkgd.min.js"></sc'+'ript>'+
                         '<script src="http://storage.googleapis.com/imp-projects/finnick/homepagepreview/isotope.pkgd.min.js"></sc'+'ript>'+
@@ -145,7 +172,7 @@ var HomepageComponent = React.createClass({
                         '<script src="http://storage.googleapis.com/imp-projects/finnick/homepagepreview/scripts.js"></sc'+'ript>'+
                         '<script src="http://storage.googleapis.com/imp-projects/finnick/homepagepreview/scripts2.js"></sc'+'ript>'+
                         '<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">'+
-                        '<script>setTimeout(function() {$(window).trigger("resize");}, 3000)</script>'+
+                        '<script>setTimeout(function() {$(window).width("100%"); console.log("hi")}, 3000); setTimeout(function() {$(window).width("100%"); console.log("hi22")}, 15000)</script>'+
                         '<div id="countdown">'+
                         'Starts Wednesday &mdash; only <span class="countdown-cell">00</span> days left!'+
                         '</div>'+
@@ -166,7 +193,23 @@ var HomepageComponent = React.createClass({
     },
 
     render(){
+    setTimeout(function() {
+        $('#iframeforhome').trigger('resize');
+        $('#iframeforhome').width('100%')
 
+    },1000)
+
+    setTimeout(function() {
+        $('#iframeforhome').width('100%')
+    },5000)
+
+    setTimeout(function() {
+        $('#iframeforhome').width('100%')
+    },10000)
+
+    setTimeout(function() {
+        $('#iframeforhome').width('100%')
+    },15000)
 
 
     var self = this;
