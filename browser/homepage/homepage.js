@@ -78,8 +78,8 @@ var HomepageComponent = React.createClass({
             <% _.each(fob, function(rows, idx) { %> \
                 <div class="tile home-tile style<%=rows[0].entries[58]["tilestyle"]%>" fob="<%=rows[0].entries[5]["doubleexposure"]%>" tall="<%=rows[0].entries[14]["goingfast"]%>">\
                     <h6><%=mapnames[rows[0].entries[5]["doubleexposure"]]%></h6>\
-                <% _.each(rows, function(row, idx) { %> \
-                    <div class="tile-wrap <%= row.entries[48]["sortnumber"] %>">\
+                <% rows.forEach(function(row, idx) { %> \
+                    <div class="tile-wrap tile-wrap<%= row.entries[48]["sortnumber"] %>">\
                         <div class="image-wrap">\
                             <img class="product-image mobile-image mobile-image" src="http://storage.googleapis.com/imp-projects/finnick/homepagepreview/uploads/<%=row.entries[5]["doubleexposure"]%>-mobile<%=intl ? "-international" : ""%><%= row.entries[48]["sortnumber"] %>.jpg?<%=d%>"/>\
                             <img class="product-image desktop-image desktop-image1" src="http://storage.googleapis.com/imp-projects/finnick/homepagepreview/uploads/<%=row.entries[5]["doubleexposure"]%><%=intl ? "-international" : ""%><%= row.entries[48]["sortnumber"] %>.jpg?<%=d%>"/>\
@@ -125,12 +125,9 @@ var HomepageComponent = React.createClass({
                 var group = _.groupBy(filledoutrows, function(row) {
                     return row.entries[5]['doubleexposure']
                 });
-                group = _.each(group, function(fob, i) {
-                    fob = _.sortBy(fob, function(f) {
-                        return f.entries[48]['sortnumber'];
-                    })
+                _.each(group, function(fob, i) {
+                    group[i] =_.sortBy(fob, 'entries[48].sortnumber')
                 });
-
 
                 setTimeout(function() {
                     $('#iframeforhome').trigger('resize');
