@@ -13,6 +13,17 @@ module.exports = app;
 // function located at server/app/configure/index.js
 require('./configure')(app);
 
+
+//upload files
+//var multer  = require('multer')
+//var upload = multer();
+//app.post('/uploadimage', upload.single('displayImage'), function (req, res, next) {
+//    console.log('img', req)
+//    // req.file is the `avatar` file
+//    // req.body will hold the text fields, if there were any
+//})
+
+
 // Routes that will be accessed via AJAX should be prepended with
 // /api so they are isolated from our GET /* wildcard.
 app.use('/api', require('./routes'));

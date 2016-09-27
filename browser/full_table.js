@@ -439,7 +439,7 @@ module.exports = React.createClass({
             var cell = $('.'+$('#move-row').val()+'-'+'killedrow').attr('data-id');
             var idCell = _.find(row[0].entries, function(entry){ return entry.columnName == 'id'});
             var catCell = _.find(row[0].entries, function(entry){ return entry.columnName == 'category'});
-            debugger;
+//            debugger;
             var killCell = cell ? cell : {"_id":'newcell'};
 
             var params = [{"row": row[0]._id, "fromFOB": row[0].fob, "toFOB": $('#move-to-fob').val(), "idCell": idCell._id, "catCell": catCell._id, "killCell": killCell._id}];

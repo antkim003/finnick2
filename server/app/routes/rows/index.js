@@ -369,7 +369,61 @@ router.get('/combobulator/:category', function (req, res, next) {
 
 });
 
+router.get('/preview/:category', function (req, res, next) {
+    if (req.params.category != 'exportall') {
+        var start = new Date();
+        var arr = [];
+        var _rows;
+        Row.find({fob: req.params.category}).lean().populate('entries').then(function(rows) {
+            _rows = rows;
+            var obj = {};
+            obj[req.params.category] = [];
+            var categoriesarr = obj;
+            arr = [categoriesarr];
+            var keys = new Date() - start;
+            console.info("Execution keys time: %dms", keys);
+            return categoriesarr;
+        }).then(function(obj) {
+            _.each(_rows, function(row,idx2) {
+                if (row.fob == req.params.category) {
+                    _.each(row.entries, function(e, i){
+                        var newobj = {};
+                        newobj[e.columnName] = e.data;
+                        row.entries[i] = newobj;
 
+                        delete row.updatedAt;
+                        delete row.createdAt;
+                        delete row.__v;
+                        delete row.locked;
+
+                        if (e.columnName == 'killedrow') {
+                            if (e.data == 'true') {
+                                row.killed = 'KILLED';
+                            }
+                        }
+
+                        if (i == row.entries.length-1) {
+                            row.entries = _.compact(row.entries);
+                            if (row.killed != 'KILLED') {
+                                arr[0][req.params.category].push(row)
+                            }
+                        }
+
+                    })
+                }
+            })
+            return obj;
+
+        }).then(function(obj) {
+            var end = new Date() - start;
+            console.info("Execution time: %dms", end);
+            res.json(arr);
+        })
+    } else {
+        next();
+    }
+
+});
 
 
 router.get('/combobulator/:category/export', function(req, res, next) {
