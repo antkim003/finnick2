@@ -110,16 +110,21 @@ render() {
         alsoinpetite = "also in petite"
     }
 
-
+    var bigtiletext = '';
     var tileclass = 'tile-title_1 tile-title';
     if( this.state.data.tilestyle == 2 || this.state.data.tilestyle == 4 ) {
         tileclass = 'tile-title_1 tile-title narrow';
+    } else if (this.state.data.tilestyle == 5 || this.state.data.tilestyle == 6 ) {
+        bigtiletext = 'smaller';
     }
     var pretext = '';
     if ( this.state.data.tilestyle == 4 ) {
         pretext =  this.state.data.category
     }
-
+    var bolder = '';
+    if (this.state.data.tilestyle == 5) {
+        bolder = 'bolder'
+    }
 
     function createMarkup(html) { return {__html: html}; };
 
@@ -198,11 +203,11 @@ render() {
                     </div>
                     <div className="tile-content">
                         <div className="pretext" dangerouslySetInnerHTML={createMarkup(pretext)} />
-                        <span className={tileclass}>{this.state.data.tilecopy1}</span>
-                        <span className="tile-title_2 tile-title">{this.state.data.tilecopy2}</span>
+                        <span className={tileclass}>{this.state.data.tilestyle == 1 || this.state.data.tilestyle == 5 || this.state.data.tilestyle == 6 ? 'DOORBUSTER' : this.state.data.tilecopy1}</span>
+                        <span className={"tile-title_2 tile-title "+bigtiletext}>{this.state.data.tilecopy2 ? this.state.data.tilecopy2.split('|').map(function(item) {return (<div>{item}</div>)}) : this.state.data.tilecopy2}</span>
                         <p className="tile-desc">
-                            <span className="tile-desc-line_1 tile-desc-line">{this.state.data.tilecopy3}</span>
-                            <span className="tile-desc-line_2 tile-desc-line">{this.state.data.tilecopy4}</span>
+                            <span className={"tile-desc-line_1 tile-desc-line "+bolder}>{this.state.data.tilecopy3 ? this.state.data.tilecopy3.split('|').map(function(item) {return (<span className="clearspan">{item}</span>)}) : this.state.data.tilecopy3}</span>
+                            <span className="tile-desc-line_2 tile-desc-line">{this.state.data.tilecopy4 ? this.state.data.tilecopy4.split('|').map(function(item) {return (<span className="clearspan">{item}</span>)}) :this.state.data.tilecopy4}</span>
                             <span className="tile-desc-line tile-desc-line_3">{alsoinpetite}</span>
                         </p>
                         <div className="tile-btns">
