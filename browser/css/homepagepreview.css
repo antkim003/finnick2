@@ -11,10 +11,13 @@
 }
 .iframeforhome {
     /*margin: 150px 0 0 0;*/
-    width: 100vw;
+    /*width: 100vw !important;*/
     min-height: 100vh;
     height: 5000px;
     z-index: -1;
+}
+.iframeforhome.resize {
+    width: 100vw !important;
 }
 .formforupload {
 

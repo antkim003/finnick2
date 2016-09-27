@@ -76,9 +76,9 @@ var HomepageComponent = React.createClass({
         <div id="home-page">\
             <div id="tile-container">\
             <% _.each(fob, function(rows, idx) { %> \
-                <div class="tile home-tile style<%=rows[0].entries[58]["tilestyle"]%>" fob="<%=rows[0].entries[5]["doubleexposure"]%>" tall="<%=rows[0].entries[14]["goingfast"]%>">\
-                    <h6><%=mapnames[rows[0].entries[5]["doubleexposure"]]%></h6>\
-                <% rows.forEach(function(row, idx) { %> \
+                <div order="<%=rows.order%>" class="tile home-tile style<%=rows.tile[0].entries[58]["tilestyle"]%>" fob="<%=rows.tile[0].entries[5]["doubleexposure"]%>" tall="<%=rows.tile[0].entries[14]["goingfast"]%>">\
+                    <h6><%=mapnames[rows.fob]%></h6>\
+                <% rows.tile.forEach(function(row, idx) { %> \
                     <div class="tile-wrap tile-wrap<%= row.entries[48]["sortnumber"] %> <%= row.entries[48]["sortnumber"] == "1" ? "active" : ""%>">\
                         <div class="image-wrap">\
                             <img class="product-image mobile-image mobile-image" src="http://storage.googleapis.com/imp-projects/finnick/homepagepreview/uploads/<%=row.entries[5]["doubleexposure"]%>-mobile<%=intl ? "-international" : ""%><%= row.entries[48]["sortnumber"] %>.jpg?<%=d%>"/>\
@@ -139,38 +139,65 @@ var HomepageComponent = React.createClass({
 
                 });
                 _.each(group, function(tile,i) {
-                       var first = _.find(tile, function(t) {
-                            return t.entries[30]['notesoncategory'] != '';
-                       });
-//                    var tilesortnum = first.entries[30].notesoncategory;
+                   var first = _.find(tile, function(t) {
+                        return t.entries[30]['notesoncategory'] != '';
+                   });
+                    var tilesortnum = first.entries[30].notesoncategory;
 //                    sorted[tilesortnum] = tile;
 //                    sorted[i] =_.sortBy(tile, 'entries[48].sortnumber');
-                     group[i] =_.sortBy(tile, 'entries[48].sortnumber')
-
+                    group[i] =_.sortBy(tile, 'entries[48].sortnumber');
+//                    group['women'][4] = tilesortnum;
                 })
 
+                var sortobj = {};
+                _.each(group, function(tile,i) {
+                    var first = _.find(tile, function(t) {
+                        return t.entries[30]['notesoncategory'] != '';
+                    });
+                    var tilesortnum = first.entries[30].notesoncategory;
+                    var tilecat = first.entries[5].doubleexposure;
+                    sortobj[tilecat] = tilesortnum;
+                });
+                var sortorder = [];
+                _.each(sortobj, function(val, key) {
+                    var obj = {};
+                    obj['tile'] = group[key];
+                    obj['order'] = parseInt(val);
+                    obj['fob'] = key;
+                    sorted.push(obj);
+                    sortorder[val-1] = group[key]
+                })
+                var neworder = _.sortBy(sorted, 'order');
+                console.log(sorted, neworder);
 
                 setTimeout(function() {
+                    $('#iframeforhome').addClass('resize');
                     $('#iframeforhome').trigger('resize');
-                    $('#iframeforhome').width('100%');
+//                    $('#iframeforhome').width('100%');
                 },1000)
 
                 setTimeout(function() {
-                    $('#iframeforhome').width('100%')
+                    $('#iframeforhome').trigger('resize');
+
+//                    $('#iframeforhome').width('100%')
                 },5000)
 
                 setTimeout(function() {
-                    $('#iframeforhome').width('100%')
+                    $('#iframeforhome').trigger('resize');
+
+//                    $('#iframeforhome').width('100%')
                 },10000)
 
                 setTimeout(function() {
-                    $('#iframeforhome').width('100%')
+                    $('#iframeforhome').trigger('resize');
+
+//                    $('#iframeforhome').width('100%')
                 },15000)
 
                 var templateCompile = _.template(template)({
                     c: content,
                     title: "Black&nbsp;Friday",
-                    fob: group,
+                    fob: neworder,
                     mapnames: mapnames,
                     d: d.getTime(),
                     intl: window.location.search == '?intl'
@@ -193,13 +220,13 @@ var HomepageComponent = React.createClass({
                     '\';document.close();})();";' +
                     'document.write("<head>" + script.outerHTML + "</head><body></body>");})())';
                 iframe.contentWindow.document.write(
-                        '<link rel="stylesheet" type="text/css" href="http://localhost:8080/macys-bf-flow/previewstyles.' +
-                        'css?sffs"/>'+
+                        '<link rel="stylesheet" type="text/css" href="http://storage.googleapis.com/imp-projects/finnick/homepagepreview/previewstyles.' +
+                        'css?t"/>'+
                         '<script src="http://storage.googleapis.com/imp-projects/finnick/homepagepreview/jQuery.js"></sc'+'ript>'+
                         '<script src="http://storage.googleapis.com/imp-projects/finnick/homepagepreview/imagesloaded.pkgd.min.js"></sc'+'ript>'+
                         '<script src="http://storage.googleapis.com/imp-projects/finnick/homepagepreview/isotope.pkgd.min.js"></sc'+'ript>'+
                         '<script src="http://storage.googleapis.com/imp-projects/finnick/homepagepreview/fit-columns.js"></sc'+'ript>'+
-                        '<script src="http://11.61.97.69:8080/macys-bf-flow/scripts.js"></sc'+'ript>'+
+                        '<script src="http://storage.googleapis.com/imp-projects/finnick/homepagepreview/macys-bf-flow/scripts.js"></sc'+'ript>'+
                         '<script src="http://storage.googleapis.com/imp-projects/finnick/homepagepreview/scripts2.js"></sc'+'ript>'+
                         '<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">'+
                         '<script>setTimeout(function() {$(window).width("100%"); console.log("hi")}, 3000); setTimeout(function() {$(window).width("100%"); console.log("hi22")}, 15000)</script>'+

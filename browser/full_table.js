@@ -654,7 +654,7 @@ module.exports = React.createClass({
         window.cols = []
         var initialcols = function() {
             var columns = _.filter( window.coledit, function(col) { return col.property != 'id' } );
-            var hiddencolumns = localStorage.getItem('hidecol');
+            var hiddencolumns = localStorage.getItem('hidecol').split(',');
             _.each(columns, function(c,i){
                 var propchecked =  _.includes(hiddencolumns, c.property);
                 if (propchecked) {
