@@ -95,6 +95,7 @@ module.exports = React.createClass({
         window.hiding = [];
 
         return {
+            currentFiles: [],
             editedCell: null,
             data: statedata,
             formatters: null,
@@ -173,6 +174,18 @@ module.exports = React.createClass({
                 });
             }
         });
+
+        $.ajax({
+            url: 'http://storage.googleapis.com/imp-projects/finnick/json/bucketfiles.json',
+            type: 'GET',
+            dataType: 'JSONP',
+            jsonpCallback: 'jsonbucket',
+            success: function(bucketfiles) {
+                self.setState({
+                    currentFiles: bucketfiles
+                });
+            }
+        })
     },
 
     render() {
@@ -272,6 +285,8 @@ module.exports = React.createClass({
                 columnNames={this.columnFilters}
                 columns={columns}
                 data={paginated.data}
+                currentFiles={this.state.currentFiles}
+
                 row={(d, rowIndex) => {
                     return {
                     className: rowIndex % 2 ? 'odd-row row-'+d.id : 'even-row row-'+d.id,

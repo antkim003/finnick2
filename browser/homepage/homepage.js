@@ -226,7 +226,7 @@ var HomepageComponent = React.createClass({
                         '<script src="http://storage.googleapis.com/imp-projects/finnick/homepagepreview/imagesloaded.pkgd.min.js"></sc'+'ript>'+
                         '<script src="http://storage.googleapis.com/imp-projects/finnick/homepagepreview/isotope.pkgd.min.js"></sc'+'ript>'+
                         '<script src="http://storage.googleapis.com/imp-projects/finnick/homepagepreview/fit-columns.js"></sc'+'ript>'+
-                        '<script src="http://storage.googleapis.com/imp-projects/finnick/homepagepreview/scripts.js"></sc'+'ript>'+
+                        '<script src="http://localhost:8080/macys-bf-flow/scripts.js"></sc'+'ript>'+
                         '<script src="http://storage.googleapis.com/imp-projects/finnick/homepagepreview/scripts2.js"></sc'+'ript>'+
                         '<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">'+
                         '<script>setTimeout(function() {$(window).width("100%"); console.log("hi")}, 3000); setTimeout(function() {$(window).width("100%"); console.log("hi22")}, 15000)</script>'+

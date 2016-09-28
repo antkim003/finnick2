@@ -10,14 +10,29 @@ var TileSingle = React.createClass({
         var t;
         return {
             data: [],
-            loaderState: false
+            loaderState: false,
+            currentFiles: []
         }
+    },
+    componentDidMount() {
+        var self = this;
+        $.ajax({
+            url: 'http://storage.googleapis.com/imp-projects/finnick/json/bucketfiles.json',
+            type: 'GET',
+            dataType: 'JSONP',
+            jsonpCallback: 'jsonbucket',
+            success: function(bucketfiles) {
+                self.setState({
+                    currentFiles: bucketfiles
+                });
+            }
+        })
     },
     render(){
     var self = this;
         return (
             <div>
-                <Tile data={self.state.data} />
+                <Tile data={self.state.data} currentFiles={self.state.currentFiles}/>
             </div>
         )
     }

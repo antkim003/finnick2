@@ -40,7 +40,8 @@ var Tiles = React.createClass({
             data: window.dataset,
             loaderState: true,
             img: false,
-            dataset: []
+            dataset: [],
+            currentFiles: []
         }
     },
     componentWillMount() {
@@ -184,6 +185,20 @@ var Tiles = React.createClass({
     });
 
     },
+    componentDidMount() {
+        var self = this;
+        $.ajax({
+            url: 'http://storage.googleapis.com/imp-projects/finnick/json/bucketfiles.json',
+            type: 'GET',
+            dataType: 'JSONP',
+            jsonpCallback: 'jsonbucket',
+            success: function(bucketfiles) {
+                self.setState({
+                    currentFiles: bucketfiles
+                });
+            }
+        })
+    },
     render(){
     var self = this;
         return (
@@ -191,7 +206,7 @@ var Tiles = React.createClass({
 
                 {self.state.loaderState ? <Loader loaderMsg={'please be patient, creating all tiles for all FOB'} /> : null}
 
-                <Tile data={self.state.data} img={true}/>
+                <Tile data={self.state.data} img={true} currentFiles={self.state.currentFiles}/>
             </div>
         )
     }

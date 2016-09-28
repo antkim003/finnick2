@@ -541,15 +541,29 @@ input[type="checkbox"] {
     background: #14ff0c;
 }
 [data-property="imageid"] img,
-[data-property="tileimage"] img {
+[data-property="tileimage"] img,
+[data-property="tileimage"] .imagehover
+{
     display: none;
 }
 [data-property="imageid"]:hover img,
-[data-property="tileimage"]:hover img {
+[data-property="tileimage"]:hover img,
+[data-property="tileimage"]:hover .imagehover{
     display: block;
 }
 
 .skylight-wrapper > div:nth-child(2) {
     width: 90% !important;
     left: 30% !important;
+}
+.arimage:after {
+    /*content: 'ar image';*/
+    /*display: inline;*/
+}
+.arimage {
+    border: 2px solid purple;
+    /*background: #ccc;*/
+}
+.arimage span {
+    background: yellow;
 }

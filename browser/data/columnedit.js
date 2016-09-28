@@ -365,7 +365,7 @@ window.coledit =     [
 },
 {
     property: 'arimageid',
-    header: 'AR Image Id',
+    header: 'AR#',
     cell: [
     app.editable({
         editor: editors.input(),

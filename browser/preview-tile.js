@@ -81,7 +81,7 @@ render() {
                         })
                         return parseInt(e.entries[t].sortnumber);
                     })
-                        return <TileInd data={sorted} img={this.props.img}/>
+                        return <TileInd data={sorted} img={this.props.img} currentFiles={this.props.currentFiles}/>
                     }
                 )}
                 {this.props.children}

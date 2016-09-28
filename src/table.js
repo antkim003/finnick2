@@ -132,6 +132,13 @@ module.exports = React.createClass({
                                     }
                                     var url = 'https://stars.macys.com/preview/'+withslash+'/final/'+value+'-214x261.jpg';
                                     img = <img className="imagehover" src={url} onerror="this.onerror=null;this.src=\'https://stars.macys.com/UI/Common/Graphics/Main/product-image-not-available.jpeg\';"/>
+                                } else if (property == 'tileimage' && value) {
+                                    var filename = _.find(this.props.currentFiles, function(match) {
+                                        return match.indexOf(value) > -1;
+                                    });
+                                    var val = filename != undefined ? filename.split('.tif')[0]+'.jpg' : '';
+                                    var url = '//storage.googleapis.com/imp-projects/finnick/test1/'+val;
+                                    img = <span className="imagehover arimage"><span>{val}</span><img src={url} onerror="" width="200"/></span>
                                 }
                             }
 

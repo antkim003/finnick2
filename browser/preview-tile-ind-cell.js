@@ -14,7 +14,8 @@ module.exports = React.createClass({
     getDefaultProps() {
     return {
         data: [],
-        img: false
+        img: false,
+        currentFiles: []
     };
 },
 
@@ -58,8 +59,12 @@ render() {
     var img = '';
     if (filteredimage[0].imageid) {
         img = '<img src="http://slimages.macys.com/is/image/MCY/products/6/optimized/'+tileimage+'_fpx.tif?bgc=255,255,255&amp;wid=228&amp;qlt=90,0&amp;fmt=jpeg" className="tile-img"/>'
-    }else {
-        img = '<img src="http://storage.googleapis.com/imp-projects/finnick/arimages/'+tileimagear+'.jpg" class="tile-img"/>'
+    }else if (filtertileimage[0].tileimage != ''){
+        var filename1 = _.find(this.props.currentFiles, function(match) {
+            return match.indexOf(filtertileimage[0].tileimage) > -1;
+        });
+        var val = filename1 ? filename1.split('.tif')[0]+'.jpg' : '';
+        img = '<img src="http://storage.googleapis.com/imp-projects/finnick/test1/'+val+'" class="tile-img"/>'
     }
     var bigtiletext = '';
     var tileclass = 'tile-title_1 tile-title';
@@ -103,7 +108,7 @@ render() {
             <div className="imageinfo">
                 <div className="imageinfo-hover">i</div>
                 <div className="imageinfo-hidden">
-                    {filteredimage[0].imageid ? '' : 'AR '}Image ID: {filteredimage[0].imageid || filteredarimage[0].arimageid} <br/>
+                    {filteredimage[0].imageid ? 'Image ID' : 'AR#'}: {filteredimage[0].imageid || filteredarimage[0].arimageid} <br/>
                     Row: {filteredid[0].id} <br/>
                     Sort: {filteredsortn[0].sortnumber} <br/>
                     Style: {tilestyle[0].tilestyle}<br/>
@@ -112,7 +117,7 @@ render() {
                 </div>
             </div>
             <div className="id">
-                <span className="left">{filteredimage[0].imageid ? '' : 'AR '}Image ID: {filteredimage[0].imageid || filteredarimage[0].arimageid}</span>
+                <span className="left">{filteredimage[0].imageid ? 'Image ID' : 'AR#'}: {filteredimage[0].imageid || filteredarimage[0].arimageid}</span>
                 <span className="right"> - {filteredfob[0] ? filteredfob[0].category : ''} -  Row: {filteredid[0].id}</span>
             </div>
             {this.props.children}

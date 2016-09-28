@@ -63,7 +63,7 @@ render() {
         <div {...props} className={Object.keys(data).toString().replace('&','and')+ ' sectionwrap'}>
             <h4>{mapnames[Object.keys(data)] || Object.keys(data)}</h4>
                      {data[Object.keys(data)].map((fob, i) => {
-                            return <TileIndCell data={fob} img={this.props.img}/>
+                            return <TileIndCell data={fob} img={this.props.img} currentFiles={this.props.currentFiles}/>
                         }
                      )}
                 {this.props.children}
