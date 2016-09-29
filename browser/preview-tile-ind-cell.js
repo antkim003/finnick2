@@ -84,6 +84,7 @@ render() {
     if ( tilestyle[0].tilestyle == 4 ) {
         pretext = filteredcategory[0].category
     }
+    var doorbustervsuperbuy = filteredcategory[0].category == 'furniture&mattresses'  ? 'SUPER BUY' : 'DOORBUSTER';
 
     function createMarkup(html) { return {__html: html}; };
     return (
@@ -94,7 +95,7 @@ render() {
             <div className="tile-content">
 
                 <div className="pretext" dangerouslySetInnerHTML={createMarkup(pretext)} />
-                <span className={tileclass}>{tilestyle[0].tilestyle == 1 || tilestyle[0].tilestyle == 5 || tilestyle[0].tilestyle == 6 ? 'DOORBUSTER' : tilecop1}</span>
+                <span className={tileclass}>{tilestyle[0].tilestyle == 1 || tilestyle[0].tilestyle == 5 || tilestyle[0].tilestyle == 6 ? doorbustervsuperbuy : tilecop1}</span>
                 <span className={"tile-title_2 tile-title "+bigtiletext}>{filteredcopy2[0].tilecopy2 ? filteredcopy2[0].tilecopy2.split('|').map(function(item) {return (<div>{item}</div>)}) : filteredcopy2[0].tilecopy2}</span>
                 <p className="tile-desc">
                     <span className={"tile-desc-line_1 tile-desc-line "+bolder}>{filteredcopy3[0].tilecopy3 ? filteredcopy3[0].tilecopy3.split('|').map(function(item) {return (<span className="clearspan">{item}</span>)}) : filteredcopy3[0].tilecopy3}</span>

@@ -91,7 +91,7 @@ render() {
     var imgsrc = '';
     if (filtertileimage) {
         if (this.state.data.imageid != null && this.state.data.imageid != "") {
-//            imgsrc = this.state.data.imageid;
+            imgsrc = this.state.data.imageid;
         } else if ( this.state.data.tileimage != null && this.state.data.tileimage != "" ){
 //            setTimeout(function(){
                 var filename1 = _.find(this.props.currentFiles, function(match) {
@@ -136,6 +136,8 @@ render() {
     if (this.state.data.tilestyle == 5) {
         bolder = 'bolder'
     }
+    var doorbustervsuperbuy = this.state.data.category == 'furniture&mattresses'  ? 'SUPER BUY' : 'DOORBUSTER';
+
 
     function createMarkup(html) { return {__html: html}; };
 
@@ -214,7 +216,7 @@ render() {
                     </div>
                     <div className="tile-content">
                         <div className="pretext" dangerouslySetInnerHTML={createMarkup(pretext)} />
-                        <span className={tileclass}>{this.state.data.tilestyle == 1 || this.state.data.tilestyle == 5 || this.state.data.tilestyle == 6 ? 'DOORBUSTER' : this.state.data.tilecopy1}</span>
+                        <span className={tileclass}>{this.state.data.tilestyle == 1 || this.state.data.tilestyle == 5 || this.state.data.tilestyle == 6 ? doorbustervsuperbuy : this.state.data.tilecopy1}</span>
                         <span className={"tile-title_2 tile-title "+bigtiletext}>{this.state.data.tilecopy2 ? this.state.data.tilecopy2.split('|').map(function(item) {return (<div>{item}</div>)}) : this.state.data.tilecopy2}</span>
                         <p className="tile-desc">
                             <span className={"tile-desc-line_1 tile-desc-line "+bolder}>{this.state.data.tilecopy3 ? this.state.data.tilecopy3.split('|').map(function(item) {return (<span className="clearspan">{item}</span>)}) : this.state.data.tilecopy3}</span>
