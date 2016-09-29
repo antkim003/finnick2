@@ -7,12 +7,6 @@ var Cell = mongoose.model('Cell');
 var Row = mongoose.model('Row');
 var ColumnIndex = mongoose.model('ColumnIndex');
 
-var wipeCollections = function () {
-    var removeUsers = User.remove({});
-    return Promise.all([
-        Cell.remove({}), Row.remove({})
-    ]);
-};
 var columnsTemplate = [
     "alsoinpetites",
     "arimageid",
@@ -147,7 +141,6 @@ var seedRowData = function(name, size, count) {
         console.error('err', err);
     });
 };
-
 
 connectToDb
     .then(function () {
