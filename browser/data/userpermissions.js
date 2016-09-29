@@ -16,7 +16,7 @@ module.exports =
         },
         {
             type: 'photography',
-            permission: ['arimageid','tileimage', 'notesfromretouchimg', 'photoprogress']
+            permission: ['arimageid','tileimage', 'notesfromretouchimg', 'photoprogress','imageid']
         },
         {
             type: 'site_merch',
