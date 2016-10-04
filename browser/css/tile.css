@@ -11,6 +11,11 @@
     vertical-align: top;
     float:left;
 }
+.tile:before, .tile:after {
+    content: ' ';
+    display: block;
+    clear: both;
+}
 .clearspan {
     display: block;
 }
