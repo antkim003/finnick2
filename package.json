@@ -73,7 +73,8 @@
     "socket.io-redis": "^1.0.0",
     "socketio-sticky-session": "^0.4.2",
     "sticky-session": "^1.1.2",
-    "webpack": "^1.13.1"
+    "webpack": "^1.13.1",
+    "webshot": "^0.18.0"
   },
   "devDependencies": {
     "annogenerate": "^0.8.1",

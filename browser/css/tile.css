@@ -180,3 +180,131 @@
     font-family: "Helvetica Neue LT W01_71488914", 'Avenir LT W01_95 Black1475556', arial, sans-serif;
     color: #d10000;
 }
+
+
+@media print {
+    h4 {
+        position: absolute;
+        top: 0;
+    }
+    *, *:before, *:after {
+        /*box-sizing: border-box;*/
+        /*-webkit-print-color-adjust: exact;*/
+    }
+    main {
+        padding-top:0 !important;
+    }
+    .navbar {
+        display: none;
+    }
+    .container {
+        width: 100%;
+        margin: 0;
+    }
+    .sectionwrap {
+        width: 100%;
+    }
+    .tile-title div {
+        color: #d10000 !important;
+    }
+    .tile-title {
+        color: #d10000 !important;
+        text-align: left;
+        clear: both;
+        width: 100%;
+        display: inline-block;
+        -webkit-print-color-adjust: exact;
+    }
+    h1, select,
+    .imageinfo {
+        display: none;
+    }
+    .tile {
+        margin: 0 10px 36px 0;
+        display: inline-block;
+        float: left;
+        clear: none;
+    }
+    .tile:before, .tile:after {
+        content: ' ';
+        display: block;
+        clear: both;
+    }
+    .id {
+        left: 0;
+    }
+    /*.tile:nth-child(3n+3) {*/
+        /*float: right;*/
+    /*}*/
+}
+
+/*legal sized landscape*/
+@media print and (orientation: landscape) {
+    .container {
+        /*border: 1px solid #cc0001;*/
+        zoom: 0.72;
+    }
+    .break {
+        width: 100%;
+        border: 1px solid #000;
+        clear: both;
+        height: 500px;
+    }
+
+}
+.break {
+    display: none;
+}
+
+@media print and (orientation: portrait) {
+
+}
+
+
+
+
+/*landscape letter*/
+@media print and (max-width: 9in) and (min-height: 7in) {
+    .container {
+        /*border: 10px solid green;*/
+        zoom: 0.72;
+    }
+    .sectionwrap {
+        width: 100%;
+    }
+    .tile {
+        margin: 0 10px 36px 0;
+        display: inline-block;
+        float: left;
+        clear: none;
+    }
+}
+
+/*portrait letter*/
+@media print and (min-height: 10in) and (max-height: 11in) and (max-width: 9in){
+    .tile {
+        margin: 0 10px 37px 0;
+    }
+    .container {
+        /*border: 10px solid blue;*/
+        zoom: 0.95;
+    }
+    .sectionwrap {
+        width: 100%;
+    }
+}
+
+/*portrait legal*/
+
+@media print and (max-width: 9in) and (min-height: 11in) {
+    .container {
+        /*border: 10px solid purple;*/
+        zoom: 0.715;
+    }
+    .sectionwrap {
+        width: 100%;
+    }
+    .tile {
+        margin: 0 10px 113px 0;
+    }
+}

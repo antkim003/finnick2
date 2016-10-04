@@ -12,6 +12,8 @@ var ensureAuthenticated = function (req, res, next) {
         res.status(401).end();
     }
 };
+var webshot = require('webshot');
+
 
 router.get('/', ensureAuthenticated, function (req, res, next) {
 //    Cell.find().then(function(cells) {
@@ -26,6 +28,32 @@ router.get('/tile', ensureAuthenticated, function (req, res, next) {
 //    });
 });
 
+router.get('/copy', ensureAuthenticated, function(req, res, next) {
+    var options = {
+        customCSS: '.sectionwrap {display: block !important;}',
+        renderDelay: '250000',
+        shotSize: {
+            width: 'all', height: 'all'
+        },
+        onLoadFinished: {
+            fn: function(status) {
+                var tags = document.getElementsByTagName(this.tagToReplace);
+
+                for (var i=0; i<tags.length; i++) {
+                    var tag = tags[i];
+                    tag.innerHTML = 'The loading status of this page is: ' + status;
+                }
+            }
+            , context: {tagToReplace: '.'}
+        }
+    }
+    webshot('http://localhost:3000/combobulatorunauth', 'google.png', function(err) {
+        // screenshot now saved to google.png
+        console.log('dones');
+        res.send('done')
+    });
+
+})
 
 var gcloud = require('gcloud');
 var gcs = gcloud.storage({

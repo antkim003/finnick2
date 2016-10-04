@@ -2,6 +2,8 @@ var React = require('react');
 var Tile = require('./preview-tile.js');
 import Loader from '../src/components/loader/loader.js';
 var sockets = require('./sockets.js');
+//var webshot = require('webshot');
+
 
 var fobs = [];
 

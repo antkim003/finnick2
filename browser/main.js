@@ -52,7 +52,8 @@ ReactDOM.render(
         <Route path="admin" component={RequireAuth(Admin)}/>
         <Route path="finnick" component={RequireAuth(App)} />
         <Route path="combobulator" component={RequireAuth(Combobulator)} />
-        <Route path="combobulator/tile" component={RequireAuth(TilePreview)} />
+        <Route path="combobulatorunauth" component={Combobulator} />
+          <Route path="combobulator/tile" component={RequireAuth(TilePreview)} />
         <Route path="homepagepreview" component={RequireAuth(Homepage)} />
         <Route path="login" component={Login}/>
         <Route path="logout" component={Logout}/>
