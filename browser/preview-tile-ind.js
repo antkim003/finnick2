@@ -65,9 +65,9 @@ render() {
                      {data[Object.keys(data)].map((fob, i) => {
                             var t = [];
                             t.push(<TileIndCell data={fob} img={this.props.img} currentFiles={this.props.currentFiles}/>)
-//                            if (parseInt(i+1)%3 == 0) {
-//                                t.push(<div className="break">{i}</div>)
-//                            }
+                            if (i > 0 && parseInt(i+1) % 3 == 0) {
+                                t.push(<div className="break">{i}</div>)
+                            }
                             return t;
                         }
                      )}

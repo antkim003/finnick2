@@ -60,10 +60,10 @@ render() {
     if (filteredimage[0].imageid) {
         img = '<img src="http://slimages.macys.com/is/image/MCY/products/6/optimized/'+tileimage+'_fpx.tif?bgc=255,255,255&amp;wid=228&amp;qlt=90,0&amp;fmt=jpeg" className="tile-img"/>'
     }else if (filtertileimage[0].tileimage != ''){
-        var filename1 = _.find(this.props.currentFiles, function(match) {
+        var filename1 = _.filter(this.props.currentFiles, function(match) {
             return match.indexOf(filtertileimage[0].tileimage) > -1;
         });
-        var val = filename1 ? filename1.split('.tif')[0]+'.jpg' : '';
+        var val = filename1[filename1.length-1] ? filename1[filename1.length-1].split('.tif')[0]+'.jpg' : '';
         img = '<img src="http://storage.googleapis.com/imp-projects/finnick/test1/'+val+'" class="tile-img"/>'
     }
     var bigtiletext = '';
