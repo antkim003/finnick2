@@ -224,7 +224,7 @@ router.get('/combobulator', function (req, res, next) {
         var end = new Date() - start;
         console.info("Execution time: %dms", end);
 //        res.json(arr);
-        fs.writeFileSync('./dist/all-finnick-data.json', JSON.stringify(arr));
+        fs.writeFileSync('./dist/all-finnick-data.json', 'jsonp('+JSON.stringify(arr)+')');
         res.download('./dist/all-finnick-data.json');
     })
 });

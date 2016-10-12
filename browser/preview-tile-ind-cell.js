@@ -58,7 +58,25 @@ render() {
 
     var img = '';
     if (filteredimage[0].imageid) {
-        img = '<img src="http://slimages.macys.com/is/image/MCY/products/6/optimized/'+tileimage+'_fpx.tif?bgc=255,255,255&amp;wid=228&amp;qlt=90,0&amp;fmt=jpeg" className="tile-img"/>'
+        var parts = filtertileimage[0].tileimage ? filtertileimage[0].tileimage.split('').reverse().join('') : '';
+        parts = parts.match(/[\s\S]{1,2}/g) || [];
+        var withslash = '';
+        if (parts.length > 0) {
+            if (parts.length == 4) {
+                if (parts[parts.length-1].length < 2) {
+                    parts[parts.length-1] = parts[parts.length-1]+'0';
+                    withslash = parts.join('/').split('').reverse().join('');
+                } else {
+                    withslash = parts.join('/').split('').reverse().join('');
+                }
+            } else {
+                parts[3] = '00';
+                withslash = parts.join('/').split('').reverse().join('');
+            }
+        }
+        var url = 'https://stars.macys.com/preview/'+withslash+'/final/'+tileimage+'-214x261.jpg';
+        img = '<img src="'+url+'" className="tile-img" data-test="'+tileimage+" "+withslash+'"/>'
+//        img = '<img src="http://slimages.macys.com/is/image/MCY/products/6/optimized/'+tileimage+'_fpx.tif?bgc=255,255,255&amp;wid=228&amp;qlt=90,0&amp;fmt=jpeg" className="tile-img" data-test="'+tileimage+" "+withslash+'"/>'
     }else if (filtertileimage[0].tileimage != ''){
         var filename1 = _.filter(this.props.currentFiles, function(match) {
             return match.indexOf(filtertileimage[0].tileimage) > -1;
