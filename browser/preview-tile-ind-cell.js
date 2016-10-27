@@ -53,7 +53,7 @@ render() {
 
     var alsoinpetite = '';
     var isp = filteredpetites[0] ? filteredpetites[0].alsoinpetites : false;
-    if (isp && !_.include(filteredcopy4[0].tilecopy4, 'etite') ) {
+    if (isp ) {
 //        alsoinpetite = 'Also in Petite'
     }
 
