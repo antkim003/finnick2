@@ -52,9 +52,11 @@ render() {
 
 
     var alsoinpetite = '';
-    if (filteredpetites[0] ? filteredpetites[0].alsoinpetites : '') {
-        alsoinpetite = "also in petite"
+    var isp = filteredpetites[0] ? filteredpetites[0].alsoinpetites : false;
+    if (isp && !_.include(filteredcopy4[0].tilecopy4, 'etite') ) {
+//        alsoinpetite = 'Also in Petite'
     }
+
 
     var img = '';
     if (filteredimage[0].imageid) {
@@ -118,7 +120,7 @@ render() {
                 <p className="tile-desc">
                     <span className={"tile-desc-line_1 tile-desc-line "+bolder}>{filteredcopy3[0].tilecopy3 ? filteredcopy3[0].tilecopy3.split('|').map(function(item) {return (<span className="clearspan">{item}</span>)}) : filteredcopy3[0].tilecopy3}</span>
                     <span className="tile-desc-line_2 tile-desc-line">{filteredcopy4[0].tilecopy4 ? filteredcopy4[0].tilecopy4.split('|').map(function(item) {return (<span className="clearspan">{item}</span>)}) : filteredcopy4[0].tilecopy4}</span>
-                    <span className="tile-desc-line tile-desc-line_3">{filteredpetites[0] ? alsoinpetite : ''}</span>
+                    <span className="tile-desc-line tile-desc-line_3">{filteredpetites[0] ? alsoinpetite : 'sdfs'}</span>
                 </p>
                 <div className="tile-btns">
                 </div>
