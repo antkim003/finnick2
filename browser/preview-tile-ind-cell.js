@@ -120,7 +120,7 @@ render() {
                 <p className="tile-desc">
                     <span className={"tile-desc-line_1 tile-desc-line "+bolder}>{filteredcopy3[0].tilecopy3 ? filteredcopy3[0].tilecopy3.split('|').map(function(item) {return (<span className="clearspan">{item}</span>)}) : filteredcopy3[0].tilecopy3}</span>
                     <span className="tile-desc-line_2 tile-desc-line">{filteredcopy4[0].tilecopy4 ? filteredcopy4[0].tilecopy4.split('|').map(function(item) {return (<span className="clearspan">{item}</span>)}) : filteredcopy4[0].tilecopy4}</span>
-                    <span className="tile-desc-line tile-desc-line_3">{filteredpetites[0] ? alsoinpetite : 'sdfs'}</span>
+                    <span className="tile-desc-line tile-desc-line_3">{filteredpetites[0] ? alsoinpetite : ''}</span>
                 </p>
                 <div className="tile-btns">
                 </div>
